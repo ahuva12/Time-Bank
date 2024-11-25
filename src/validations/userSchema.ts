@@ -11,3 +11,9 @@ export const userSchema = z.object({
     password: z.string().min(5, "Password must be at least 8 characters long"),
     remainingHours: z.number().min(0, "Remaining hours must be 0 or greater"),
 });
+
+export const loginSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(5),
+});
+  

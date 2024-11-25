@@ -31,6 +31,30 @@ export async function getAllDocuments(client: MongoClient, collection: string) {
     }
 }
 
+export async function getDocuments(client: MongoClient, collection: string, filter: object) {
+    try {
+        const db = client.db('time-bank');
+        const documents = await db.collection(collection).find(filter).toArray();
+        return documents;
+
+    } catch (error) {
+        console.error("Error retrieving documents:", error);
+        throw error;
+    }
+}
+
+export async function getDocument(client: MongoClient, collection: string, filter: object) {
+    try {
+        const db = client.db('time-bank');
+        const document = await db.collection(collection).findOne(filter);
+        return document;
+
+    } catch (error) {
+        console.error("Error retrieving document:", error);
+        throw error;
+    }
+}
+
 export async function insertDocument(client: MongoClient, collection: string, document: object) {
     try {
         const db = client.db('time-bank');
@@ -47,6 +71,7 @@ export async function deleteDocument(client: MongoClient, collection: string, fi
         const db = client.db('time-bank');
         const result = await db.collection(collection).deleteOne(filter);
         return result;
+
     } catch (error) {
         console.error("Error deleting document:", error);
         throw error;
