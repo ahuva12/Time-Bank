@@ -1,21 +1,29 @@
-import { connectDatabase, insertDocument, getDocument } from "../../../services/mongo";
+import { connectDatabase, insertDocument, getDocument } from "@/services/mongo";
 import bcrypt from "bcryptjs";
 
-export default async function handler(req, res) {
-  if (req.method === "POST") {
-    const { username, email, password } = req.body;
+export async function POST(req)  {
+
+    const body = await req.json();
+
+    const { username, email, password } = body;
 
     if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required." });
+        return new Response(
+            JSON.stringify({ message: "All fields are required." }),
+            { status: 400 }
+          );
     }
-
     try {
       const client = await connectDatabase();
-
+      
       // Check if the username already exists
       const existingUser = await getDocument(client, 'users',{ 'email': email}); //await usersCollection.findOne({ username });
+      console.log('2')
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return new Response(
+            JSON.stringify({ message: "User already exists." }),
+            { status: 409 }
+          );
       }
 
       // Hash the password
@@ -27,11 +35,16 @@ export default async function handler(req, res) {
         password: hashedPassword,
       });
 
-      res.status(201).json({ message: "User created successfully" });
+      return new Response(
+        JSON.stringify({ message: "User registered successfully.", result }),
+        { status: 201 }
+      );
     } catch (error) {
-      res.status(500).json({ message: "Error registering user" });
+        console.error("Error in POST /register:", error);
+        return new Response(
+          JSON.stringify({ message: "An error occurred." }),
+          { status: 500 }
+        );
     }
-  } else {
-    res.status(405).json({ message: "Method not allowed" });
-  }
+  
 }

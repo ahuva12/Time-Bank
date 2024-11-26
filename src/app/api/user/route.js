@@ -1,4 +1,4 @@
-import { connectDatabase, getDocument } from "../../../services/mongo";
+import { connectDatabase, getDocument } from "@/services/mongo";
 import jwt from "jsonwebtoken";
 
 export default async function handler(req, res) {

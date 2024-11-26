@@ -1,29 +1,30 @@
+'use client'
 import { useState } from "react";
+import { http } from '@/services/http'
 
 export default function Register() {
-  const [username, setUsername] = useState("");
+  const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, email, password }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      alert("Registration successful");
-      window.location.href = "/login"; // Redirect to login
-    } else {
-      setError(data.message);
-    }
-  };
+    
+    try {
+        const response = await http.post("/register", {
+          username,
+          email,
+          password,
+        });
+        console.log('11')
+        alert("Registration successful!");
+        window.location.href = "/"; // Redirect to login page
+      } catch (error) {
+        console.log('ERROR')
+        setError(error.response?.data?.message || "An error occurred");
+      }
+    };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -31,7 +32,7 @@ export default function Register() {
         type="text"
         placeholder="Username"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
         required
       />
       <input
