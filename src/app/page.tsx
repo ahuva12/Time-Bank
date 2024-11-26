@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Login from '../components/SignUp/SignUp'
 
 export default function Home() {
   return (
