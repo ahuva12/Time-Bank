@@ -1,140 +1,15 @@
-/* home.module.css
 
-.container {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.header h1 {
-  font-size: 2.5rem;
-  color: #2b3a42;
-}
-
-.header h2 {
-  font-size: 1.8rem;
-  color: #007bff;
-  margin-top: 10px;
-}
-
-.header p {
-  font-size: 1rem;
-  color: #555;
-  margin-top: 10px;
-}
-
-.image {
-  display: block;
-  margin: 20px auto;
-}
-
-.section {
-  margin-bottom: 50px;
-}
-
-.section h2 {
-  font-size: 2rem;
-  color: #2b3a42;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.section p {
-  font-size: 1.2rem;
-  color: #555;
-  line-height: 1.6;
-  text-align: center;
-}
-
-.steps {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 30px;
-}
-
-.step {
-  text-align: center;
-  width: 250px;
-  padding: 20px;
-  border: 1px solid #007bff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.step h3 {
-  font-size: 2rem;
-  color: #007bff;
-  margin-bottom: 10px;
-}
-
-.step p {
-  font-size: 1.1rem;
-  color: #555;
-}
-
-.benefits {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 30px;
-  text-align: center;
-}
-
-.benefits div {
-  flex: 1 1 22%;
-  padding: 20px;
-  border: 1px solid #007bff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.benefits h3 {
-  font-size: 1.5rem;
-  color: #007bff;
-  margin-bottom: 10px;
-}
-
-.benefits p {
-  font-size: 1rem;
-  color: #555;
-}
-
-.startNow {
-  text-align: center;
-  background-color: #007bff;
-  padding: 30px;
-  color: white;
-  border-radius: 10px;
-}
-
-.startNow h2 {
-  font-size: 2rem;
-}
-
-.startNow p {
-  font-size: 1.2rem;
-  margin-top: 20px;
-} */
 /* כלליים */
 .body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  margin-left: 4rem;
+  margin-right: 4rem;
   background-color: #f4f4f9; /* צבע רקע כללי */
 }
 
 /* container for the main page */
 .container {
   width: 100%;
-  margin: 0 auto;
-  padding: 20px;
   box-sizing: border-box;
 }
 
@@ -143,15 +18,16 @@
   display: flex; /* סידור האלמנטים במאוזן */
   align-items: center; /* ממקם את התמונה והכיתוב במרכז אנכי */
   justify-content: space-between; /* רווח בין התמונה לכיתוב */
-  padding: 10px;
+  /* padding: 10px; */
 }
 
 /* סגנון התמונה */
 .image {
-  width: 300px; /* גודל התמונה */
-  height: 200px; /* גובה התמונה */
+  width: 400px; /* גודל התמונה */
+  height: 300px; /* גובה התמונה */
   /* object-fit: cover;  */
-  margin-left: 20px; /* רווח מהקצה השמאלי */
+  margin-left: 4rem;
+  padding: 0;
 }
 
 /* סגנון הכיתובים בצד ימין */
@@ -160,14 +36,15 @@
   flex-direction: column; /* ממקם את האלמנטים בצורה אנכית (אחד מתחת לשני) */
   justify-content: center; /* ממקם את התוכן במרכז אנכי */
   align-items: flex-start; /* הכיתוב יהיה בצד שמאל */
-  margin-right: 20px; /* רווח מהקצה הימני */
+  margin-right: 4rem; /* רווח מהקצה הימני */
 }
 
 /* סגנון כותרת ראשית */
 .header h1 {
   font-size: 2.2rem; /* גודל טקסט של כותרת ראשית */
-  color: #007BFF; /* צבע כחול */
+  color: #048EBC; /* צבע כחול */
   margin: 0; /* מסיר רווחים סביב הכותרת */
+  padding: 0;
 }
 
 /* סגנון כותרת משנה */
@@ -175,20 +52,43 @@
   font-size: 2.8rem; /* גודל טקסט של כותרת משנה (גדול יותר מ-h1) */
   color: #000000; /* צבע שחור */
   margin: 0; /* רווחים למעלה ולמטה */
+  padding: 0;
 }
 
 /* סגנון הפסקה */
 .header p {
   font-size: 1.2rem; /* גודל טקסט קטן יותר מ-h1 ו-h2 */
-  color: #555; /* צבע טקסט אפור כהה */
+  color: #000000; /* צבע טקסט אפור כהה */
   margin: 0;
 }
 
 
 
 /* What is Time Bank? */
-.section:nth-of-type(2) {
-  background-color: #f0f8ff; /* light blue background for this section */
+.sectionExplation {
+  background-color: #E0F5F8; /* light blue background for this section */
+  padding: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  height: 200px;
+  
+}
+
+.sectionExplation div{
+  margin-right: 2rem;
+  border-right: 4px solid #007BA6;
+  padding-right: 1.7rem;
+}
+
+.sectionExplation h2 {
+  font-size: 1.4rem; /* larger font size for this heading */
+  color: #007BA6; /* black text color */
+}
+
+.sectionExplation p {
+  font-size: 1.1rem; /* smaller font size for this paragraph */
+  color: #000000;
+  width: 70%;
 }
 
 /* Why Join? */
