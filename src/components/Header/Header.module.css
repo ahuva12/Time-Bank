@@ -25,7 +25,7 @@
     height: 2rem;
     font-size: small;
     width: 4.5rem;
-    margin-right: 8px;
+    margin-right: 4rem;
 }
 
 
@@ -38,7 +38,7 @@
     height: 2rem;
     font-size: small;
     width: 4.5rem;
-    margin-right: 8px;
+    margin-right: 2rem;
 }
 
 .btnLogin a,
@@ -78,5 +78,5 @@
 }
 
 .logo {
-    margin-left: 2rem;
+    margin-left: 4rem;
 }
