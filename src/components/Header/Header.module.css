@@ -18,13 +18,14 @@
 
 .btnLogin {
     background-color: #048EBC;
+    border: 1px solid #048EBC;
     color: white;
     border-radius: 8px;
     padding: 12px;
-    height: 40%;
+    height: 2rem;
     font-size: small;
-    width: 4rem;
-    margin-left: 8px;
+    width: 4.5rem;
+    margin-right: 8px;
 }
 
 
@@ -34,10 +35,10 @@
     border: 1px solid black;
     border-radius: 8px;
     padding: 12px;
-    height: 40%;
+    height: 2rem;
     font-size: small;
-    width: 4rem;
-    margin-left: 8px;
+    width: 4.5rem;
+    margin-right: 8px;
 }
 
 .btnLogin a,

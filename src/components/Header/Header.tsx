@@ -28,7 +28,7 @@ export default function Header() {
                     <div><button onClick={login}>Simulate Login</button></div>
                 </nav>
             )}
-            <Image className={styles.logo} src={logo} alt="Logo" width={150} height={75} />
+            <Image className={styles.logo} src={logo} alt="Logo" width={180} height={90} />
 
         </header>
     );
