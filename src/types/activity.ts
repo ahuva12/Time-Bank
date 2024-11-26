@@ -5,6 +5,7 @@ export interface Activity {
     nameActivity: string;
     durationHours: number; 
     description: string;
+    tags: Array<string>;
     giverId: string | ObjectId;
     receiverId: string | ObjectId;
     status: "proposed" | "caught" | "accepted" | "cancelled";   
