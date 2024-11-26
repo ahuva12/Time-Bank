@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Register from "../components/Login/Login";
+import Register from "../components/Register/Register";
 
 export default function Home() {
   return (
