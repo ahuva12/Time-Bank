@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
@@ -20,7 +20,7 @@ export async function connectDatabase() {
     return clientPromise;
 }
 
-export async function getAllDocuments(client: any, collection: string) {
+export async function getAllDocuments(client: MongoClient, collection: string) {
     try {
         const db = client.db('time-bank');
         const documents = await db.collection(collection).find().toArray();
@@ -31,7 +31,31 @@ export async function getAllDocuments(client: any, collection: string) {
     }
 }
 
-export async function insertDocument(client: any, collection: string, document: object) {
+export async function getDocuments(client: MongoClient, collection: string, filter: object) {
+    try {
+        const db = client.db('time-bank');
+        const documents = await db.collection(collection).find(filter).toArray();
+        return documents;
+
+    } catch (error) {
+        console.error("Error retrieving documents:", error);
+        throw error;
+    }
+}
+
+export async function getDocument(client: MongoClient, collection: string, filter: object) {
+    try {
+        const db = client.db('time-bank');
+        const document = await db.collection(collection).findOne(filter);
+        return document;
+
+    } catch (error) {
+        console.error("Error retrieving document:", error);
+        throw error;
+    }
+}
+
+export async function insertDocument(client: MongoClient, collection: string, document: object) {
     try {
         const db = client.db('time-bank');
         const result = await db.collection(collection).insertOne(document);
@@ -42,18 +66,19 @@ export async function insertDocument(client: any, collection: string, document: 
     }
 }
 
-export async function deleteDocument(client: any, collection: string, filter: object) {
+export async function deleteDocument(client: MongoClient, collection: string, filter: object) {
     try {
         const db = client.db('time-bank');
         const result = await db.collection(collection).deleteOne(filter);
         return result;
+
     } catch (error) {
         console.error("Error deleting document:", error);
         throw error;
     }
 }
 
-export async function updateDocument(client: any, collection: string, filter: object, update: object) {
+export async function updateDocument(client: MongoClient, collection: string, filter: object, update: object) {
     try {
         const db = client.db('time-bank');
         const result = await db.collection(collection).updateOne(filter, { $set: update });
