@@ -4,11 +4,13 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>ברוכים הבאים לבנק הזמן</h1>
-        <h2 className={styles.highlight}>מקום שבו הזמן שווה כסף!</h2>
-        <p>חווה את כוחה של הקהילה באמצעות בנק הזמן</p>
+        <div className={styles.textContent}>
+          <h1>ברוכים הבאים לבנק הזמן</h1>
+          <h2 className={styles.highlight}>מקום שבו הזמן שווה כסף!</h2>
+          <p>חווה את כוחה של הקהילה באמצעות בנק הזמן</p>
+        </div>
         <Image
-          src="./images/people.png"
+          src="/images/people.png"
           alt="חברים מחובקים"
           width={300}
           height={200}
@@ -73,7 +75,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={styles.section}>
+      <section className={styles.startNow}>
         <h2>התחל עכשיו!</h2>
         <p>
           צור חשבון, אסוף את השעות שלך ומצא מישהו שמוכן לעזור לך. אנו ממליצים לך
