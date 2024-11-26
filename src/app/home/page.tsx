@@ -14,7 +14,7 @@ export default function Home() {
           alt="חברים מחובקים"
           width={300}
           height={200}
-          className={styles.image}
+          className={styles.imagePeople}
         />
       </header>
       <section className={styles.sectionExplation}>
@@ -30,8 +30,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={styles.section}>
-        <h2>איך מתחילים</h2>
+      <section className={styles.sectionStart}>
+        <h2>איך מתחילים:</h2>
         <div className={styles.steps}>
           {[
             "הצטרף: הירשם לאתר בנק הזמן שלנו ופתח פרופיל אישי.",
@@ -41,49 +41,60 @@ export default function Home() {
           ].map((text, index) => (
             <div key={index} className={styles.step}>
               <h3>{index + 1}</h3>
-              <p>{text}</p>
+              <p>
+                <strong>{text.split(":")[0]}:</strong>
+                <br />
+                {text.split(":")[1]}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className={styles.section}>
+      <section className={styles.sectionJoin}>
         <h2>למה כדאי להצטרף?</h2>
         <div className={styles.benefits}>
-          <div>
+          <div className={styles.joinImage}>
+            <Image
+              src="/images/heands.png"
+              alt="hands"
+              width={100}
+              height={100}
+              className={styles.image}
+            />
+          </div>
+          <div className={styles.benefit}>
             <h3>הזדמנויות למידה:</h3>
             <p>
               כל אדם שמציע שירות בבנק הזמן יכול ללמוד ולהתנסות במגוון תחומים.
             </p>
           </div>
-          <div>
+          <div className={styles.benefit}>
             <h3>קהילה תומכת:</h3>
             <p>
               הצטרפות לבנק הזמן מאפשרת לך להיות חלק מקהילה שבה כולם עוזרים אחד
               לשני
             </p>
           </div>
-          <div>
+          <div className={styles.benefit}>
             <h3>גמישות:</h3>
             <p>
               קבע את שעות הפעילות שלך ואת השירותים שאתה מציע, וכל אחד יכול
               להשתמש בשירותים שלך לפי הצורך.
             </p>
           </div>
-          <div>
+          <div className={styles.benefit}>
             <h3>חיסכון כספי:</h3>
             <p>ניתן לקבל שירותים מבלי לשלם כסף – כל מה שצריך זה זמן.</p>
           </div>
         </div>
       </section>
-
-      <section className={styles.startNow}>
+      
+      <section className={styles.sectionStartNow}>
         <h2>התחל עכשיו!</h2>
-        <p>
-          צור חשבון, אסוף את השעות שלך ומצא מישהו שמוכן לעזור לך. אנו ממליצים לך
-          להתחיל בפרסום בקשה, כדי שתבין איך התהליך עובד. מהר מאוד תגלה שאתה
-          בקהילה שבה אמון ועזרה הולכים יד ביד.
-        </p>
+        <p>צור חשבון, אסוף את השעות שלך ומצא מישהו שמוכן לעזור לך.</p>
+        <p>אנו ממליצים לך להתחיל בפרסום בקשה, כדי שתבין איך התהליך עובד.</p>
+        <p>מהר מאוד תגלה שאתה בקהילה שבה אמון ועזרה הולכים יד ביד.</p>
       </section>
     </div>
   );

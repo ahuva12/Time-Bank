@@ -1,170 +1,222 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Pacifico&display=swap");
 
-/* כלליים */
 .body {
   font-family: Arial, sans-serif;
   margin-left: 4rem;
   margin-right: 4rem;
-  background-color: #f4f4f9; /* צבע רקע כללי */
+  background-color: #f4f4f9;
 }
 
-/* container for the main page */
 .container {
   width: 100%;
   box-sizing: border-box;
 }
 
-/* סגנון הכללי ל-header */
 .header {
-  display: flex; /* סידור האלמנטים במאוזן */
-  align-items: center; /* ממקם את התמונה והכיתוב במרכז אנכי */
-  justify-content: space-between; /* רווח בין התמונה לכיתוב */
-  /* padding: 10px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* סגנון התמונה */
-.image {
-  width: 400px; /* גודל התמונה */
-  height: 300px; /* גובה התמונה */
-  /* object-fit: cover;  */
+.imagePeople {
+  width: 400px;
+  height: 300px;
   margin-left: 4rem;
   padding: 0;
 }
 
-/* סגנון הכיתובים בצד ימין */
 .textContent {
-  display: flex; /* שימוש ב-flexbox כדי להנחות את הכיתובים */
-  flex-direction: column; /* ממקם את האלמנטים בצורה אנכית (אחד מתחת לשני) */
-  justify-content: center; /* ממקם את התוכן במרכז אנכי */
-  align-items: flex-start; /* הכיתוב יהיה בצד שמאל */
-  margin-right: 4rem; /* רווח מהקצה הימני */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-right: 4rem;
 }
 
-/* סגנון כותרת ראשית */
 .header h1 {
-  font-size: 2.2rem; /* גודל טקסט של כותרת ראשית */
-  color: #048EBC; /* צבע כחול */
-  margin: 0; /* מסיר רווחים סביב הכותרת */
+  font-size: 2.2rem;
+  color: #048ebc;
+  margin: 0;
   padding: 0;
 }
 
-/* סגנון כותרת משנה */
 .header h2 {
-  font-size: 2.8rem; /* גודל טקסט של כותרת משנה (גדול יותר מ-h1) */
-  color: #000000; /* צבע שחור */
-  margin: 0; /* רווחים למעלה ולמטה */
+  font-size: 2.8rem;
+  color: #000000;
+  margin: 0;
   padding: 0;
 }
 
-/* סגנון הפסקה */
 .header p {
-  font-size: 1.2rem; /* גודל טקסט קטן יותר מ-h1 ו-h2 */
-  color: #000000; /* צבע טקסט אפור כהה */
+  font-size: 1.2rem;
+  color: #000000;
   margin: 0;
 }
 
-
-
 /* What is Time Bank? */
 .sectionExplation {
-  background-color: #E0F5F8; /* light blue background for this section */
+  background-color: #e0f5f8;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   padding: 2rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
-  height: 200px;
-  
+  height: 250px;
 }
 
-.sectionExplation div{
+.sectionExplation div {
   margin-right: 2rem;
-  border-right: 4px solid #007BA6;
+  border-right: 4px solid #007ba6;
   padding-right: 1.7rem;
 }
 
 .sectionExplation h2 {
-  font-size: 1.4rem; /* larger font size for this heading */
-  color: #007BA6; /* black text color */
+  font-size: 1.4rem;
+  color: #007ba6;
+  margin-bottom: 1.3rem;
 }
 
 .sectionExplation p {
-  font-size: 1.1rem; /* smaller font size for this paragraph */
+  font-size: 1.1rem;
   color: #000000;
   width: 70%;
+  line-height: 1.8;
 }
 
-/* Why Join? */
-.section:nth-of-type(4) {
-  background-color: #e8f9f3; /* light green background for this section */
+/* How Start */
+
+.sectionStart {
+  padding: 2rem;
+  margin-bottom: 2rem;
 }
 
-/* Steps */
+.sectionStart h2 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  color: #000000;
+}
+
 .steps {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
+  margin-left: 4rem;
+  margin-right: 4rem;
 }
 
 .step {
-  width: 23%; /* each step takes 23% width, adjust as needed */
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  width: 20%;
+  background-color: #048ebc;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  padding-top: 0;
+  border-radius: 30px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
 .step h3 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-  color: #2b3a42;
+  font-size: 3rem;
+  color: white;
+  padding-top: 0;
+  font-family: "Pacifico", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .step p {
   font-size: 1rem;
-  color: #555;
+  color: #000000;
+  line-height: 1.5;
 }
 
-/* Benefits Section */
+/*why join*/
+.sectionJoin h2 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  color: #000000;
+}
+
+.sectionJoin {
+  background-color: #e0f5f8;
+  padding: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .benefits {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
   flex-wrap: wrap;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.joinImage {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .benefit {
-  width: 23%; /* each benefit takes 23% width */
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex: 1 1 20%;
+  padding: 1rem;
+  text-align: center;
 }
 
 .benefit h3 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-  color: #2b3a42;
+  font-size: 1rem;
+  color: black;
+  font-weight: bold;
 }
 
 .benefit p {
   font-size: 1rem;
-  color: #555;
+  color: #000;
+  line-height: 1.5;
 }
 
 /* Call to Action */
-.section:last-of-type {
+.sectionStartNow {
   text-align: center;
+  padding: 2rem;
+  margin-bottom: 2rem;
 }
 
-.section:last-of-type h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #2b3a42;
+.sectionStartNow h2 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  color: #000000;
 }
 
-.section:last-of-type p {
-  font-size: 1.2rem;
-  color: #555;
+.sectionStartNow p {
+  font-size: 1.1rem;
+  color: #000000;
   max-width: 600px;
   margin: 0 auto;
+  line-height: 1.8;
 }
