@@ -1,0 +1,77 @@
+.ActivityCard {
+    background-color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    line-height: 33.6px;
+    display: flex;
+    width: 25rem;
+    border-radius: 3.875rem;
+}
+
+.ActivityCardHalf1, .ActivityCardHalf2 {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+.ActivityCardHalf1 {
+    justify-content: flex-start;
+}
+
+.ActivityCardHalf2 {
+    justify-content: center;
+    align-items: center;
+}
+
+.limit {
+    background-color: #EFFDFF;
+    width: 3px; 
+    height: auto; 
+    margin: 0 1rem; 
+    color: #EFFDFF;
+}
+
+.nameActivity, .description {
+    font-size: 1rem;
+    margin-right: 8px;
+}
+
+.nameActivity {
+    font-weight: 700;
+}
+
+.tags {
+    display: flex;
+    justify-content: start;
+}
+
+.tag {
+    background-color: #f0f0f0;
+    border: 0.8px #333 solid;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    color: #333;
+    padding: 0 5px;
+    border-radius: 7px;
+    margin-right: 8px;
+    font-size: 13px;
+    font-weight: 300;
+    height: 25px;
+    min-width: 40px;
+}
+
+.moreDetails {
+    background-color: #EFFDFF;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 8px;
+    margin-top: 8px;
+}
+
+.moreOptionButton {
+    width: 9rem;
+    height: 2rem;
+    background-color: rgb(217, 217, 217);
+    box-shadow: 0 0 10px rgba(217, 217, 217, 0.5);
+    margin: 0.3rem 0;
+}
