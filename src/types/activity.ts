@@ -1,9 +1,12 @@
+import { ObjectId } from "mongodb";
+
 export interface Activity {
-    _id?: string;
+    _id?: string | ObjectId;
     nameActivity: string;
     durationHours: number; 
     description: string;
-    giverId: string;
-    receiverId: string;
+    giverId: string | ObjectId;
+    receiverId: string | ObjectId;
     status: "proposed" | "caught" | "accepted" | "cancelled";   
+    comments?: string 
 }
