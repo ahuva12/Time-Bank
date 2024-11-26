@@ -2,7 +2,7 @@ import { connectDatabase, insertDocument, getDocument } from "@/services/mongo";
 import bcrypt from "bcryptjs";
 
 export async function POST(req)  {
-    console.log('1')
+    
     const body = await req.json();
 
     const { firstName, lastName, address, gender, email, phoneNumber, birthDate, password } = body;
@@ -28,8 +28,6 @@ export async function POST(req)  {
 
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 12);
-
-      console.log('hhhhhhhhhhhhhhhhhhhhhhhhhh')
 
       await insertDocument(client, 'users', {
         firstName: firstName, 
