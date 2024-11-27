@@ -36,25 +36,26 @@ export async function POST(req)  {
       }
       
        // Validate JWT_SECRET
-    if (!process.env.JWT_SECRET) {
-        console.error("JWT_SECRET is not defined");
-        return new Response(
-          JSON.stringify({ message: "Server configuration error" }),
-          { status: 500 }
-        );
-      }
+    // if (!process.env.JWT_SECRET) {
+    //     console.error("JWT_SECRET is not defined");
+    //     return new Response(
+    //       JSON.stringify({ message: "Server configuration error" }),
+    //       { status: 500 }
+    //     );
+    //   }
   
       // Create JWT token
-      const token = jwt.sign(
-        { userId: user._id },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
+      // const token = jwt.sign(
+      //   { userId: user._id },
+      //   process.env.JWT_SECRET,
+      //   { expiresIn: "1h" }
+      // );
 
       return new Response(
-        JSON.stringify({token }),
+        JSON.stringify({ user }),
         { status: 200 }
       );
+      
     } catch (error) {
         console.error("Error in POST /login:", error);
         return new Response(
