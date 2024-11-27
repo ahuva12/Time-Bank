@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { http } from "@/services/http";
-import useUserStore from "@/stores/userStore";
+import useUserStore from "@/store/useUserStore";
 
 export default function Login() {
   const [email, setEmail] = useState("");
