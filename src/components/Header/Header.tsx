@@ -57,7 +57,7 @@ export default function Header() {
             >
               ×
             </button>
-            <Login />
+            <Login login={login} closePopup={toggleLogin}/>
           </div>
         </div>
       )}
@@ -72,7 +72,7 @@ export default function Header() {
             >
               ×
             </button>
-            <Register />
+            <Register closePopup={toggleRegister}/>
           </div>
         </div>
       )}

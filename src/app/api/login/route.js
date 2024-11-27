@@ -36,13 +36,13 @@ export async function POST(req)  {
       }
       
        // Validate JWT_SECRET
-    if (!process.env.JWT_SECRET) {
-        console.error("JWT_SECRET is not defined");
-        return new Response(
-          JSON.stringify({ message: "Server configuration error" }),
-          { status: 500 }
-        );
-      }
+    // if (!process.env.JWT_SECRET) {
+    //     console.error("JWT_SECRET is not defined");
+    //     return new Response(
+    //       JSON.stringify({ message: "Server configuration error" }),
+    //       { status: 500 }
+    //     );
+    //   }
   
       // Create JWT token
       // const token = jwt.sign(

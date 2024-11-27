@@ -4,7 +4,7 @@ import { useState } from "react";
 import { http } from "@/services/http";
 import useUserStore from "@/store/useUserStore";
 
-export default function Login() {
+export default function Login({login, closePopup}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,8 +16,8 @@ export default function Login() {
       const response = await http.post("/login", { email, password });
       // Store user details in Zustand
       setUser(response.data.user); // Assuming `response.data.user` contains the user's details
-      alert("Login successful!");
-      window.location.href = "/"; // Redirect to the dashboard
+      login();
+      closePopup();
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
     }
