@@ -21,7 +21,6 @@ export default function Register({ closePopup }) {
         e.preventDefault();
 
         try {
-            console.log("Before turning to backend")
             const response = await http.post("/register", {
                 firstName,
                 lastName,
@@ -32,11 +31,9 @@ export default function Register({ closePopup }) {
                 birthDate,
                 password,
             });
-            console.log("After turning to backend")
             alert("Registration successful!");
             closePopup();
         } catch (error) {
-            console.log('ERROR')
             setError(error.response?.data?.message || "An error occurred");
         }
     };
