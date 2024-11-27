@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Register from "../components/Login/Login";
 
 export default function Home() {
