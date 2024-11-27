@@ -45,16 +45,17 @@ export async function POST(req)  {
       }
   
       // Create JWT token
-      const token = jwt.sign(
-        { userId: user._id },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
+      // const token = jwt.sign(
+      //   { userId: user._id },
+      //   process.env.JWT_SECRET,
+      //   { expiresIn: "1h" }
+      // );
 
       return new Response(
-        JSON.stringify({token }),
+        JSON.stringify({ user }),
         { status: 200 }
       );
+      
     } catch (error) {
         console.error("Error in POST /login:", error);
         return new Response(

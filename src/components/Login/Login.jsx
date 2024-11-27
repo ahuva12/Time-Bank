@@ -1,26 +1,28 @@
-'use client'
-import { useState } from "react";
-import { http } from '@/services/http'
+'use client';
 
+import { useState } from "react";
+import { http } from "@/services/http";
+import useUserStore from "@/stores/userStore";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const setUser = useUserStore((state) => state.setUser);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await http.post("/login", { email, password });
-      // Store JWT token in localStorage
-      localStorage.setItem("token", response.data.token);
+      // Store user details in Zustand
+      setUser(response.data.user); // Assuming `response.data.user` contains the user's details
       alert("Login successful!");
       window.location.href = "/"; // Redirect to the dashboard
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
     }
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <input
@@ -42,6 +44,7 @@ export default function Login() {
     </form>
   );
 }
+
 
 
 
