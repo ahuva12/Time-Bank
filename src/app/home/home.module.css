@@ -15,14 +15,20 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  height: 23rem;
+
+  /* justify-content: space-between; */
 }
 
 .imagePeople {
-  width: 400px;
-  height: 300px;
-  margin-left: 4rem;
+  position: relative;
+  left: -500px;
+  top: -110px;
+  width: 35%;
+  height: auto;
+  margin: 0;
   padding: 0;
+  z-index: -1;
 }
 
 .textContent {
@@ -31,6 +37,7 @@
   justify-content: center;
   align-items: flex-start;
   margin-right: 4rem;
+  margin-top: 0;
 }
 
 .header h1 {
@@ -60,7 +67,7 @@
   flex-direction: row;
   align-items: center;
   padding: 2rem;
-  margin-top: 2rem;
+  margin-top: 0;
   margin-bottom: 2rem;
   height: 250px;
 }
@@ -136,6 +143,7 @@
 }
 
 /*why join*/
+
 .sectionJoin h2 {
   text-align: center;
   font-weight: bold;
@@ -166,16 +174,14 @@
 
 .joinImage {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
   margin: 0;
 }
 
 .image {
-  width: 80px;
-  height: 80px;
   border-radius: 50%;
   object-fit: cover;
 }

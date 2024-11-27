@@ -22,9 +22,9 @@
     color: white;
     border-radius: 8px;
     padding: 12px;
-    height: 2rem;
+    height: 2.4rem;
     font-size: small;
-    width: 4.5rem;
+    width: 5rem;
     margin-right: 4rem;
 }
 
@@ -35,10 +35,10 @@
     border: 1px solid black;
     border-radius: 8px;
     padding: 12px;
-    height: 2rem;
+    height: 2.4rem;
     font-size: small;
-    width: 4.5rem;
-    margin-right: 2rem;
+    width: 5rem;
+    margin-right: 1rem;
 }
 
 .btnLogin a,
