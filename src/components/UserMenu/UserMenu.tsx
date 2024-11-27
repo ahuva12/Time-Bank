@@ -2,17 +2,26 @@
 import styles from './UserMenu.module.css';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import useUserStore from "@/store/useUserStore";
 
-export default function UserMenu() {
+export default function UserMenu({ logout }: { logout: Function }) {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
+    const clearUser = useUserStore((state) => state.clearUser);
+
+    const handleLogout = () => {
+        clearUser(); // Clear user data from Zustand store
+        alert("Logged out successfully!");
+        logout();
+        window.location.href = "/home"; // Redirect to login page
+    };
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
 
     const handleRedirect = (path: string) => {
-      router.push(path); // Redirect to the specified route
+        router.push(path); // Redirect to the specified route
     };
 
     return (
@@ -29,7 +38,7 @@ export default function UserMenu() {
                         <li onClick={() => handleRedirect('profile')}>פרופיל</li>
                         <li onClick={() => handleRedirect('history')}>היסטוריה</li>
                         <li onClick={() => handleRedirect('saved')}>שמורים</li>
-                        <li onClick={() => handleRedirect('logout')}>התנתקות</li>
+                        <li onClick={handleLogout}>התנתקות</li>
                     </ul>
                 </div>
             )}
