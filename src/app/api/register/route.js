@@ -38,7 +38,7 @@ export async function POST(req)  {
         phoneNumber: phoneNumber, 
         dateOfBirth: birthDate,
         password: hashedPassword,
-        remainingHours: 0
+        remainingHours: 2
       });
 
       return new Response(
