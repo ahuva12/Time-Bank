@@ -2,9 +2,8 @@
 import styles from './AddActivityForm.module.css';
 import { useForm, SubmitHandler} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addActivityForm } from '@/validations/activity'; 
+import { addActivityForm } from '@/validations/validationsClient/activity'; 
 import { useState } from "react";
-import { symbol } from 'zod';
 
 const predefinedTags = [
     "מוזיקה", "שיעור פרטי", "יצירה", "הדרכה", 
@@ -36,7 +35,6 @@ const AddActivityForm = () => {
             const updatedTags = [...selectedTags, tag];
             setSelectedTags(updatedTags);
             setValue("tags", updatedTags); 
-            console.log(updatedTags)
         }
     };    
     
