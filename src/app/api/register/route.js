@@ -2,12 +2,12 @@ import { connectDatabase, insertDocument, getDocument } from "@/services/mongo";
 import bcrypt from "bcryptjs";
 
 export async function POST(req)  {
-
+    
     const body = await req.json();
 
-    const { username, email, password } = body;
+    const { firstName, lastName, address, gender, email, phoneNumber, birthDate, password } = body;
 
-    if (!username || !email || !password) {
+    if (!firstName || !lastName || !address || !gender || !email || !phoneNumber || !birthDate || !password) {
         return new Response(
             JSON.stringify({ message: "All fields are required." }),
             { status: 400 }
@@ -18,7 +18,7 @@ export async function POST(req)  {
       
       // Check if the username already exists
       const existingUser = await getDocument(client, 'users',{ 'email': email}); //await usersCollection.findOne({ username });
-      console.log('2')
+      
       if (existingUser) {
         return new Response(
             JSON.stringify({ message: "User already exists." }),
@@ -30,13 +30,19 @@ export async function POST(req)  {
       const hashedPassword = await bcrypt.hash(password, 12);
 
       await insertDocument(client, 'users', {
-        username,
-        email,
+        firstName: firstName, 
+        lastName: lastName, 
+        address: address, 
+        gender: gender, 
+        email: email, 
+        phoneNumber: phoneNumber, 
+        dateOfBirth: birthDate,
         password: hashedPassword,
+        remainingHours: 2
       });
 
       return new Response(
-        JSON.stringify({ message: "User registered successfully.", result }),
+        JSON.stringify({ message: "User registered successfully." }),
         { status: 201 }
       );
     } catch (error) {

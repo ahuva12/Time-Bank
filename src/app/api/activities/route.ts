@@ -1,7 +1,7 @@
 import { connectDatabase, getAllDocuments, insertDocument } from "@/services/mongo";
 import { NextResponse } from "next/server";
 import { User } from "@/types/user";
-import { activitySchema } from "@/validations/activitySchema";
+import { activitySchema } from "@/validations/activity";
 import { z } from "zod";
 
 export async function GET(request: Request) {

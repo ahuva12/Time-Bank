@@ -54,21 +54,23 @@ export default function Home() {
       <section className={styles.sectionJoin}>
         <h2>למה כדאי להצטרף?</h2>
         <div className={styles.benefits}>
-          <div className={styles.joinImage}>
+        <div className={styles.joinImage}>
             <Image
               src="/images/heands.png"
               alt="hands"
-              width={100}
-              height={100}
+              width={150}
+              height={150}
               className={styles.image}
             />
           </div>
+
           <div className={styles.benefit}>
             <h3>הזדמנויות למידה:</h3>
             <p>
               כל אדם שמציע שירות בבנק הזמן יכול ללמוד ולהתנסות במגוון תחומים.
             </p>
           </div>
+
           <div className={styles.benefit}>
             <h3>קהילה תומכת:</h3>
             <p>
@@ -76,6 +78,7 @@ export default function Home() {
               לשני
             </p>
           </div>
+
           <div className={styles.benefit}>
             <h3>גמישות:</h3>
             <p>
@@ -83,13 +86,14 @@ export default function Home() {
               להשתמש בשירותים שלך לפי הצורך.
             </p>
           </div>
+
           <div className={styles.benefit}>
             <h3>חיסכון כספי:</h3>
             <p>ניתן לקבל שירותים מבלי לשלם כסף – כל מה שצריך זה זמן.</p>
           </div>
         </div>
       </section>
-      
+
       <section className={styles.sectionStartNow}>
         <h2>התחל עכשיו!</h2>
         <p>צור חשבון, אסוף את השעות שלך ומצא מישהו שמוכן לעזור לך.</p>
