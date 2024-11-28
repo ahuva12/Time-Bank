@@ -8,7 +8,7 @@ import { symbol } from 'zod';
 
 const predefinedTags = [
     "מוזיקה", "שיעור פרטי", "יצירה", "הדרכה", 
-    "עבודות בית", "ספורט", "בישול", "פנאי", "תחזוקה", "שונות"
+    "עבודות בית", "ספורט", "בישול", "פנאי", "תחזוקה"
 ];
 
 type AddActivityFormFileds = {
@@ -21,7 +21,6 @@ type AddActivityFormFileds = {
 const AddActivityForm = () => {
     
     const [selectedTags, setSelectedTags] = useState<string[]>([]);    
-    // const [newTag, setNewTag] = useState('');    
 
     const {
         register,
@@ -41,14 +40,14 @@ const AddActivityForm = () => {
         }
     };    
     
-    // const handleCustomTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    //     const tag = (e.currentTarget.value || "").trim();
-    //     if (e.key === "Enter" && tag) {
-    //         e.preventDefault();
-    //         handleAddTag(tag);
-    //         e.currentTarget.value = ""; 
-    //     }
-    // };
+    const handleCustomTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        const tag = (e.currentTarget.value || "").trim();
+        if (e.key === "Enter" && tag) {
+            e.preventDefault();
+            handleAddTag(tag);
+            e.currentTarget.value = ""; 
+        }
+    };
 
     const handleRemoveTag = (tag: string) => {
         const updatedTags = selectedTags.filter(t => t !== tag);
@@ -93,11 +92,11 @@ const AddActivityForm = () => {
                         <option key={tag} value={tag}>{tag}</option>
                     ))}
                 </select>
-                {/* <input
+                <input
                     type="text"
                     placeholder="הוסף תגית חדשה"
                     onKeyDown={handleCustomTagInput}
-                    /> */}
+                    />
                 <div className={styles.TagList}>
                     {selectedTags.map(tag => (
                         <span key={tag} className={styles.Tag}>
