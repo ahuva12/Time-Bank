@@ -1,9 +1,6 @@
 import { connectDatabase, deleteDocument, getDocument, updateDocument, getDocuments } from '@/services/mongo';
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
-import { User } from '@/types/user';
-import { activitySchema } from "@/validations/activity";
-import { z } from "zod";
 
 //get activities in status "accepted" + the user in giverId or receiverId
 export async function GET(req: Request, { params }: { params: Promise<{ activityId: string }> }) {

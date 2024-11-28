@@ -16,3 +16,4 @@ export const updatingStatusSchema = z.object({
     }).optional(), 
     status: z.enum(["proposed", "caught", "accepted", "cancelled"]),
 });
+

@@ -1,7 +1,7 @@
 import { connectDatabase, updateDocument } from '@/services/mongo';
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
-import { updatingStatusSchema } from '@/validations/activity';
+import { updatingStatusSchema } from '@/validations/validationsServer/activity';
 import { z } from "zod";
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ activityId: string }> }) {

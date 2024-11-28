@@ -1,7 +1,7 @@
 import { connectDatabase, deleteDocument, getDocument, updateDocument, getDocuments } from '@/services/mongo';
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
-import { activitySchema } from "@/validations/activity";
+import { activitySchema } from "@/validations/validationsServer/activity";
 import { z } from "zod";
 import { Activity } from '@/types/activity';
 

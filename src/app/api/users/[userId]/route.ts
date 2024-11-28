@@ -2,7 +2,7 @@ import { connectDatabase, deleteDocument, updateDocument } from '@/services/mong
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { User } from '@/types/user';
-import { userSchema } from "@/validations/user";
+import { userSchema } from "@/validations/validationsServer/user";
 import { z } from "zod";
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ userId: string }> }) {
