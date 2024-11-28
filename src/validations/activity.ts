@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { z } from "zod";
 
 export const activitySchema = z.object({
@@ -7,4 +8,11 @@ export const activitySchema = z.object({
     giverId: z.string().min(1, "Giver ID is required"),
     receiverId: z.string().min(1, "Receiver ID is required"),
     status: z.enum(["proposed", "caught", "accepted", "cancelled"])
+});
+
+export const updatingStatusSchema = z.object({
+    receiverId: z.string().refine((value) => ObjectId.isValid(value), {
+        message: "Invalid ObjectId format",
+    }).optional(), 
+    status: z.enum(["proposed", "caught", "accepted", "cancelled"]),
 });

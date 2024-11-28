@@ -2,7 +2,7 @@ import { connectDatabase, deleteDocument, updateDocument } from '@/services/mong
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { User } from '@/types/user';
-import { userSchema } from "@/validations/userSchema";
+import { userSchema } from "@/validations/user";
 import { z } from "zod";
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ userId: string }> }) {
@@ -50,7 +50,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ userId
             return NextResponse.json({ message: "User updated successfully" }, {status: 200});
         } else {
             if (result.matchedCount === 1)
-                return NextResponse.json({ message: "No changes made" }, { status: 404 });
+                return NextResponse.json({ message: "No changes made" }, { status: 204 });
             else
                 return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
