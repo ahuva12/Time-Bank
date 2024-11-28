@@ -1,9 +1,9 @@
 import { connectDatabase, deleteDocument, getDocument, updateDocument, getDocuments } from '@/services/mongo';
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
-import { User } from '@/types/user';
-import { activitySchema } from "@/validations/activitySchema";
+import { activitySchema } from "@/validations/activity";
 import { z } from "zod";
+import { Activity } from '@/types/activity';
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ activityId: string }> }) {
     try {
@@ -30,7 +30,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ activ
 export async function PATCH(req: Request, { params }: { params: Promise<{ activityId: string }> }) {
     try {
         const { activityId } = await params;
-        const body: User = await req.json(); 
+        const body = await req.json(); 
 
         if (!activityId) {
             return NextResponse.json({ message: "Activity ID is required" }, { status: 400 });
@@ -50,7 +50,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ activi
             return NextResponse.json({ message: "Activity updated successfully" }, {status: 200});
         } else {
             if (result.matchedCount === 1)
-                return NextResponse.json({ message: "No changes made" }, { status: 404 });
+                return NextResponse.json({ message: "No changes made" }, { status: 204 });
             else
                 return NextResponse.json({ message: "Activity not found" }, { status: 404 });
         }
@@ -67,20 +67,20 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ activi
     }
 }
 
-//get activities in status that the user is not giverId
-export async function GET(req: Request, { params }: { params: Promise<{ activityId: string }> }) {
-    try {
-        const { activityId } = await params;
-        if (!activityId) {
-            return NextResponse.json({ message: "activity ID is required" }, { status: 400 });
-        }
+// //get activities in status that the user is not giverId
+// export async function GET(req: Request, { params }: { params: Promise<{ activityId: string }> }) {
+//     try {
+//         const { activityId } = await params;
+//         if (!activityId) {
+//             return NextResponse.json({ message: "activity ID is required" }, { status: 400 });
+//         }
 
-        const client = await connectDatabase();
-        const activities = await getDocuments(client, 'activities', { giverId: { $ne: new ObjectId(activityId) } });
-        return NextResponse.json(activities);
+//         const client = await connectDatabase();
+//         const activities = await getDocuments(client, 'activities', { giverId: { $ne: new ObjectId(activityId) } });
+//         return NextResponse.json(activities);
 
-    } catch (error) {
-        console.error("Error fetching activities:", error);
-        return NextResponse.json({ message: "Failed to fetch activities" }, { status: 500 });
-    }
-}
+//     } catch (error) {
+//         console.error("Error fetching activities:", error);
+//         return NextResponse.json({ message: "Failed to fetch activities" }, { status: 500 });
+//     }
+// }

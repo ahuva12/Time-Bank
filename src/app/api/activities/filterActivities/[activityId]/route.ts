@@ -2,7 +2,7 @@ import { connectDatabase, deleteDocument, getDocument, updateDocument, getDocume
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { User } from '@/types/user';
-import { activitySchema } from "@/validations/activitySchema";
+import { activitySchema } from "@/validations/activity";
 import { z } from "zod";
 
 //get activities in status "accepted" + the user in giverId or receiverId
@@ -36,9 +36,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ activity
 //general get activities (according by filter)
 export async function POST(req: Request) {
     try {
-        console.log('get')
-        console.log(req)
-        // const filter = await req.json(); 
         const { filter } = await req.json();
 
         console.log(filter)

@@ -1,6 +1,6 @@
 import { connectDatabase, getAllDocuments, insertDocument, getDocument } from "@/services/mongo";
 import { NextResponse } from "next/server";
-import { loginSchema } from "@/validations/userSchema";
+import { loginSchema } from "@/validations/user";
 import { z } from "zod";
 
 export async function POST(req: Request) {

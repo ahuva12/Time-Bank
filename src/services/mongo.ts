@@ -4,8 +4,7 @@ let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
 export async function connectDatabase() {
-    if (!client) {
-        
+    if (!client) {       
         const dbConnectionString = process.env.PUBLIC_DB_CONNECTION;
         if (!dbConnectionString) {
             throw new Error('Database connection string is not defined');
@@ -89,7 +88,17 @@ export async function updateDocument(client: MongoClient, collection: string, fi
         throw error;
     }
 }
-
+ 
+export async function incFieldInDocument(client: MongoClient, collection: string, filter: object, update: object) {
+    try {
+        const db = client.db('time-bank');
+        const result = await db.collection(collection).updateOne(filter, update);
+        return result;
+    } catch (error) {
+        console.error("Error updating document:", error);
+        throw error;
+    }
+}
 
 
 
