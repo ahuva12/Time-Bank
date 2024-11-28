@@ -2,7 +2,7 @@
 import styles from './AddActivityForm.module.css';
 import { useForm, SubmitHandler} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addActivityForm } from '@/validations/activitySchema'; 
+import { addActivityForm } from '@/validations/activity'; 
 import { useState } from "react";
 import { symbol } from 'zod';
 
