@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { http } from "@/services/http";
 import useUserStore from "@/store/useUserStore";
+import Styles from './Login.module.css'
 
-export default function Login({login, closePopup}) {
+export default function Login({login, closePopup, setIsRegisterOpen}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,24 +24,46 @@ export default function Login({login, closePopup}) {
     }
   };
 
+  const goRegister = () => {
+    closePopup();
+    setIsRegisterOpen(true); 
+  };
+
   return (
     <form onSubmit={handleSubmit}>
-      <input
+      <div className={Styles.container}>
+        <h1 className={Styles.title}>כניסה</h1>
+      <input className={Styles.inputFields}
         type="email"
-        placeholder="Email"
+        placeholder="אמייל"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
       />
-      <input
+      <input className={Styles.inputFields}
         type="password"
-        placeholder="Password"
+        placeholder="סיסמא"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <button type="submit">Login</button>
+      <div className={Styles.innerDiv}>
+        <button className={Styles.button} type="submit">כניסה</button>
+        <div style={{marginLeft: '50px'}}>
+      <p className={Styles.registerText}>
+          אין לך חשבון?{' '}
+          <span
+            style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
+            onClick={goRegister}
+          >
+            הירשם
+          </span>{' '}
+          במקום.
+        </p>
+        </div>
+      </div>
       {error && <p>{error}</p>}
+      </div>
     </form>
   );
 }

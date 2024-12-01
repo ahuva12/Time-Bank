@@ -32,13 +32,13 @@ export default function Header() {
             className={styles.btnLogin}
             onClick={toggleLogin}
           >
-            Login
+            כניסה
           </button>
           <button
             className={styles.btnSignup}
             onClick={toggleRegister}
           >
-            Signup
+            הרשמה
           </button>
           <div>
             <button onClick={login}>Simulate Login</button>
@@ -57,7 +57,7 @@ export default function Header() {
             >
               ×
             </button>
-            <Login login={login} closePopup={toggleLogin}/>
+            <Login login={login} closePopup={toggleLogin} setIsRegisterOpen={setIsRegisterOpen}/>
           </div>
         </div>
       )}
@@ -72,7 +72,7 @@ export default function Header() {
             >
               ×
             </button>
-            <Register closePopup={toggleRegister}/>
+            <Register closePopup={toggleRegister} setIsLoginOpen={setIsLoginOpen}/>
           </div>
         </div>
       )}

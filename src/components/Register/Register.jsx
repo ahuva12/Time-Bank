@@ -1,8 +1,9 @@
 'use client'
 import { useState } from "react";
 import { http } from '@/services/http'
+import Styles from './Register.module.css'
 
-export default function Register({ closePopup }) {
+export default function Register({ closePopup, setIsLoginOpen }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [address, setAddress] = useState("");
@@ -38,69 +39,91 @@ export default function Register({ closePopup }) {
         }
     };
 
+    const goLogin = () => {
+        closePopup();
+        setIsLoginOpen(true); 
+      };
+
     return (
         <form onSubmit={handleSubmit}>
-            <input
+            <div className={Styles.container}>
+            <h1 className={Styles.title}>הרשמה</h1>
+            <input className={Styles.inputFields}
                 type="text"
-                placeholder="First name"
+                placeholder="שם פרטי"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
             />
-            <input
+            <input className={Styles.inputFields}
                 type="text"
-                placeholder="Last name"
+                placeholder="שם משפחה"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
             />
-            <input
+            <input className={Styles.inputFields}
                 type="text"
-                placeholder="Address"
+                placeholder="כתובת"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 required
             />
-            <input
+            <input className={Styles.inputFields}
                 type="email"
-                placeholder="Email"
+                placeholder="אמייל"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
             />
-            <div>
-                <label htmlFor="gender">Select Gender:</label>
+            <div className={Styles.selectGender}>
+                <label htmlFor="gender" style={{marginLeft: '10px'}}>מגדר</label>
                 <select id="gender" value={gender} onChange={handleChange}>
                     <option value="" disabled>
-                        -- Select --
+                        -- בחר --
                     </option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
+                    <option value="male">זכר</option>
+                    <option value="female">נקבה</option>
                 </select>
                 {/* {gender && <p>You selected: {gender}</p>} */}
             </div>
-            <input
+            <input className={Styles.inputFields}
                 type="text"
-                placeholder="Phone Number"
+                placeholder="טלפון"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 required
             />
-            <input
+            <input className={Styles.inputFields}
                 type="date"
-                placeholder="Birth Date"
+                placeholder="תאריך לידה"
                 value={birthDate}
                 onChange={(e) => setBirthDate(e.target.value)}
                 required
             />
-            <input
+            <input className={Styles.inputFields}
                 type="password"
-                placeholder="Password"
+                placeholder="סיסמא"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
             />
-            <button type="submit">Register</button>
+        </div>
+            <div className={Styles.innerDiv}>
+        <button className={Styles.button} type="submit">הרשמה</button>
+        <div style={{marginLeft: '50px'}}>
+      <p className={Styles.loginText}>
+          כבר חבר?{' '}
+          <span
+            style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
+            onClick={goLogin}
+          >
+            היכנס
+          </span>{' '}
+          במקום.
+        </p>
+        </div>
+      </div>
             {error && <p>{error}</p>}
         </form>
     );
