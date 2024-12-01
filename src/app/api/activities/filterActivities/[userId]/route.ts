@@ -30,26 +30,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ activity
     }
 }
 
-//general get activities (according by filter)
-// export async function POST(req: Request) {
-//     try {
-//         const { filter } = await req.json();
-
-//         console.log(filter)
-//         const client = await connectDatabase();
-//         const activities = await getDocuments(client, 'activities', filter);
-
-//         if (!activities.length) {
-//             return NextResponse.json({ message: "No activities found" }, { status: 404 });
-//         }
-
-//         return NextResponse.json(activities);
-//     } catch (error) {
-//         console.error('Error fetching activities:', error);
-//         return NextResponse.json({ message: 'Error fetching activities' }, { status: 500 });
-//     }
-// }
-
 const getCaughtActivitiesFilter = (userId:string) => {
     return {
                 $and: [
@@ -57,10 +37,68 @@ const getCaughtActivitiesFilter = (userId:string) => {
                     receiverId: new ObjectId(userId),
                 },
                 {
-                    status: 'caught',
+                    status: 'caughted',
                 },
                 ],
             }
+}
+
+const getActivitiesHistoryFilter = (userId:string) => {
+    return {
+            $or: [
+                {
+                    $and: [
+                    { giverId: new ObjectId(userId) },
+                    { status: 'accepted' }
+                    ]
+                },
+                {
+                    $and: [
+                    { receiverId: new ObjectId(userId) },
+                    { status: 'accepted' }
+                    ]
+                }
+            ]
+        }
+}
+
+const getActivitiesProposedFilter = (userId:string) => {
+    return {
+            $and: [
+                    {
+                        giverId: { $ne: new ObjectId(userId) }, 
+                    },
+                    {
+                        status: 'proposed',
+                    },
+                ]
+        }
+}
+
+const getCaughtActivitiesGiverFilter = (userId:string) => {
+    return {
+        $and: [
+                {
+                    giverId: new ObjectId(userId),
+                },
+                {
+                    status: 'caughted',
+                },
+            ]
+        }
+}
+
+const getProposedActivitiesGiverFilter = (userId:string) => {
+    return {
+        $and: [
+            {
+                giverId: new ObjectId(userId),
+            },
+            {
+                status: 'proposed',
+            },
+        ]
+    }
 }
 
 export async function POST(req: Request, { params }: { params: { userId: string } }) {
@@ -81,6 +119,19 @@ export async function POST(req: Request, { params }: { params: { userId: string 
             case 'caughted':
                 filter = getCaughtActivitiesFilter(userId); 
                 break;
+            case 'history':
+                filter = getActivitiesHistoryFilter(userId); 
+                break;
+            case 'proposed':
+                filter = getActivitiesProposedFilter(userId); 
+                break;
+            case 'caughtedGiver':
+                filter = getCaughtActivitiesGiverFilter(userId); 
+                break;
+            case 'proposedGiver':
+                filter = getProposedActivitiesGiverFilter(userId); 
+                break;
+             
             default:
                 return NextResponse.json(
                     { message: 'Invalid filter type provided.' },
@@ -90,13 +141,6 @@ export async function POST(req: Request, { params }: { params: { userId: string 
 
         const client = await connectDatabase();
         const activities = await getDocuments(client, 'activities', filter);
-
-        if (!activities.length) {
-            return NextResponse.json(
-                { message: 'No activities found.' },
-                { status: 404 }
-            );
-        }
 
         return NextResponse.json(activities);
     } catch (error) {

@@ -14,6 +14,7 @@ export default function Login({login, closePopup}) {
     e.preventDefault();
     try {
       const response = await http.post("/login", { email, password });
+      console.log(response.data.user)
       // Store user details in Zustand
       setUser(response.data.user); // Assuming `response.data.user` contains the user's details
       login();

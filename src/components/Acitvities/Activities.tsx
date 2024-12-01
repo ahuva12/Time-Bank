@@ -1,39 +1,30 @@
 'use client';
 import styles from './Activities.module.css';
 import { Activity } from '@/types/activity';
-import { ActivityCardBtn, Loader } from '@/components';
-import { useEffect } from 'react';
+import { ActivityCard } from '@/components';
 
 interface ActivitiesProps {
     activities: Activity[];
-    handleMoreDetails: () => void;
-    handlesMoreOptions: {
-        handleAcceptActivity?: () => void;
-        handleCancellRequestActivity?: () => void;
-        handleRequesterDetails?: () => void;
-        handleUpdateActivity?: () => void;
-        handleCancellProposalActivity?: () => void;
-    };
-
   }
   
 
-const Activities = ({activities, handleMoreDetails, handlesMoreOptions}: ActivitiesProps) => {
+const Activities = ({activities}: ActivitiesProps) => {
 
-  const useEffect = (console.log(activities), [activities])
-
-   return (<div>
-    {activities ? ( <div className={styles.tableActivities}> 
-        {activities.map((activity, index) => (<ActivityCardBtn 
-                                                key={index}
-                                                activity={activity}
-                                                handleMoreDetails={handleMoreDetails}
-                                                handlesMoreOptions={handlesMoreOptions}/>))}
-   </div>) : (<Loader/>)}
-   
-        
+  return (
+    <div className={styles.tableActivities}>
+      {activities.length === 0 ? (
+        <div className={styles.noActivities}>אין לך פעילויות שמורות. רוצה גם אתה להרשם לפעילות בבנק הזמן?<a className={styles.link} href="#">לחץ כאן</a>על מנת לחפש פעילות להרשם אליה:)</div>
+      ) : (
+        activities.map((activity, index) => (
+          <ActivityCard 
+            key={index} 
+            activity={activity} 
+          />
+        ))
+      )}
     </div>
-   )
+  );
+                  
 }
 
 export default Activities;

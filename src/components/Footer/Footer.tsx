@@ -10,7 +10,7 @@ export default function Footer() {
          <div className={styles.contactInfo}>
             <h3>יצירת קשר</h3>
             <div className={styles.contactlist}>
-                <p>דוא"ל: <a href="mailto:support@example.com">support@example.com</a></p>
+                <p>דוא"ל: <a href="mailto:Timebank@gmail.com">Timebank@gmail.com</a></p>
                 <p>טלפון: 03-1234567</p>
                 <p>כתובת: רחוב הדוגמה 12, תל אביב</p>
             </div>

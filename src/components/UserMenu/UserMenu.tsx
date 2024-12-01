@@ -22,6 +22,7 @@ export default function UserMenu({ logout }: { logout: Function }) {
 
     const handleRedirect = (path: string) => {
         router.push(path); // Redirect to the specified route
+        setIsOpen(false);
     };
 
     return (
@@ -37,7 +38,7 @@ export default function UserMenu({ logout }: { logout: Function }) {
                     <ul>
                         <li onClick={() => handleRedirect('profile')}>פרופיל</li>
                         <li onClick={() => handleRedirect('history')}>היסטוריה</li>
-                        <li onClick={() => handleRedirect('saved')}>שמורים</li>
+                        <li onClick={() => handleRedirect('/savedActivities')}>שמורים</li>
                         <li onClick={handleLogout}>התנתקות</li>
                     </ul>
                 </div>
