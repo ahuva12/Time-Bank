@@ -112,7 +112,7 @@ export default function Register({ closePopup, setIsLoginOpen }) {
             <div className={Styles.innerDiv}>
         <button className={Styles.button} type="submit">הרשמה</button>
         <div style={{marginLeft: '50px'}}>
-      <p className={Styles.registerText}>
+      <p className={Styles.loginText}>
           כבר חבר?{' '}
           <span
             style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
