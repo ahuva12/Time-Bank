@@ -35,7 +35,8 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
                     <p className={styles.textSucc}>
                         תודה על התעניינותך!
                         <br />
-                        הודענו על כך למבצע הפעילות
+                        הודענו על כך למבצע הפעילות.
+                        <br />
                         תוכל ליצור איתו קשר במייל: {user.email}</p>
                     <button className={styles.buttonSucc} onClick={onClose}>
                         OK
@@ -74,14 +75,14 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
                                     ))}
                                 </div>
                             </div>
-
                         </div>
+
                         <div className={styles.content}>
-                            <div className={styles.icon}>
+                            <div className={styles.description}>
                                 <div className={styles.profileIcon}></div>
-                                <p>{user.firstName} {user.lastName}</p>
-                                <p>{user.gender === "male" ? "בן" : "בת"} {calculateAge(user.dateOfBirth)}</p>
-                                <p>{user.address}</p>
+                                <p className={styles.text}>{user.firstName} {user.lastName}</p>
+                                <p className={styles.text}>{user.gender === "male" ? "בן" : "בת"} {calculateAge(user.dateOfBirth)}</p>
+                                <p className={styles.text}>{user.address}</p>
                             </div>
                         </div>
                     </div>
@@ -91,6 +92,6 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
         );
     };
 
-    return isSuccess ? successModal() : activityModalOpen();
 
+    return isSuccess ? successModal() : activityModalOpen();
 };
