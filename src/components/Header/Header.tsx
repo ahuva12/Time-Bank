@@ -10,7 +10,7 @@ import Register from '@/components/Register/Register';
 import { useState } from 'react';
 
 export default function Header() {
-  const { isLoggedIn, logout, login } = useAuthStore();
+  const { isLoggedIn, logout, login, signup } = useAuthStore();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
