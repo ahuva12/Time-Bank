@@ -1,0 +1,63 @@
+.footer {
+    background-color: #048EBC;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* מיקומים קצה לקצה */
+    padding: 20px;
+    gap: 20px; /* רווח בין הדיבים */
+  }
+  
+  .contactInfo {
+    text-align: right; /* יישור לימין */
+    flex: 1; /* מאפשר מקום שווה לדיב */
+  }
+  
+  .socialLinks {
+    text-align: left;
+    display: flex; /* הפעלת flexbox */
+    flex-direction: column; /* סידור התוכן בעמודה */
+    align-items: flex-start; /* מיישר את כל האלמנטים לשמאל */
+  }
+  
+  .socialLinks h3{
+    margin-left: 0;
+    text-align: left;
+  }
+  .logo {
+    margin-top: 20px; /* מוסיף רווח מעל הלוגו */
+    align-self: flex-start; /* מצמיד את הלוגו לשמאל */
+  }
+  
+  .title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .divider {
+    border: 0;
+    height: 1px;
+    background-color: white; /* צבע הקו */
+    margin-bottom: 10px; /* רווח מתחת לקו */
+  }
+  
+  .contactlist p, .links a {
+    margin: 5px 0;
+  }
+  
+  .links {
+    display: flex; /* סידור אלמנטים בשורה */
+    flex-direction: row; /* מוודא שהקישורים יהיו בשורה */
+    gap: 15px; /* מרווח בין הקישורים */
+    justify-content: flex-start; /* מיישר את הקישורים לשמאל */
+    align-items: center; /* ממרכז אנכית את הקישורים (אם יש טקסט או לוגו בגבהים שונים) */
+  }
+  
+  .icon {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+ 

@@ -5,9 +5,9 @@ export interface Activity {
     nameActivity: string;
     durationHours: number; 
     description: string;
-    tags: Array<string>;
+    tags: Array<string> | [];
     giverId: string | ObjectId;
-    receiverId: string | ObjectId;
+    receiverId: string | ObjectId | null;
     status: "proposed" | "caught" | "accepted" | "cancelled";   
     comments?: string 
 }

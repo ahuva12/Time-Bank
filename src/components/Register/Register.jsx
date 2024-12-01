@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { http } from '@/services/http'
 
-export default function Register() {
+export default function Register({ closePopup }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [address, setAddress] = useState("");
@@ -21,7 +21,6 @@ export default function Register() {
         e.preventDefault();
 
         try {
-            console.log("Before turning to backend")
             const response = await http.post("/register", {
                 firstName,
                 lastName,
@@ -32,11 +31,9 @@ export default function Register() {
                 birthDate,
                 password,
             });
-            console.log("After turning to backend")
             alert("Registration successful!");
-            window.location.href = "/"; // Redirect to login page
+            closePopup();
         } catch (error) {
-            console.log('ERROR')
             setError(error.response?.data?.message || "An error occurred");
         }
     };
