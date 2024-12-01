@@ -1,152 +1,23 @@
 import { http } from '@/services/http';
 import { Activity } from '@/types/activity';
-import { ObjectId } from 'mongodb';
 
-//get activities the user has given or received (for history page)
-export const getActivitiesHistory = async (userId:string) => {
-    const user_objectId =  new ObjectId(userId);
-    const body = {
-        filter: {
-          $or: [
-            {
-              $and: [
-                { giverId: user_objectId },
-                { status: 'accepted' }
-              ]
-            },
-            {
-              $and: [
-                { receiverId: user_objectId },
-                { status: 'accepted' }
-              ]
-            }
-          ]
-        }
-      };
+//get activities based on filtering 
+//(the filters are can be: 'caughted', 'history', 'proposed', 'caughtedGiver', 'proposedGiver')
+export const getFilteringActivities = async (filterType:string, userId:string) => {
 
-    try {
-      const response = await http.post(`/activities/filterActivities/${userId}`, body); 
-      if (response.status !== 200)
-        throw new Error(`${response.status}: error fetching activities`);
+  const body = { filterType };
 
-      return response.data; 
+  try {
+    const response = await http.post(`/activities/filterActivities/${userId}`, body); 
+    if (response.status !== 200)
+      throw new Error(`${response.status}: error fetching activities`);
 
-    } catch (error: any) {
-        console.error('Error:', error.message);
-        throw new Error(error.message);
-    }
-};
+    return response.data; 
 
-//get all activities proposed
-export const getActivitiesProposed = async (userId:string) => {
-    const body = {
-        filter: {
-          $and: [
-            {
-                giverId: { $ne: new ObjectId(userId) }, 
-            },
-            {
-                status: 'proposed',
-            },
-          ],
-        },
-      };
-
-    try {
-      const response = await http.post(`/activities/filterActivities/${userId}`, body); 
-      if (response.status !== 200)
-        throw new Error(`${response.status}: error fetching activities`);
-
-      return response.data; 
-
-    } catch (error: any) {
-        console.error('Error:', error.message);
-        throw new Error(error.message);
-    }
-};
-
-//get activities that the user has marked as "wanted"
-export const getCaughtActivities = async (userId:string) => {   
-    const body = {
-        filter: {
-          $and: [
-            {
-                receiverId: new ObjectId(userId),
-            },
-            {
-                status: 'caught',
-            },
-          ],
-        },
-      };
-
-    try {
-      const response = await http.post(`/activities/filterActivities/${userId}`, body); 
-      if (response.status !== 200)
-        throw new Error(`${response.status}: error fetching activities`);
-
-      return response.data; 
-
-    } catch (error: any) {
-        console.error('Error:', error.message);
-        throw new Error(error.message);
-    }
-};
-
-//get activities that the current user is the giver and their status is "wanted"
-export const getCaughtActivitiesGiven = async (userId:string) => {   
-    const body = {
-        filter: {
-          $and: [
-            {
-                giverId: new ObjectId(userId),
-            },
-            {
-                status: 'caught',
-            },
-          ],
-        },
-      };
-
-    try {
-      const response = await http.post(`/activities/filterActivities/${userId}`, body); 
-      if (response.status !== 200)
-        throw new Error(`${response.status}: error fetching activities`);
-
-      return response.data; 
-
-    } catch (error: any) {
-        console.error('Error:', error.message);
-        throw new Error(error.message);
-    }
-};
-
-//get activities that the current user is the giver and their status is "proposed"
-export const getProposedActivitiesGiven = async (userId:string) => {   
-    const body = {
-        filter: {
-          $and: [
-            {
-                giverId: new ObjectId(userId),
-            },
-            {
-                status: 'proposed',
-            },
-          ],
-        },
-      };
-
-    try {
-      const response = await http.post(`/activities/filterActivities/${userId}`, body); 
-      if (response.status !== 200)
-        throw new Error(`${response.status}: error fetching activities`);
-
-      return response.data; 
-
-    } catch (error: any) {
-        console.error('Error:', error.message);
-        throw new Error(error.message);
-    }
+  } catch (error: any) {
+      console.error('Error:', error.message);
+      throw new Error(error.message);
+  }
 };
 
 // Post activitiy
@@ -185,7 +56,7 @@ export const updateStatusActivity = async (activityId:string, status:string, rec
 
     const body: Record<string, any> = { status };
     if (receiverId) {
-      body.receiverId = new ObjectId(receiverId); 
+      body.receiverId = receiverId; 
     }
 
     try {

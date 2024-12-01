@@ -1,0 +1,27 @@
+.tableActivities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+  gap: 1rem; 
+  padding: 1rem 6rem; 
+}
+
+.noActivities {
+  margin-top: 2.7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  height: 100vh; 
+  font-size: 1.4rem;
+  color: #555;
+}
+
+.link {
+  color: #007BFF; 
+  font-weight: bold;
+  margin: 3px 0;
+}
+
+.link:hover {
+  color: #0056b3; 
+}

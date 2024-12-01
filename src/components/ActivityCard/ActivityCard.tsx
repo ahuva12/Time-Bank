@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ActivityCard.module.css";
-import { Activity } from "../../types/activity";
+import { Activity } from "@/types/activity";
 
 interface ActivityCardProps {
   activity: Activity;

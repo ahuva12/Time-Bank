@@ -8,6 +8,6 @@ export interface Activity {
     tags: Array<string> | [];
     giverId: string | ObjectId;
     receiverId: string | ObjectId | null;
-    status: "proposed" | "caught" | "accepted" | "cancelled";   
+    status: "proposed" | "caughted" | "accepted" | "cancelled";   
     comments?: string 
 }
