@@ -9,25 +9,23 @@ import { Activity } from '@/types/activity';
 
 const SavedActivities = () => {
   const { user } = useUserStore();
-  
+
+  // Immediately return a static fallback if the user is not logged in
   if (!user) {
     return <div>Please log in to view your saved activities.</div>;
   }
-  
+
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>('close');
 
+  // Always call hooks, even if you plan to render a fallback
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['savedActivities'],
-    queryFn: () => getFilteringActivities('caughted', user?._id ?? ''),
+    queryFn: () => getFilteringActivities('caughted', user._id),
     staleTime: 10000,
   });
 
-  // Error handling
-  if (isError) return <div>Something went wrong while fetching activities.</div>;
-
-  // Mutations
   const updateStatusMutation = useMutation({
     mutationFn: updateStatusActivity,
     onMutate: async ({ activityId }: { activityId: string }) => {
@@ -48,31 +46,36 @@ const SavedActivities = () => {
   });
 
   // Handlers
-  function handleMoreDetails(activity: Activity) {
+  const handleMoreDetails = (activity: Activity) => {
     setSelectedActivity(activity);
     setModeActivityModel('open');
-  }
+  };
 
-  function handleAcceptActivity() {
+  const handleAcceptActivity = () => {
     if (!selectedActivity) return;
     updateStatusMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'accepted',
-      receiverId: user?._id as string,
+      receiverId: user._id,
     });
-  }
+  };
 
-  function handleCancellRequestActivity() {
+  const handleCancellRequestActivity = () => {
     if (!selectedActivity) return;
     updateStatusMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'proposed',
-      receiverId: user?._id as string,
+      receiverId: user._id,
     });
-  }
+  };
 
-  function closeModal() {
+  const closeModal = () => {
     setModeActivityModel('close');
+  };
+
+  // Render content based on the query's state
+  if (isError) {
+    return <div>Something went wrong while fetching activities.</div>;
   }
 
   return (
@@ -85,7 +88,7 @@ const SavedActivities = () => {
       )}
       {modeActivityModel !== 'close' && selectedActivity && (
         <ActivityModal
-          modeOpen={modeActivityModel}
+          modeModel={modeActivityModel}
           onClose={closeModal}
           activity={selectedActivity}
           user={user}

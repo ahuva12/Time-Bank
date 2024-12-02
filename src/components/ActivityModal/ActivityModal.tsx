@@ -7,7 +7,7 @@ import { calculateAge } from "@/services/utils";
 import { CiUser } from "react-icons/ci";
 
 interface ActivityModalProps {
-    modeOpen: string;
+    modeModel: string;
     onClose: () => void;
     activity: Activity;
     user: User;
@@ -20,11 +20,10 @@ interface ActivityModalProps {
     };
 }
 
-const ActivityModal: React.FC<ActivityModalProps> = ({ modeOpen, onClose, activity, user, handlesMoreOptions }) => {
-    if (modeOpen ==='close') return null;
+const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, onClose, activity, user, handlesMoreOptions }) => {
+    if (modeModel === 'close') return null;
 
     const renderButtons = () => {
-
         const buttonConfig = [
             { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי' },
             { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול' },
@@ -46,12 +45,15 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeOpen, onClose, activi
                                 {button.label}
                             </button>
                         )
-                )
-                }
+                )}
             </div>
-        )
+        );
+    };
 
-
+    const errorModal = () => {
+        return (
+            <div>error in model</div>
+        );
     };
 
     const successModal = () => {
@@ -69,7 +71,8 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeOpen, onClose, activi
                         <br />
                         הודענו על כך למבצע הפעילות.
                         <br />
-                        תוכל ליצור איתו קשר במייל: {user.email}</p>
+                        תוכל ליצור איתו קשר במייל: {user.email}
+                    </p>
                     <button className={styles.buttonSucc} onClick={onClose}>
                         OK
                     </button>
@@ -117,7 +120,6 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeOpen, onClose, activi
                                 <p className={styles.text}>{user.firstName} {user.lastName}</p>
                                 <p className={styles.text}>{user.gender === "male" ? "בן" : "בת"} {calculateAge(user.dateOfBirth)}</p>
                                 <p className={styles.text}>{user.address}</p>
-
                             </div>
                         </div>
                     </div>
@@ -125,13 +127,18 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeOpen, onClose, activi
                     <div>
                         {renderButtons()}
                     </div>
-
                 </div>
             </div>
         );
     };
 
-    return modeOpen==='open' ? activityModalOpen() : successModal();
+    return (
+        <>
+            {modeModel === 'open' && activityModalOpen()}
+            {modeModel === 'success' && successModal()}
+            {modeModel === 'error' && errorModal()}
+        </>
+    );
 };
 
 export default ActivityModal;
