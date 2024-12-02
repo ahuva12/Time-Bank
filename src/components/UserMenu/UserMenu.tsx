@@ -22,6 +22,7 @@ export default function UserMenu({ logout }: { logout: Function }) {
 
     const handleRedirect = (path: string) => {
         router.push(path); // Redirect to the specified route
+        setIsOpen(false);
     };
 
     return (
