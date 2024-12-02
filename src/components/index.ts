@@ -4,7 +4,9 @@ export { default as ActivityCard} from './ActivityCard/ActivityCard';
 export { default as ActivityCardBtn} from './ActivityCardBtn/ActivityCardBtn';
 export { default as AddActivityForm} from './AddActivityForm/AddActivityForm';
 export { default as Activities} from './Acitvities/Activities';
+export { default as ActivityModal} from './ActivityModal/ActivityModal';
 export { default as Loader} from './Loader/Loader';
+
 
 
 

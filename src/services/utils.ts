@@ -1,8 +1,9 @@
-export function calculateAge(birthDate: Date): number {
+export function calculateAge(birthDate: Date | string): number {
+    const parsedDate = typeof birthDate === 'string' ? new Date(birthDate) : birthDate;
     const today = new Date();
-    const birthYear = birthDate.getFullYear();
-    const birthMonth = birthDate.getMonth();
-    const birthDay = birthDate.getDate();
+    const birthYear = parsedDate.getFullYear();
+    const birthMonth = parsedDate.getMonth();
+    const birthDay = parsedDate.getDate();
 
     let age = today.getFullYear() - birthYear;
 
