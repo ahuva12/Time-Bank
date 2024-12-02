@@ -6,6 +6,7 @@
     justify-content: space-between; /* מיקומים קצה לקצה */
     padding: 20px;
     gap: 20px; /* רווח בין הדיבים */
+    position :static;
   }
   
   .contactInfo {

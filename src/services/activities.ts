@@ -52,26 +52,33 @@ export const updateActivity = async (updatedActivity:Activity) => {
 }
 
 //update status activitiy
-export const updateStatusActivity = async (activityId:string, status:string, receiverId?:string) => {
+export const updateStatusActivity = async ({ activityId, status, receiverId }: { 
+  activityId: string;
+  status: string;
+  receiverId: string;}) => {
 
-    const body: Record<string, any> = { status };
-    if (receiverId) {
-      body.receiverId = receiverId; 
+  if (!receiverId || !activityId || !status) {
+    throw new Error('Receiver ID, activityId and status are required');
+  }
+
+  const body = { status, receiverId };
+
+  try {
+    const response = await http.patch(`/activities/updatingStatus/${activityId}`, body);
+
+    if (response.status !== 200) {
+      throw new Error(`${response.status}: Failed to update activity`);
     }
 
-    try {
-        const response = await http.patch(`/activities/updatingStatus/${activityId}`, body);
+    return response.data;
+  } catch (error: any) {
+    console.error('Error updating activity:', error.message || error);
+    throw new Error(`Error updating activity: ${error.message || error}`);
+  }
+};
 
-        if (response.status !== 200)
-          throw new Error(`${response.status}: fail in updating activitiy`);
 
-        
-        return response.data;
-      } catch (error) {
-        console.error('Error updating activitiy:', error);
-        throw new Error(`'Error updating activitiy: ${error}`);
-    }
-}
+
 
 
 

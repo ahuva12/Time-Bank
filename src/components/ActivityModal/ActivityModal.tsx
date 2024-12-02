@@ -1,16 +1,13 @@
 'use client'
-import React, { use, useState } from "react";
 import { FaCheckCircle } from 'react-icons/fa';
-
 import styles from "./ActivityModal.module.css";
 import { Activity } from "@/types/activity";
 import { User } from "@/types/user";
 import { calculateAge } from "@/services/utils";
 import { CiUser } from "react-icons/ci";
 
-
 interface ActivityModalProps {
-    isOpen: boolean;
+    modeOpen: string;
     onClose: () => void;
     activity: Activity;
     user: User;
@@ -23,9 +20,8 @@ interface ActivityModalProps {
     };
 }
 
-export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, activity, user, handlesMoreOptions }) => {
-    if (!isOpen) return null;
-    const [isSuccess, setIsSuccess] = useState(false);
+const ActivityModal: React.FC<ActivityModalProps> = ({ modeOpen, onClose, activity, user, handlesMoreOptions }) => {
+    if (modeOpen ==='close') return null;
 
     const renderButtons = () => {
 
@@ -58,11 +54,6 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
 
     };
 
-    const handleIntrested = () => {
-        setIsSuccess(true);
-    }
-
-
     const successModal = () => {
         return (
             <div className={styles.overlay}>
@@ -86,7 +77,6 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
             </div>
         );
     };
-
 
     const activityModalOpen = () => {
         return (
@@ -141,6 +131,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
         );
     };
 
-
-    return isSuccess ? successModal() : activityModalOpen();
+    return modeOpen==='open' ? activityModalOpen() : successModal();
 };
+
+export default ActivityModal;
