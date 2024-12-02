@@ -22,9 +22,9 @@ export default function Header() {
       {isLoggedIn ? (
         <nav className={styles.navigation}>
           <UserMenu logout={logout} />
-          <a href="/home" className={styles.navItem}>Home</a>
-          <a href="/activities" className={styles.navItem}>Activities</a>
-          <a href="/give" className={styles.navItem}>Give</a>
+          <a href="/home" className={styles.navItem}>דף הבית</a>
+          <a href="/activities" className={styles.navItem}>פעילויות</a>
+          <a href="/give" className={styles.navItem}>לתת</a>
         </nav>
       ) : (
         <nav className={styles.navigation}>
