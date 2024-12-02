@@ -25,10 +25,6 @@ export const useAuthStore = create<AuthState>((set) => {
       set({ isLoggedIn: true });
     },
     signup: () => {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('LoggedIn', 'true'); // Set LoggedIn to true in localStorage
-      }
-      set({ isLoggedIn: true });
     },
     logout: () => {
       if (typeof window !== 'undefined') {
