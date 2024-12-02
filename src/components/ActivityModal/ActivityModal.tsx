@@ -6,20 +6,61 @@ import styles from "./ActivityModal.module.css";
 import { Activity } from "@/types/activity";
 import { User } from "@/types/user";
 import { calculateAge } from "@/services/utils";
+import { CiUser } from "react-icons/ci";
+
+
 interface ActivityModalProps {
     isOpen: boolean;
     onClose: () => void;
     activity: Activity;
     user: User;
+    handlesMoreOptions: {
+        handleAcceptActivity?: () => void;
+        handleCancellRequestActivity?: () => void;
+        handleRequesterDetails?: () => void;
+        handleUpdateActivity?: () => void;
+        handleCancellProposalActivity?: () => void;
+    };
 }
 
-export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, activity, user }) => {
+export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, activity, user, handlesMoreOptions }) => {
     if (!isOpen) return null;
     const [isSuccess, setIsSuccess] = useState(false);
 
+    const renderButtons = () => {
+
+        const buttonConfig = [
+            { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי' },
+            { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול' },
+            { handler: handlesMoreOptions.handleRequesterDetails, label: 'אני מעוניין בפעילות זו' },
+            { handler: handlesMoreOptions.handleUpdateActivity, label: 'עדכון' },
+            { handler: handlesMoreOptions.handleCancellProposalActivity, label: 'מחיקה' },
+        ];
+
+        return (
+            <div className={styles.buttonsContainer}>
+                {buttonConfig.map(
+                    (button, index) =>
+                        button.handler && (
+                            <button
+                                key={index}
+                                className={styles.moreOptionButton}
+                                onClick={button.handler}
+                            >
+                                {button.label}
+                            </button>
+                        )
+                )
+                }
+            </div>
+        )
+
+
+    };
+
     const handleIntrested = () => {
         setIsSuccess(true);
-    };
+    }
 
 
     const successModal = () => {
@@ -45,6 +86,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
             </div>
         );
     };
+
 
     const activityModalOpen = () => {
         return (
@@ -79,14 +121,21 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
 
                         <div className={styles.content}>
                             <div className={styles.description}>
-                                <div className={styles.profileIcon}></div>
+                                <div className={styles.profileIcon}>
+                                    <CiUser className={styles.icon} />
+                                </div>
                                 <p className={styles.text}>{user.firstName} {user.lastName}</p>
                                 <p className={styles.text}>{user.gender === "male" ? "בן" : "בת"} {calculateAge(user.dateOfBirth)}</p>
                                 <p className={styles.text}>{user.address}</p>
+
                             </div>
                         </div>
                     </div>
-                    <button className={styles.submitButton} onClick={handleIntrested}>אני מעוניין בפעילות זו</button>
+
+                    <div>
+                        {renderButtons()}
+                    </div>
+
                 </div>
             </div>
         );
