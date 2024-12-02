@@ -38,6 +38,7 @@ export default function UserMenu({ logout }: { logout: Function }) {
                         <li onClick={() => handleRedirect('profile')}>פרופיל</li>
                         <li onClick={() => handleRedirect('history')}>היסטוריה</li>
                         <li onClick={() => handleRedirect('saved')}>שמורים</li>
+                        <li onClick={() => handleRedirect('myDonation')}>התרומה שלי</li>
                         <li onClick={handleLogout}>התנתקות</li>
                     </ul>
                 </div>
