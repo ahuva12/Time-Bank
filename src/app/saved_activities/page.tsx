@@ -10,9 +10,14 @@ import { Activity } from '@/types/activity';
 const SavedActivities = () => {
   const { user } = useUserStore();
 
-  // Immediately return a static fallback if the user is not logged in
-  if (!user) {
-    <ErrorMessage message_line1="אתה לא מחובר!" message_line2='עליך להכנס לאתר/להרשם אם אין לך חשבון'/>
+  // Check if user is logged in and render an error message if not
+  if (!localStorage.getItem('LoggedIn') || localStorage.getItem('LoggedIn') === 'false') {
+    return (
+      <ErrorMessage 
+        message_line1="אתה לא מחובר!" 
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+      />
+    );
   }
 
   const queryClient = useQueryClient();
