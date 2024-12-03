@@ -11,7 +11,7 @@ interface ActivitiesProps {
 const Activities = ({ activities, onMoreDetails }: ActivitiesProps) => {
     return (
         <div className={styles.tableActivities}>
-            {activities.length === 0 ? (
+            {!activities || activities.length === 0 ? (
                 <div className={styles.noActivities}>
                     אין לך פעילויות שמורות. רוצה גם אתה להרשם לפעילות בבנק הזמן?
                     <a className={styles.link} href="#">לחץ כאן</a>
