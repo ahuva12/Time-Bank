@@ -18,7 +18,7 @@ export default function Login({login, closePopup, setIsRegisterOpen}) {
       console.log(response.data.user)
       // Store user details in Zustand
       setUser(response.data.user); // Assuming `response.data.user` contains the user's details
-      localStorage.setItem('UserId', response.data.user._id);
+      // localStorage.setItem('UserId', response.data.user._id);
       login();
       closePopup();
     } catch (error) {

@@ -29,8 +29,8 @@ const useUserStore = create((set) => {
   return {
     user: null,
     setUser: (user) => {
-      if (user?.id) {
-        localStorage.setItem("UserId", user.id);
+      if (user?._id) {
+        localStorage.setItem("UserId", user._id);
       }
       set({ user });
     },
