@@ -40,9 +40,6 @@ export default function Header() {
           >
             הרשמה
           </button>
-          <div>
-            <button onClick={login}>Simulate Login</button>
-          </div>
         </nav>
       )}
       <Image className={styles.logo} src={logo} alt="Logo" width={200} height={100} />
