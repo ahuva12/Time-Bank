@@ -1,4 +1,6 @@
+'use client'
 import { create } from 'zustand';
+
 
 interface AuthState {
   isLoggedIn: boolean;

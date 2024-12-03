@@ -4,28 +4,35 @@ import { Activities, Loader, ActivityModal, ErrorMessage } from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
 import useUserStore from '@/store/useUserStore';
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { Activity } from '@/types/activity';
 
 const SavedActivities = () => {
   const { user } = useUserStore();
-
-  // Immediately return a static fallback if the user is not logged in
-  if (!user) {
-    <ErrorMessage message_line1="אתה לא מחובר!" message_line2='עליך להכנס לאתר/להרשם אם אין לך חשבון'/>
-  }
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+    localStorage.getItem('LoggedIn') === 'true'
+  );
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>('close');
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
 
-  // Always call hooks, even if you plan to render a fallback
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['savedActivities'],
     queryFn: () => getFilteringActivities('caughted', user._id),
     staleTime: 10000,
+    enabled: isLoggedIn, 
   });
+
+  if (!isLoggedIn) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+      />
+    );
+  }
 
   const updateStatusMutation = useMutation({
     mutationFn: updateStatusActivity,

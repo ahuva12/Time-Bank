@@ -1,4 +1,4 @@
-import { connectDatabase, deleteDocument, updateDocument } from '@/services/mongo';
+import { connectDatabase, deleteDocument, updateDocument, getDocument } from '@/services/mongo';
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { User } from '@/types/user';
@@ -66,3 +66,29 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ userId
         return NextResponse.json({ message: "Internal server error" }, { status: 500 });
     }
 }
+
+export async function GET(req: Request, { params }: { params: Promise<{ userId: string }> }) {
+    try {
+      const { userId } = await params;
+      
+      if (!userId) {
+        return NextResponse.json(
+          { message: "User ID is required" },
+          { status: 400 }
+        );
+      }
+  
+      const client = await connectDatabase();
+      const user = await getDocument(client, "users", { _id: new ObjectId(userId) });
+      
+
+      if (user) {
+        return NextResponse.json({ user }, { status: 200 });
+      } else {
+        return NextResponse.json({ message: "User not found" }, { status: 404 });
+      }
+    } catch (error) {
+      console.error("Server error:", error);
+      return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    }
+  }

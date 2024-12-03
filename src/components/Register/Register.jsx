@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { http } from '@/services/http'
 import Styles from './Register.module.css'
+import { useRouter } from 'next/navigation';
 
 export default function Register({ closePopup, setIsLoginOpen }) {
     const [firstName, setFirstName] = useState("");
@@ -13,6 +14,7 @@ export default function Register({ closePopup, setIsLoginOpen }) {
     const [birthDate, setBirthDate] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const router = useRouter();
 
     const handleChange = (event) => {
         setGender(event.target.value);
@@ -34,6 +36,7 @@ export default function Register({ closePopup, setIsLoginOpen }) {
             });
             alert("Registration successful!");
             closePopup();
+            router.push('home'); 
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         }
