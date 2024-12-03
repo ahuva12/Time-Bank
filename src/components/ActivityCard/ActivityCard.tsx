@@ -4,9 +4,10 @@ import { Activity } from "@/types/activity";
 
 interface ActivityCardProps {
   activity: Activity;
+  onMoreDetails: () => void;
 }
 
-const ActivityCard = ({ activity }: ActivityCardProps) => {
+const ActivityCard = ({ activity, onMoreDetails }: ActivityCardProps) => {
   return (
     <div className={styles.card}>
       <div className={styles.content}>
@@ -22,9 +23,9 @@ const ActivityCard = ({ activity }: ActivityCardProps) => {
           ))}
         </div>
       </div>
-      <a href="#" className={styles.link}>
-        פרטים נוספים
-      </a>
+      <button className={styles.link} onClick={onMoreDetails}>
+                פרטים נוספים
+      </button>
     </div>
   );
 };
