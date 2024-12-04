@@ -12,10 +12,8 @@ import { getUserById } from '@/services/users'; // Updated import
 
 interface ActivityModalForDonationProps {
     modeModel: string;
-    isModeCancelling: boolean;
     onClose: () => void;
     activity: Activity;
-    user: User;
 }
 
 const ActivityModalForDonation: React.FC<ActivityModalForDonationProps> = ({ modeModel, onClose, activity }) => {
@@ -27,11 +25,11 @@ const ActivityModalForDonation: React.FC<ActivityModalForDonationProps> = ({ mod
         const fetchRecipient = async () => {
             try {
                 setLoading(true);
-                const fetchedUser = await getUserById(activity.receiverId as string); // Use getUserById
-                setRecipient(fetchedUser.data); // Assuming Axios response contains the user in `data`
+                const user = await getUserById(activity.receiverId as string); // Use getUserById
+                setRecipient(user); // Assuming Axios response contains the user in `data`
             } catch (err) {
                 console.error("Failed to fetch recipient:", err);
-                setError("Failed to fetch recipient details. Please try again.");
+                // setError("Failed to fetch recipient details. Please try again.");
             } finally {
                 setLoading(false);
             }
@@ -91,6 +89,7 @@ const ActivityModalForDonation: React.FC<ActivityModalForDonationProps> = ({ mod
                             <p className={styles.text} style={{ color: 'red' }}>{error}</p>
                         ) : recipient ? (
                             <div className={styles.description}>
+                                <h1>המקבל:</h1>
                                 <div className={styles.profileIcon}>
                                     <CiUser className={styles.icon} />
                                 </div>

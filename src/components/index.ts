@@ -7,7 +7,7 @@ export { default as ActivityModal} from './ActivityModal/ActivityModal';
 export { default as Loader} from './Loader/Loader';
 export { default as ErrorMessage} from './ErrorMessage/ErrorMessage';
 export { default as SuccessMessage} from './SuccessMessage/SuccessMessage';
-
+export { default as ActivityModalForDonation} from './ActivityModalForDonation/ActivityModalForDonation';
 
 
 
