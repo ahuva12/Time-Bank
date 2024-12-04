@@ -5,7 +5,7 @@ import { Activities, Loader, ErrorMessage, ActivityModalForDonation } from '@/co
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
 import useUserStore from '@/store/useUserStore';
-import { useState } from 'react';
+import { useState /*, useEffect*/ } from 'react';
 import { Activity } from '@/types/activity';
 
 const myDonation = () => {
@@ -13,6 +13,14 @@ const myDonation = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     localStorage.getItem('LoggedIn') === 'true'
   );
+  // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //       const loggedInStatus = localStorage.getItem('LoggedIn') === 'true';
+  //       setIsLoggedIn(loggedInStatus);
+  //   }
+  // }, []);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -34,26 +42,6 @@ const myDonation = () => {
       />
     );
   }
-
-  const updateStatusMutation = useMutation({
-    mutationFn: updateStatusActivity,
-    onMutate: async ({ activityId }: { activityId: string }) => {
-      await queryClient.cancelQueries({ queryKey: ['myDonation'] });
-      const previousmyDonation = queryClient.getQueryData<Activity[]>(['myDonation']);
-      queryClient.setQueryData<Activity[]>(['myDonation'], 
-      (old) => old ? old.filter((activity) => activity._id !== activityId) : []);
-      return { previousmyDonation };
-    },
-    onError: (error, variables, context: any) => {
-      if (context?.previousmyDonation) {
-        queryClient.setQueryData(['myDonation'], context.previousmyDonation);
-      }  
-      setModeActivityModel('error');
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myDonation'] });
-    },
-  });
   
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
@@ -76,7 +64,7 @@ const myDonation = () => {
 
   return (
     <div className={styles.savedActivities}>
-      <h1 className={styles.title}>הפעילויות השמורות שלי</h1>
+      <h1 className={styles.title}>התרומה שלי</h1>
       {(isLoading || isFetching) ? (
         <Loader />
       ) : (
