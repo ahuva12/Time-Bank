@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 600px;
+    width: 450px;
+}
+
+.title {
+    text-align: center;
+    font-size: xx-large;
+}
+
+.inputFields {
+    width: 400px;
+    height: 40px;
+    align-self: center;
+    background-color: #e0f5f8;
+    border-bottom: 2px solid #048ebc;
+}
+
+.selectGender {
+    margin-right: 25px;
+}
+
+.button {
+    background-color: #048ebc;
+    color: white;
+    border-radius: 10px;
+    width: 100px;
+    height: 35px;
+    margin-right: 50px;
+}
+
+.innerDiv {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.loginText {
+    font-size: small;
+}

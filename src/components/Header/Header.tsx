@@ -10,7 +10,7 @@ import Register from '@/components/Register/Register';
 import { useState } from 'react';
 
 export default function Header() {
-  const { isLoggedIn, logout, login } = useAuthStore();
+  const { isLoggedIn, logout, login, signup } = useAuthStore();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
@@ -22,9 +22,9 @@ export default function Header() {
       {isLoggedIn ? (
         <nav className={styles.navigation}>
           <UserMenu logout={logout} />
-          <a href="/home" className={styles.navItem}>Home</a>
-          <a href="/activities" className={styles.navItem}>Activities</a>
-          <a href="/give" className={styles.navItem}>Give</a>
+          <a href="/home" className={styles.navItem}>דף הבית</a>
+          <a href="/activities" className={styles.navItem}>פעילויות</a>
+          <a href="/give" className={styles.navItem}>לתת</a>
         </nav>
       ) : (
         <nav className={styles.navigation}>
@@ -32,17 +32,14 @@ export default function Header() {
             className={styles.btnLogin}
             onClick={toggleLogin}
           >
-            Login
+            כניסה
           </button>
           <button
             className={styles.btnSignup}
             onClick={toggleRegister}
           >
-            Signup
+            הרשמה
           </button>
-          <div>
-            <button onClick={login}>Simulate Login</button>
-          </div>
         </nav>
       )}
       <Image className={styles.logo} src={logo} alt="Logo" width={200} height={100} />
@@ -57,7 +54,7 @@ export default function Header() {
             >
               ×
             </button>
-            <Login login={login} closePopup={toggleLogin}/>
+            <Login login={login} closePopup={toggleLogin} setIsRegisterOpen={setIsRegisterOpen}/>
           </div>
         </div>
       )}
@@ -72,7 +69,7 @@ export default function Header() {
             >
               ×
             </button>
-            <Register closePopup={toggleRegister}/>
+            <Register closePopup={toggleRegister} setIsLoginOpen={setIsLoginOpen}/>
           </div>
         </div>
       )}
