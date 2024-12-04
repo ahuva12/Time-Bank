@@ -1,5 +1,4 @@
 'use client';
-
 import { useAuthStore } from '@/store/authStore';
 import styles from './Header.module.css';
 import Image from 'next/image';
@@ -20,11 +19,11 @@ export default function Header() {
   return (
     <header className={styles.header}>
       {isLoggedIn ? (
-        <nav className={styles.navigation}>
-          <UserMenu logout={logout} />
-          <a href="/home" className={styles.navItem}>דף הבית</a>
-          <a href="/activities" className={styles.navItem}>פעילויות</a>
-          <a href="/give" className={styles.navItem}>לתת</a>
+          <nav className={styles.navigation}>
+            <UserMenu logout={logout} />
+            <a href="/home" className={styles.navItem}>דף הבית</a>
+            <a href="/activities" className={styles.navItem}>פעילויות</a>
+            <a href="/give" className={styles.navItem}>לתת</a>
         </nav>
       ) : (
         <nav className={styles.navigation}>
