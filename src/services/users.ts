@@ -24,7 +24,7 @@ export const updateStatusActivity = async (giverId: string, receiverId: string, 
 };
 
 
-export const getUserById = async (userId: String) => {
+export const getUserById = async (userId: string) => {
     try {
       const response = await http.get(`/users/${userId}`);
       if (response.status !== 200) {
