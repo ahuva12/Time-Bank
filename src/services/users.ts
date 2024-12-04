@@ -24,13 +24,13 @@ export const updateStatusActivity = async (giverId: string, receiverId: string, 
 };
 
 
-export const getUserById = async (userId: String) => {
+export const getUserById = async (userId: string) => {
     try {
       const response = await http.get(`/users/${userId}`);
       if (response.status !== 200) {
         throw new Error(`User not found. ID: ${userId}`);
       }
-      console.log("User data:", response.data);
+      // console.log("User data:", response.data);
       return response.data.user;
     } catch (error) {
       console.error("Error fetching user:", error);
