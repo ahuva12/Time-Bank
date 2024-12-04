@@ -1,0 +1,191 @@
+.container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #e7f7fc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.main {
+    width: 80%;
+    max-width: 1200px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+.logoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    background-color: #cfe8f7;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+}
+
+.profileIcon {
+    width: 80px;
+    height: 80px;
+    background-color: #ffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin-bottom: 0.5rem;
+    color: #048ebc;
+    padding: 8px;
+}
+
+.welcome {
+    font-size: 18px;
+    color: #333;
+}
+
+.form {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.wallet {
+    background-color: white;
+    border-radius: 8px;
+    margin: 1rem;
+    padding: 1rem;
+    width: 70%;
+    align-self: end;
+}
+
+.wallet div {
+    border: 0px solid transparent;
+    padding: 1rem;
+}
+
+.wallet h1 {
+    font-size: larger;
+    font-weight: 600;
+    margin-top: 1rem;
+    color: #555;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.label {
+    font-size: 16px;
+    color: #555;
+    text-align: right;
+}
+
+.input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: right;
+}
+
+
+.button:hover {
+    background-color: #006078;
+}
+
+.field {
+    white-space: nowrap;
+    font-size: 1.2em;
+    color: #868686;
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    border-bottom: 1px solid #009ac1;
+    padding-bottom: 1rem;
+    padding-top: 2rem;
+}
+
+.field p {
+    text-align: start;
+}
+
+.editIcon {
+    color: #c3c6ce;
+    cursor: pointer;
+}
+
+.beforeEdit {
+    color:#555;
+    text-align: right;
+}
+
+.wrapperRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.saveBtn {
+    background-color: #048EBC;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.saveBtn:hover {
+    background-color: #006078;
+}
+
+.cancelBtn {
+    background-color: white;
+    color: #555;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.cancelBtn:hover {
+    background-color: #dadada;
+}
+
+
+.error {
+    font-size: small;
+}
+
+.buttonWrapper {
+    display: flex;
+    width: 50%;
+    justify-content: start;
+
+}
+
+
+.buttonWrapper button {
+    margin-right: 1rem;
+    width: 20%;
+}
