@@ -21,10 +21,10 @@
 }
 
 .imagePeople {
-  position: relative;
-  left: -500px;
-  top: -110px;
-  width: 35%;
+  position: absolute;
+  left: -5vw; /* Adjust based on the desired offset */
+  top: -10vh;  /* Adjust based on the desired offset */
+  width: 35vw;
   height: auto;
   margin: 0;
   padding: 0;
