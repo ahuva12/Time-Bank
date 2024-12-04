@@ -43,7 +43,7 @@ export default function UserMenu({ logout }: { logout: Function }) {
                                 <span>{user.firstName}</span>
                             </div>
                             <div>
-                                יתרת השעות שלי: 
+                                יתרת השעות שלי:&nbsp; 
                                 <span style={{fontWeight: "bold"}}>{user.remainingHours}</span>
                             </div>
                         </li>
