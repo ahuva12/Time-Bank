@@ -1,204 +1,199 @@
 'use client';
 
-import React, { use, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import styles from './profile.module.css';
 import useUserStore from '@/store/useUserStore';
-import { User } from '@/types/user';
-import { FaEdit } from "react-icons/fa";
+import { userSchema } from '@/validations/validationsClient/user';
 import { updateUser } from '@/services/users';
+import { FaEdit } from 'react-icons/fa';
+import { Activity } from '@/types/activity';
+import { getFilteringActivities } from '@/services/activities';
+import { CiUser } from "react-icons/ci";
 
-interface EditableFields {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber: string;
-    address: string;
+// Define Zod schema for the form
+const editableFieldsSchema = userSchema.pick({
+    firstName: true,
+    lastName: true,
+    email: true,
+    phoneNumber: true,
+    address: true,
+});
+
+// Define the TypeScript type based on the schema
+type EditableFields = z.infer<typeof editableFieldsSchema>;
+
+// Field mappings for Hebrew labels
+const fieldMappings: { [key in keyof EditableFields]: string } = {
+    firstName: "שם פרטי",
+    lastName: "שם משפחה",
+    email: "אימייל",
+    phoneNumber: "טלפון",
+    address: "כתובת",
+};
+
+interface Wallet {
+    hoursGiven: number;
+    hoursReceived: number;
+    hoursToReceive: number;
 }
 
 const Profile: React.FC = () => {
     const { user, setUser } = useUserStore();
-    console.log(user);
-    const [isEditing, setIsEditing] = useState({
-        firstName: false,
-        lastName: false,
-        email: false,
-        phoneNumber: false,
-        address: false
+    const [editingField, setEditingField] = useState<keyof EditableFields | null>(null);
+    const [wallet, setWallet] = useState<Wallet>({
+        hoursGiven: 0,
+        hoursReceived: 0,
+        hoursToReceive: 0
     });
-    const [editableFields, setEditableFields] = useState<EditableFields>({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        address: user.address,
-    });
-    const fieldMappings: { [key in keyof EditableFields]: string } = {
-        firstName: "שם פרטי",
-        lastName: "שם משפחה",
-        email: "אימייל",
-        phoneNumber: "טלפון",
-        address: "כתובת",
+
+    const getWallet = async () => {
+        try {
+            const activities: Activity[] = await getFilteringActivities("history", user._id);
+            const hoursGiven = activities.filter((activity) => activity.giverId === user._id).length;
+            const hoursReceived = activities.filter((activity) => activity.receiverId === user._id).length;
+            const hoursToReceive = user.remainingHours;
+
+            setWallet({ hoursGiven, hoursReceived, hoursToReceive });
+        } catch (error) {
+            console.error("Failed to fetch wallet data:", error);
+        }
     };
 
-    const renderField = (
-        field: keyof EditableFields,
-        isEditing: { [key: string]: boolean },
-        editableFields: EditableFields,
-        user: EditableFields,
-        handleEditClick: (field: keyof EditableFields) => void,
-        handleChange: (e: React.ChangeEvent<HTMLInputElement>, field: keyof EditableFields) => void,
-        handleBlur: (field: keyof EditableFields) => void,
-        handleUpdate: (field: keyof EditableFields) => void
-    ) => {
+    // Fetch wallet data when the component mounts
+    useEffect(() => {
+        if (user?._id) {
+            getWallet();
+        }
+    }, [user]);
 
-        return (
-            <div className={styles.field} key={field}>
-                <span className={styles.wrapperRow}>
-                    <p className={styles.label}>{fieldMappings[field]}</p>
-                    <FaEdit className={styles.editIcon} onClick={() => handleEditClick(field)} />
-                </span>
-                <div className={styles.wrapperRow}>
-                    <input
-                        type="text"
-                        value={editableFields[field]}
-                        onChange={(e) => handleChange(e, field)}
-                        onBlur={() => handleBlur(field)}
-                        autoFocus
-                        className={styles.editInput}
-                    />
-                    <button className={styles.cancelBtn}>בטל</button>
-                    <button
-                        className={styles.saveBtn}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleUpdate(field);
-                        }}
-                    >
-                        שמור
-                    </button>
-                </div>
-                {/* {isEditing[field] ? (
-                    <div className={styles.wrapperRow}>
-                        <input
-                            type="text"
-                            value={editableFields[field]}
-                            onChange={(e) => handleChange(e, field)}
-                            onBlur={() => handleBlur(field)}
-                            autoFocus
-                            className={styles.editInput}
-                        />
-                        <button className={styles.cancelBtn}>בטל</button>
-                        <button
-                            className={styles.saveBtn}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                handleUpdate(field);
-                            }}
-                        >
-                            שמור
-                        </button>
-                    </div>
-                ) : (
-                    <div className={styles.beforeEdit}>
-                        {user[field]}
-                    </div>
-                )} */}
-            </div>
-        );
+    // Form handling using React Hook Form and Zod
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+    } = useForm<EditableFields>({
+        resolver: zodResolver(editableFieldsSchema),
+        defaultValues: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            address: user.address,
+        },
+    });
+
+    const onSubmit = async (data: EditableFields) => {
+        console.log(data);
+        try {
+            console.log(data);
+            const updatedUser = { ...user, ...data };
+            const response = await updateUser(updatedUser);
+            setUser(updatedUser);
+            alert('Profile updated successfully!');
+            setEditingField(null); // Close the input field after successful update
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile.');
+        }
     };
-
 
     const handleEditClick = (field: keyof EditableFields) => {
-        setIsEditing((prev) => ({ ...prev, [field]: true }));
-        setEditableFields((prev) => ({ ...prev, [field]: user[field] })); // Set initial value for editing
+        setEditingField(field);
+        setValue(field, user[field]); // Pre-fill the input with the current value
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof EditableFields) => {
-        setEditableFields((prev) => ({ ...prev, [field]: e.target.value }));
-    };
+    const handleBlur = () => {
+        setEditingField(null); // Close the input field after
+    }
 
-    const handleBlur = (field: keyof EditableFields) => {
-        setIsEditing((prev) => ({ ...prev, [field]: false }));
-    };
 
-    const handleUpdate = async (field: keyof EditableFields) => {
-        // Update Zustand store
-        console.log("here");
-        const updatedUser = { ...user, [field]: editableFields[field as keyof EditableFields] };
-        // const updatedUser = { ...user, [field]: editableFields[field] };
-        setTimeout(() => {
-            setUser(updatedUser);
-        }, 0);
-        // setUser(updatedUser); // Zustand method to set user state
-        // console.log(updatedUser);
-
-        try {
-            const data = await updateUser(updatedUser);
-            // setUser(data.updatedUser); // Update Zustand with the latest user data
-            setTimeout(() => {
-                setUser(updatedUser);
-            }, 0);
-
-        } catch (error) {
-            console.error("Error updating user:", error);
-            // Optionally revert Zustand state in case of failure
-            setTimeout(() => {
-                setUser(user);
-            }, 0);
-            // setUser(user); // Restore previous state if needed
-        }
-
-        // End editing mode
-        setIsEditing((prev) => ({ ...prev, [field]: false }));
-    };
 
     return (
         <div className={styles.container}>
             <main className={styles.main}>
                 <div className={styles.logoContainer}>
-                    <div className={styles.logo}></div>
+                    <div className={styles.profileIcon}>
+                        <CiUser className={styles.icon} />
+                    </div>
                     <h2 className={styles.welcome}>שלום, {user.firstName}!</h2>
                 </div>
 
-                <div className={styles.form}>
-                    {/* editable fields */}
+                <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.column}>
                         <div className={styles.profilePage}>
-                            {Object.keys(editableFields).map((field) =>
-                                renderField(
-                                    field as keyof EditableFields,
-                                    isEditing,
-                                    editableFields,
-                                    user,
-                                    handleEditClick,
-                                    handleChange,
-                                    handleBlur,
-                                    handleUpdate
-                                )
-                            )}
+                            {Object.keys(editableFieldsSchema.shape).map((field) => (
+                                <div key={field} className={styles.field}>
+                                    <span className={styles.wrapperRow}>
+                                        <p className={styles.label}>{fieldMappings[field as keyof EditableFields]}</p>
+                                        <FaEdit
+                                            className={styles.editIcon}
+                                            onClick={() => handleEditClick(field as keyof EditableFields)}
+                                        />
+                                    </span>
+                                    {editingField === field ? (
+                                        <div className={styles.editWrapper}>
+                                            <div className={styles.wrapperRow}>
+                                                <input
+                                                    {...register(field as keyof EditableFields)}
+                                                    className={styles.editInput}
+                                                    autoFocus
+                                                    onBlur={handleBlur}
+                                                />
+                                                <div className={styles.buttonWrapper}>
+                                                    <button
+                                                        type="button"
+                                                        className={styles.cancelBtn}
+                                                        onClick={() => setEditingField(null)}
+                                                    >
+                                                        בטל
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        className={styles.saveBtn}
+                                                    >
+                                                        שמור
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {errors[field as keyof EditableFields] && (
+                                                <p className={styles.error}>
+                                                    {errors[field as keyof EditableFields]?.message}
+                                                </p>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p className={styles.value}>{user[field as keyof EditableFields]}</p>
+                                    )}
+                                </div>
+                            ))}
                         </div>
-
                     </div>
-
-                    {/* wallet stuff */}
                     <div className={styles.column}>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label}>מספר שעות שתרמת</label>
-                            <input className={styles.input} type="text" disabled />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label}>מספר שעות שקיבלת</label>
-                            <input className={styles.input} type="text" disabled />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label}>מספר שעות שאותר לך לקבל</label>
-                            <input className={styles.input} type="text" disabled />
+                        <div className={styles.wallet}>
+                            <h1>הארנק שלי</h1>
+                            <div className={styles.field}>
+                                <label className={styles.label}>שעות שתרמת: </label>
+                                <p>{wallet.hoursGiven}</p>
+                            </div>
+                            <div className={styles.field}>
+                                <label className={styles.label}>שעות שניצלת: </label>
+                                <p>{wallet.hoursReceived}</p>
+                            </div>
+                            <div className={styles.field}>
+                                <label className={styles.label}>יתרת שעות: </label>
+                                <p>{wallet.hoursToReceive}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </main>
         </div>
     );
 };
 
 export default Profile;
+

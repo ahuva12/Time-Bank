@@ -30,6 +30,27 @@
     margin-bottom: 10px;
 }
 
+.icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+}
+
+.profileIcon {
+    width: 80px;
+    height: 80px;
+    background-color: #ffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin-bottom: 0.5rem;
+    color: #048ebc;
+    padding: 8px;
+}
+
 .welcome {
     font-size: 18px;
     color: #333;
@@ -46,6 +67,27 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+.wallet {
+    background-color: white;
+    border-radius: 8px;
+    margin: 1rem;
+    padding: 1rem;
+    width: 70%;
+    align-self: end;
+}
+
+.wallet div {
+    border: 0px solid transparent;
+    padding: 1rem;
+}
+
+.wallet h1 {
+    font-size: larger;
+    font-weight: 600;
+    margin-top: 1rem;
+    color: #555;
 }
 
 .inputGroup {
@@ -67,16 +109,6 @@
     text-align: right;
 }
 
-/* .button {
-    margin-top: 30px;
-    padding: 15px 30px;
-    background-color: #048EBC;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-} */
 
 .button:hover {
     background-color: #006078;
@@ -94,6 +126,9 @@
     padding-top: 2rem;
 }
 
+.field p {
+    text-align: start;
+}
 
 .editIcon {
     color: #c3c6ce;
@@ -109,12 +144,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.wrapperRow button {
-    margin-right: 1rem;
-    width: 10%;
-
 }
 
 .saveBtn {
@@ -141,4 +170,22 @@
 
 .cancelBtn:hover {
     background-color: #dadada;
+}
+
+
+.error {
+    font-size: small;
+}
+
+.buttonWrapper {
+    display: flex;
+    width: 50%;
+    justify-content: start;
+
+}
+
+
+.buttonWrapper button {
+    margin-right: 1rem;
+    width: 20%;
 }
