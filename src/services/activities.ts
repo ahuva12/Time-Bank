@@ -1,5 +1,6 @@
 import { http } from '@/services/http';
 import { Activity } from '@/types/activity';
+import { updateRemainingHours } from './users';
 
 //get activities based on filtering 
 //(the filters are can be: 'caughted', 'history', 'proposed', 'caughtedGiver', 'proposedGiver')
@@ -77,6 +78,32 @@ export const updateStatusActivity = async ({ activityId, status, receiverId }: {
   }
 };
 
+//Registration or unregistering for an activity
+export const registrationForActivity = async (
+  activityId: string,
+  durationHoursActivity: number,
+  giverId: string,
+  receiverId: string,
+  status: 'accepted' | 'proposed'
+) => {
+  try {
+    const resUpdateRemainingHours = await updateRemainingHours(giverId, receiverId, durationHoursActivity);    
+    if (!resUpdateRemainingHours) {
+      throw new Error('Error updating remaining hours');
+    }
+
+    const resUpdateStatusActivity = await updateStatusActivity({ activityId, status, receiverId });
+    if (!resUpdateStatusActivity) {
+      throw new Error('Error updating activity status');
+    }
+
+    return { success: true, message: 'Successfully registered for activity' };
+    
+  } catch (error:any) {
+    console.error('Error in registering for activity:', error);
+    throw new Error(`Error registering for activity: ${error.message || error}`);
+  }
+};
 
 
 

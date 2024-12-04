@@ -1,7 +1,7 @@
 import { http } from '@/services/http';
 
 // update remainingHours of the giver and receiver
-export const updateStatusActivity = async (giverId: string, receiverId: string, durationHoursActivity: number) => {
+export const updateRemainingHours = async (giverId: string, receiverId: string, durationHoursActivity: number) => {
     
     if (typeof durationHoursActivity !== 'number' || durationHoursActivity <= 0) {
         throw new Error("Invalid hoursActivity value");
@@ -22,7 +22,6 @@ export const updateStatusActivity = async (giverId: string, receiverId: string, 
         throw new Error(`Error updating remainingHours: ${error}`);
     }
 };
-
 
 export const getUserById = async (userId: string) => {
     try {

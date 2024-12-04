@@ -16,7 +16,7 @@ interface ActivityModalProps {
     handlesMoreOptions: {
         handleAcceptActivity?: () => void;
         handleCancellRequestActivity?: () => void;
-        handleRequesterDetails?: () => void;
+        handleRegistrationActivity?: () => void;
         handleUpdateActivity?: () => void;
         handleCancellProposalActivity?: () => void;
     };
@@ -29,7 +29,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
         const buttonConfig = [
             { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי' },
             { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול' },
-            { handler: handlesMoreOptions.handleRequesterDetails, label: 'אני מעוניין בפעילות זו' },
+            { handler: handlesMoreOptions.handleRegistrationActivity, label: 'אני מעוניין בפעילות זו' },
             { handler: handlesMoreOptions.handleUpdateActivity, label: 'עדכון' },
             { handler: handlesMoreOptions.handleCancellProposalActivity, label: 'מחיקה' },
         ];
@@ -96,11 +96,11 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             );
         }
     
-        if (handlesMoreOptions.handleRequesterDetails) {
+        if (handlesMoreOptions.handleRegistrationActivity) {
             return (
                 <SuccessMessage
                     message_line1="תודה על התעניינותך"
-                    message_line2="הודענו על כך למבצע הפעילות"
+                    message_line2="הודענו על כך למבצע הפעילות" //i want the mail of giver
                     message_line3={`תוכל ליצור איתו קשר במייל: ${user.email}`}
                 />
             );

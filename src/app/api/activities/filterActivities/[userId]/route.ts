@@ -30,77 +30,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ activity
     }
 }
 
-const getCaughtActivitiesFilter = (userId:string) => {
-    return {
-                $and: [
-                {
-                    receiverId: new ObjectId(userId),
-                },
-                {
-                    status: 'caughted',
-                },
-                ],
-            }
-}
-
-const getActivitiesHistoryFilter = (userId:string) => {
-    return {
-            $or: [
-                {
-                    $and: [
-                    { giverId: new ObjectId(userId) },
-                    { status: 'accepted' }
-                    ]
-                },
-                {
-                    $and: [
-                    { receiverId: new ObjectId(userId) },
-                    { status: 'accepted' }
-                    ]
-                }
-            ]
-        }
-}
-
-const getActivitiesProposedFilter = (userId:string) => {
-    return {
-            $and: [
-                    {
-                        giverId: { $ne: new ObjectId(userId) }, 
-                    },
-                    {
-                        status: 'proposed',
-                    },
-                ]
-        }
-}
-
-const getCaughtActivitiesGiverFilter = (userId:string) => {
-    return {
-        $and: [
-                {
-                    giverId: new ObjectId(userId),
-                },
-                {
-                    status: 'caughted',
-                },
-            ]
-        }
-}
-
-const getProposedActivitiesGiverFilter = (userId:string) => {
-    return {
-        $and: [
-            {
-                giverId: new ObjectId(userId),
-            },
-            {
-                status: 'proposed',
-            },
-        ]
-    }
-}
-
 export async function POST(req: Request, { params }: { params: { userId: string } }) {
     try {
         const { filterType } = await req.json(); 
@@ -149,6 +78,62 @@ export async function POST(req: Request, { params }: { params: { userId: string 
             { message: 'Error fetching activities' },
             { status: 500 }
         );
+    }
+}
+
+const getCaughtActivitiesFilter = (userId:string) => {
+    return {
+                $and: [
+                { receiverId: new ObjectId(userId), },
+                { status: 'caughted', },
+                ],
+            }
+}
+
+const getActivitiesHistoryFilter = (userId:string) => {
+    return {
+            $or: [
+                {
+                    $and: [
+                    { giverId: new ObjectId(userId) },
+                    { status: 'accepted' }
+                    ]
+                },
+                {
+                    $and: [
+                    { receiverId: new ObjectId(userId) },
+                    { status: 'accepted' }
+                    ]
+                }
+            ]
+        }
+}
+
+const getActivitiesProposedFilter = (userId:string) => {
+    return {
+            $and: [
+                    { giverId: { $ne: new ObjectId(userId) }, },
+                    { receiverId: { $eq: null }, },
+                    { status: 'proposed', },
+                ]
+        }
+}
+
+const getCaughtActivitiesGiverFilter = (userId:string) => {
+    return {
+        $and: [
+                { giverId: new ObjectId(userId), },
+                { status: 'caughted', },
+            ]
+        }
+}
+
+const getProposedActivitiesGiverFilter = (userId:string) => {
+    return {
+        $and: [
+            { giverId: new ObjectId(userId), },
+            { status: 'proposed', },
+        ]
     }
 }
 
