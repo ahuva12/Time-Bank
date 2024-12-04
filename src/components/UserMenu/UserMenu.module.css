@@ -1,58 +1,73 @@
 /* Container for Profile Icon and Dropdown */
 .profileContainer {
-    position: relative;
-    /* Necessary for absolute positioning of dropdown */
-    display: inline-block;
+  position: relative;
+  /* Necessary for absolute positioning of dropdown */
+  display: inline-block;
 }
 
 /* Profile Icon */
 .profileIcon {
-    width: 40px;
-    height: 40px;
-    background-color: #eaf8fb;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background-color: #eaf8fb;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  cursor: pointer;
 }
 
 .profileIcon::before {
-    content: "👤";
-    font-size: 18px;
-    color: #048ebc;
+  content: "👤";
+  font-size: 18px;
+  color: #048ebc;
 }
 
 /* Dropdown Menu */
 .dropdownMenu {
-    position: absolute;
-    top: 50px;
-    /* Adjust as needed to position below the icon */
-    right: 30px;
-    /* Increase this value to move it left */
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    width: 150px;
-    z-index: 100;
+  position: absolute;
+  top: 50px;
+  /* Adjust as needed to position below the icon */
+  right: 30px;
+  /* Increase this value to move it left */
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 180px;
+  z-index: 100;
+}
+
+.welcomeItem {
+  background-color: #e0f5f8;
+  padding: 10px 15px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.welcomeItem div {
+  margin-bottom: 5px;
 }
 
 /* Dropdown Menu Styling */
 .dropdownMenu ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .dropdownMenu li {
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .dropdownMenu li:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
+}
+
+.noHover {
+  pointer-events: none; 
 }

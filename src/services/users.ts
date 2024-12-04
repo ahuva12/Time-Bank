@@ -31,11 +31,24 @@ export const updateUser = async (updatedUser: User) => {
 
         if (response.status !== 200)
             throw new Error(`${response.status}: fail in updating user`);
-
-
+      
         return response.data;
     } catch (error) {
         console.error('Error updating user:', error);
         throw new Error(`'Error updating user: ${error}`);
+    }
+}
+
+export const getUserById = async (userId: string) => {
+    try {
+      const response = await http.get(`/users/${userId}`);
+      if (response.status !== 200) {
+        throw new Error(`User not found. ID: ${userId}`);
+      }
+      // console.log("User data:", response.data);
+      return response.data.user;
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      throw error;
     }
 }

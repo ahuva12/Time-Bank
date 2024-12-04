@@ -1,16 +1,15 @@
 'use client'
-import React, { use, useState } from "react";
 import { FaCheckCircle } from 'react-icons/fa';
-
 import styles from "./ActivityModal.module.css";
 import { Activity } from "@/types/activity";
 import { User } from "@/types/user";
 import { calculateAge } from "@/services/utils";
 import { CiUser } from "react-icons/ci";
-
+import {ErrorMessage, SuccessMessage} from '@/components';
 
 interface ActivityModalProps {
-    isOpen: boolean;
+    modeModel: string;
+    isModeCancellig:boolean;
     onClose: () => void;
     activity: Activity;
     user: User;
@@ -23,12 +22,10 @@ interface ActivityModalProps {
     };
 }
 
-export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, activity, user, handlesMoreOptions }) => {
-    if (!isOpen) return null;
-    const [isSuccess, setIsSuccess] = useState(false);
+const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, handlesMoreOptions }) => {
+    if (modeModel === 'close') return null;
 
     const renderButtons = () => {
-
         const buttonConfig = [
             { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי' },
             { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול' },
@@ -50,43 +47,67 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
                                 {button.label}
                             </button>
                         )
-                )
-                }
-            </div>
-        )
-
-
-    };
-
-    const handleIntrested = () => {
-        setIsSuccess(true);
-    }
-
-
-    const successModal = () => {
-        return (
-            <div className={styles.overlay}>
-                <div className={styles.modalSucc}>
-                    <button className={styles.closeButton} onClick={onClose}>
-                        ✕
-                    </button>
-                    <div className={styles.iconSucc}>
-                        <FaCheckCircle color="#11b823" size={50} />
-                    </div>
-                    <p className={styles.textSucc}>
-                        תודה על התעניינותך!
-                        <br />
-                        הודענו על כך למבצע הפעילות.
-                        <br />
-                        תוכל ליצור איתו קשר במייל: {user.email}</p>
-                    <button className={styles.buttonSucc} onClick={onClose}>
-                        OK
-                    </button>
-                </div>
+                )}
             </div>
         );
     };
 
+    const errorModal = () => {
+        return (
+            <ErrorMessage message_line1="משהו השתבש... פעולתך נכשלה" message_line2='תוכל לנסות שוב במועד מאוחר יותר'/>
+        );
+    };
+
+    const successModal = () => {
+        if (handlesMoreOptions.handleAcceptActivity && !isModeCancellig) {
+            return (
+                <SuccessMessage
+                    message_line1="שמחים שנהנית :)"
+                    message_line2={`יתרת השעות שלך עומדת על: ${user.remainingHours}`}
+                    message_line3={`תמיד נשמח לקבל משוב על הפעילות במייל TimeBank@gmail.com`}
+                />
+            );
+        }
+    
+        if (handlesMoreOptions.handleCancellRequestActivity && isModeCancellig) {
+            return (
+                <SuccessMessage
+                    message_line1="ביטול הפעילות התקבל בהצלחה"
+                    message_line2={`יתרת השעות שלך עודכנה ל: ${user.remainingHours}`}
+                />
+            );
+        }
+    
+        if (handlesMoreOptions.handleUpdateActivity && isModeCancellig) {
+            return (
+                <SuccessMessage
+                    message_line1="עדכון פרטי הפעילות התבצע בהצלחה"
+                    message_line2={`תמיד נשמח לקבל פרגונים במייל TimeBank@gmail.com`}
+                />
+            );
+        }
+    
+        if (handlesMoreOptions.handleCancellProposalActivity && !isModeCancellig) {
+            return (
+                <SuccessMessage
+                    message_line1="הפעילות שלך נמחקה בהצלחה"
+                    message_line2={`תמיד נשמח לקבל פרגונים במייל TimeBank@gmail.com`}
+                />
+            );
+        }
+    
+        if (handlesMoreOptions.handleRequesterDetails) {
+            return (
+                <SuccessMessage
+                    message_line1="תודה על התעניינותך"
+                    message_line2="הודענו על כך למבצע הפעילות"
+                    message_line3={`תוכל ליצור איתו קשר במייל: ${user.email}`}
+                />
+            );
+        }
+    
+        return null; 
+    };  
 
     const activityModalOpen = () => {
         return (
@@ -127,7 +148,6 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
                                 <p className={styles.text}>{user.firstName} {user.lastName}</p>
                                 <p className={styles.text}>{user.gender === "male" ? "בן" : "בת"} {calculateAge(user.dateOfBirth)}</p>
                                 <p className={styles.text}>{user.address}</p>
-
                             </div>
                         </div>
                     </div>
@@ -135,12 +155,18 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ isOpen, onClose, a
                     <div>
                         {renderButtons()}
                     </div>
-
                 </div>
             </div>
         );
     };
 
-
-    return isSuccess ? successModal() : activityModalOpen();
+    return (
+        <>
+            {modeModel === 'open' && activityModalOpen()}
+            {modeModel.startsWith('success') && successModal()}
+            {modeModel === 'error' && errorModal()}
+        </>
+    );
 };
+
+export default ActivityModal;

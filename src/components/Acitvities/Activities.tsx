@@ -5,27 +5,32 @@ import { ActivityCard } from '@/components';
 
 interface ActivitiesProps {
     activities: Activity[];
-  }
-  
-
-const Activities = ({activities}: ActivitiesProps) => {
-
-  return (
-    <div className={styles.tableActivities}>
-      {activities.length === 0 ? (
-        <div className={styles.noActivities}>אין לך פעילויות שמורות. רוצה גם אתה להרשם לפעילות בבנק הזמן?<a className={styles.link} href="#">לחץ כאן</a>על מנת לחפש פעילות להרשם אליה:)</div>
-      ) : (
-        activities.map((activity, index) => (
-          <ActivityCard 
-            key={index} 
-            activity={activity} 
-          />
-        ))
-      )}
-    </div>
-  );
-                  
+    onMoreDetails: (activity: Activity) => void;
 }
 
-export default Activities;
+const Activities = ({ activities, onMoreDetails }: ActivitiesProps) => {
+    return (
+        <div className={styles.tableActivities}>
+            {!activities || activities.length === 0 ? (
+                // <div className={styles.noActivities}>
+                //     אין לך פעילויות שמורות. רוצה גם אתה להרשם לפעילות בבנק הזמן?
+                //     <a className={styles.link} href="#">לחץ כאן</a>
+                //     על מנת לחפש פעילות להרשם אליה:)
+                // </div>
+                <div className={styles.noActivities}>
+                    אין מידע רלוונטי להציג
+                </div>
+            ) : (
+                activities.map((activity, index) => (
+                    <ActivityCard
+                        key={index}
+                        activity={activity}
+                        onMoreDetails={() => onMoreDetails(activity)}
+                    />
+                ))
+            )}
+        </div>
+    );
+};
 
+export default Activities;
