@@ -8,6 +8,7 @@ export default function UserMenu({ logout }: { logout: Function }) {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
     const clearUser = useUserStore((state) => state.clearUser);
+    const { user } = useUserStore();
 
     const handleLogout = () => {
         clearUser(); // Clear user data from Zustand store
@@ -36,9 +37,19 @@ export default function UserMenu({ logout }: { logout: Function }) {
             {isOpen && (
                 <div className={styles.dropdownMenu}>
                     <ul>
+                        <li>
+                            <div>
+                                שלום&nbsp; 
+                                <span>{user.firstName}</span>
+                            </div>
+                            <div>
+                                יתרת השעות שלי: 
+                                <span style={{fontWeight: "bold"}}>{user.remainingHours}</span>
+                            </div>
+                        </li>
                         <li onClick={() => handleRedirect('profile')}>פרופיל</li>
                         <li onClick={() => handleRedirect('history')}>היסטוריה</li>
-                        <li onClick={() => handleRedirect('saved_activities')}>שמורים</li>
+                        <li onClick={() => handleRedirect('saved_activities')}>פעילויות שמורות</li>
                         <li onClick={() => handleRedirect('my_donation')}>התרומה שלי</li>
                         <li onClick={handleLogout}>התנתקות</li>
                     </ul>
