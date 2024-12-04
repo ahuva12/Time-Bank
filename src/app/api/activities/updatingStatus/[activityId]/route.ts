@@ -14,8 +14,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ activi
         const body = await req.json(); 
         const validatedUpdatedStatus = updatingStatusSchema.parse(body);
 
+        const { receiverId, ...rest } = validatedUpdatedStatus;
+        const updateData = {
+            ...rest,
+            receiverId: new ObjectId(receiverId),
+        };
+
         const client = await connectDatabase();
-        const result = await updateDocument(client, 'activities', { _id: new ObjectId(activityId) }, body);
+        const result = await updateDocument(client, 'activities', { _id: new ObjectId(activityId) }, updateData);
 
         if (result.modifiedCount === 1) { 
             return NextResponse.json({ message: "Activity updated successfully" }, {status: 200});

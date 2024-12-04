@@ -1,0 +1,49 @@
+.container {
+  background-color: #e0f7ff;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.heading {
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+.title {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  margin-right: 2rem;
+}
+
+.activityGrid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  margin-right: 2rem;
+  margin-left: 2rem;
+}
+
+.act {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 90%;
+  gap: 1rem;
+}
+
+.paginationButton {
+  color: #048cba;
+  border: none;
+  padding: 3px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  font-size: 1.8rem;
+  width: 5%;
+}
+
+.paginationButton:disabled {
+  cursor: not-allowed;
+  color: #000000;
+}
