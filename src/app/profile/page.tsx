@@ -244,8 +244,8 @@ interface Wallet {
 
 const Profile: React.FC = () => {
     // const { user, setUser } = useUserStore();
-    const setUser = useUserStore((state)=> state.setUser);
-    const user = useUserStore((state)=> state.user);
+    const setUser = useUserStore((state) => state.setUser);
+    const user = useUserStore((state) => state.user);
 
     const [editingField, setEditingField] = useState<keyof EditableFields | null>(null);
     const [wallet, setWallet] = useState<Wallet>({
@@ -272,7 +272,7 @@ const Profile: React.FC = () => {
         if (user?._id) {
             getWallet();
         }
-    }, [user]);
+    }, []);
 
     // Form handling using React Hook Form and Zod
     const {
@@ -315,8 +315,23 @@ const Profile: React.FC = () => {
         setEditingField(null); // Close the input field after
     }
 
-    const validationResult = editableFieldsSchema.safeParse({...user, firstName: 'gfd'});
+    const validationResult = editableFieldsSchema.safeParse({ ...user, firstName: 'gfd' });
     console.log(validationResult);
+
+    const Form = () => {
+        return (
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input {...register('firstName')} />
+                <input {...register('lastName')} />
+                <input {...register('email')} />
+                <input {...register('phoneNumber')} />
+                <input {...register('address')} />
+                <button type="submit" className={styles.saveBtn}>
+                    שמור
+                </button>
+            </form>
+        )
+    }
 
     return (
         <div className={styles.container}>
@@ -327,8 +342,8 @@ const Profile: React.FC = () => {
                     </div>
                     <h2 className={styles.welcome}>שלום, {user.firstName}!</h2>
                 </div>
-
-                <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+                <Form />
+                {/* <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.column}>
                         <div className={styles.profilePage}>
                             {Object.keys(editableFieldsSchema.shape).map((field) => (
@@ -395,7 +410,7 @@ const Profile: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                </form>
+                </form> */}
             </main>
         </div>
     );
