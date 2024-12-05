@@ -4,22 +4,6 @@ import { User } from "@/types/user";
 import { activitySchema } from "@/validations/validationsServer/activity";
 import { z } from "zod";
 
-export async function GET(request: Request) {
-    try {
-        const client = await connectDatabase();
-        const data = await getAllDocuments(client, 'activities');
-
-        return NextResponse.json(data);
-
-    } catch (error) {
-        console.error('Error fetching activities:', error);
-        return NextResponse.json(
-            { message: 'Failed to fetch activities' },
-            { status: 500 }
-        );
-    }
-}
-
 export async function POST(req: Request) {
     try {
         const body: User = await req.json();
@@ -39,5 +23,21 @@ export async function POST(req: Request) {
         }
         console.error("Error post request:", error);
         return NextResponse.json({ error: "Failed to insert activity" }, { status: 500 });
+    }
+}
+
+export async function GET(request: Request) {
+    try {
+        const client = await connectDatabase();
+        const data = await getAllDocuments(client, 'activities');
+
+        return NextResponse.json(data);
+
+    } catch (error) {
+        console.error('Error fetching activities:', error);
+        return NextResponse.json(
+            { message: 'Failed to fetch activities' },
+            { status: 500 }
+        );
     }
 }

@@ -4,7 +4,7 @@ import { Activities, Loader, ActivityModal, ErrorMessage } from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
 import useUserStore from '@/store/useUserStore';
-import { useState, useEffect  } from 'react';
+import { useState  } from 'react';
 import { Activity } from '@/types/activity';
 
 const SavedActivities = () => {

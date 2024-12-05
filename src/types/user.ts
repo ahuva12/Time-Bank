@@ -10,6 +10,6 @@ export interface User {
     gender: "male" | "female";   
     dateOfBirth: Date;
     password: string;
-    remainingHours: number;
+    remainingHours?: number;
 }
 
