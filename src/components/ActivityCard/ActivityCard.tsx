@@ -11,9 +11,14 @@ const ActivityCard = ({ activity, onMoreDetails }: ActivityCardProps) => {
   return (
     <div className={styles.card}>
       <div className={styles.content}>
-        <p className={styles.name}>
-          <strong>{activity.nameActivity}</strong>
-        </p>
+        <div>
+          <p className={styles.name}>
+            <strong>{activity.nameActivity}</strong>
+          </p>
+          <p className={styles.hour}>
+            {activity.durationHours} {"שעות"}
+          </p>
+        </div>
         <p>{activity.description}</p>
         <div className={styles.tags}>
           {activity.tags.map((tag, index) => (
@@ -24,7 +29,7 @@ const ActivityCard = ({ activity, onMoreDetails }: ActivityCardProps) => {
         </div>
       </div>
       <button className={styles.link} onClick={onMoreDetails}>
-                פרטים נוספים
+        פרטים נוספים
       </button>
     </div>
   );
