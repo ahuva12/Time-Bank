@@ -11,13 +11,3 @@ export { default as SuccessMessage } from './SuccessMessage/SuccessMessage';
 export { default as ActivityModalForDonation } from './ActivityModalForDonation/ActivityModalForDonation';
 export { default as Register } from './Register/Register';
 export { default as MyDonation} from './MyDonation/MyDonation';
-
-
-
-
-
-
-
-
-
-
