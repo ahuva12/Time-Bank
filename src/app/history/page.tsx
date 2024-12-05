@@ -1,12 +1,13 @@
+
 "use client";
-import { GrFormNextLink } from "react-icons/gr";
-import { GrFormPreviousLink } from "react-icons/gr";
+import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import useUserStore from "@/store/useUserStore";
 import { useEffect, useState } from "react";
 import { Activity } from "@/types/activity";
 import { getFilteringActivities } from "@/services/activities";
 import styles from "./history.module.css";
-import { ActivityCard, Loader } from "@/components";
+import { ActivityCard, Loader, ActivityModal } from "@/components";
+
 export default function History() {
   const { user } = useUserStore();
   const [giverActivities, setGiverActivities] = useState<Activity[]>([]);
@@ -16,6 +17,8 @@ export default function History() {
   const [itemsPerPage] = useState(4);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [modeActivityModel, setModeActivityModel] = useState<string>("close");
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -59,8 +62,15 @@ export default function History() {
   const giverPaginated = paginate(giverActivities, giverPage);
   const receiverPaginated = paginate(receiverActivities, receiverPage);
 
-  const isFewGiverCards = giverPaginated.length < 4;
-  const isFewReceiverCards = receiverPaginated.length < 4;
+  const handleMoreDetails = (activity: Activity) => {
+    setSelectedActivity(activity);
+    setModeActivityModel("open");
+  };
+
+  const closeModal = () => {
+    setModeActivityModel("close");
+    setSelectedActivity(null);
+  };
 
   return (
     <div className={styles.container}>
@@ -90,9 +100,7 @@ export default function History() {
                     <ActivityCard
                       key={activity._id as string}
                       activity={activity}
-                      onMoreDetails={() =>
-                        console.log("more details about", activity)
-                      }
+                      onMoreDetails={() => handleMoreDetails(activity)}
                     />
                   ))
                 ) : (
@@ -128,13 +136,11 @@ export default function History() {
                     <ActivityCard
                       key={activity._id as string}
                       activity={activity}
-                      onMoreDetails={() =>
-                        console.log("more details about", activity)
-                      }
+                      onMoreDetails={() => handleMoreDetails(activity)}
                     />
                   ))
                 ) : (
-                  <p>לא נמצאו פעולות שתרמת</p>
+                  <p>לא נמצאו פעולות שקיבלת</p>
                 )}
               </div>
               <button
@@ -150,6 +156,16 @@ export default function History() {
             </div>
           </section>
         </div>
+      )}
+      {modeActivityModel === "open" && selectedActivity && (
+        <ActivityModal
+          modeModel={modeActivityModel}
+          isModeCancellig={false}
+          onClose={closeModal}
+          activity={selectedActivity}
+          user={user}
+          handlesMoreOptions={{}}
+        />
       )}
     </div>
   );
