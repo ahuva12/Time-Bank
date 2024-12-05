@@ -3,10 +3,11 @@
 import styles from './give.module.css';
 import { Activities, Loader, ErrorMessage, ActivityModal, MyDonation } from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getFilteringActivities, updateStatusActivity, updateActivity } from '@/services/activities';
+import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
 import useUserStore from '@/store/useUserStore';
 import { useState /*, useEffect*/ } from 'react';
 import { Activity } from '@/types/activity';
+
 
 const give = () => {
     const { user } = useUserStore();
@@ -35,30 +36,6 @@ const give = () => {
       );
     }
     //mutationFn: updateActivity
-    const updateActivityMutation = useMutation({
-      mutationFn: updateActivity,
-      onMutate: async (updatedActivity: Activity) => {
-          await queryClient.cancelQueries({ queryKey: ['activities'] });
-          const previousActivities = queryClient.getQueryData<Activity[]>(['activities']);
-          queryClient.setQueryData<Activity[]>(['activities'], (old) =>
-              old
-                  ? old.map((activity) =>
-                        activity._id === updatedActivity._id ? { ...activity, ...updatedActivity } : activity
-                    )
-                  : []
-          );
-          return { previousActivities };
-      },
-      onError: (error, variables, context: any) => {
-          if (context?.previousActivities) {
-              queryClient.setQueryData(['activities'], context.previousActivities);
-          }
-          console.error('Error updating activity:', error);
-      },
-      onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['activities'] });
-      },
-  });
   
 
     const updateStatusMutation = useMutation({
@@ -102,6 +79,7 @@ const give = () => {
       if (!selectedActivity) return;
       setIsModeCancellig(false)
       setModeActivityModel('success');
+      
       //TO DO: open popup that takes the new updates and add it to new Activity
       // updateActivityMutation.mutate({
       //   activityId: selectedActivity._id as string,
