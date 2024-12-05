@@ -4,8 +4,7 @@ import styles from './Header.module.css';
 import Image from 'next/image';
 import UserMenu from '../UserMenu/UserMenu';
 import logo from '../../../public/images/logo.gif';
-import Login from '@/components/Login/Login'; 
-import Register from '@/components/Register/Register'; 
+import { Login, Register} from '@/components'; 
 import { useState, useEffect  } from 'react';
 import Link from 'next/link';
 
@@ -69,7 +68,7 @@ export default function Header() {
             >
               ×
             </button>
-            <Login login={login} closePopup={toggleLogin} setIsRegisterOpen={setIsRegisterOpen}/>
+            <Login closePopup={toggleLogin} setIsRegisterOpen={setIsRegisterOpen}/>
           </div>
         </div>
       )}

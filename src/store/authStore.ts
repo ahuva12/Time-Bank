@@ -1,7 +1,6 @@
 'use client'
 import { create } from 'zustand';
 
-
 interface AuthState {
   isLoggedIn: boolean;
   login: () => void;
@@ -22,7 +21,7 @@ export const useAuthStore = create<AuthState>((set) => {
     isLoggedIn: isLoggedInFromStorage, // Set initial state from localStorage or false
     login: () => {
       if (typeof window !== 'undefined') {
-        localStorage.setItem('LoggedIn', 'true'); // Set LoggedIn to true in localStorage
+        localStorage.setItem('LoggedIn', 'true'); 
       }
       set({ isLoggedIn: true });
     },
@@ -30,7 +29,7 @@ export const useAuthStore = create<AuthState>((set) => {
     },
     logout: () => {
       if (typeof window !== 'undefined') {
-        localStorage.setItem('LoggedIn', 'false'); // Set LoggedIn to false in localStorage
+        localStorage.setItem('LoggedIn', 'false'); 
       }
       set({ isLoggedIn: false });
     },

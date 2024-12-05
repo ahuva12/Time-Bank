@@ -40,11 +40,11 @@ export default function UserMenu({ logout }: { logout: Function }) {
                         <li className={`${styles.welcomeItem} ${styles.noHover}`}>
                             <div>
                                 שלום&nbsp; 
-                                <span style={{fontWeight: "bold"}}>{user.firstName}</span>
+                                <span style={{fontWeight: "bold"}}>{user?.firstName}</span>
                             </div>
                             <div>
                                 יתרת השעות שלי:&nbsp; 
-                                <span>{user.remainingHours}</span>
+                                <span>{user?.remainingHours}</span>
                             </div>
                         </li>
                         <li onClick={() => handleRedirect('profile')}>פרופיל</li>

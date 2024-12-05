@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { number, z } from 'zod';
 import styles from './profile.module.css';
 import useUserStore from '@/store/useUserStore';
 import { userSchema } from '@/validations/validationsClient/user';
@@ -12,6 +12,7 @@ import { FaEdit } from 'react-icons/fa';
 import { Activity } from '@/types/activity';
 import { getFilteringActivities } from '@/services/activities';
 import { CiUser } from "react-icons/ci";
+import { User } from '@/types/user';
 
 // Define Zod schema for the form
 const editableFieldsSchema = userSchema.pick({
@@ -51,12 +52,10 @@ const Profile: React.FC = () => {
 
     const getWallet = async () => {
         try {
-            const activities: Activity[] = await getFilteringActivities("history", user._id);
-            const hoursGiven = activities.filter((activity) => activity.giverId === user._id).length;
-            const hoursReceived = activities.filter((activity) => activity.receiverId === user._id).length;
-            const hoursToReceive = user.remainingHours;
-
-            setWallet({ hoursGiven, hoursReceived, hoursToReceive });
+            const activities: Activity[] = await getFilteringActivities("history", user?._id as string);
+            const hoursGiven = activities.filter((activity) => activity.giverId === user?._id as string).length;
+            const hoursReceived = activities.filter((activity) => activity.receiverId === user?._id as string).length;
+            const hoursToReceive = user?.remainingHours ?? 0; 
         } catch (error) {
             console.error("Failed to fetch wallet data:", error);
         }
@@ -78,11 +77,11 @@ const Profile: React.FC = () => {
     } = useForm<EditableFields>({
         resolver: zodResolver(editableFieldsSchema),
         defaultValues: {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            address: user.address,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            email: user?.email,
+            phoneNumber: user?.phoneNumber,
+            address: user?.address,
         },
     });
 
@@ -91,8 +90,8 @@ const Profile: React.FC = () => {
         try {
             console.log(data);
             const updatedUser = { ...user, ...data };
-            const response = await updateUser(updatedUser);
-            setUser(updatedUser);
+            const response = await updateUser(updatedUser as User);
+            setUser(updatedUser as User);
             alert('Profile updated successfully!');
             setEditingField(null); // Close the input field after successful update
         } catch (error) {
@@ -103,7 +102,7 @@ const Profile: React.FC = () => {
 
     const handleEditClick = (field: keyof EditableFields) => {
         setEditingField(field);
-        setValue(field, user[field]); // Pre-fill the input with the current value
+        setValue(field, user?.[field] || "");
     };
 
     const handleBlur = () => {
@@ -119,7 +118,7 @@ const Profile: React.FC = () => {
                     <div className={styles.profileIcon}>
                         <CiUser className={styles.icon} />
                     </div>
-                    <h2 className={styles.welcome}>שלום, {user.firstName}!</h2>
+                    <h2 className={styles.welcome}>שלום, {user?.firstName}!</h2>
                 </div>
 
                 <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -166,7 +165,7 @@ const Profile: React.FC = () => {
                                             )}
                                         </div>
                                     ) : (
-                                        <p className={styles.value}>{user[field as keyof EditableFields]}</p>
+                                        <p className={styles.value}>{user ? user[field as keyof EditableFields] : "N/A"}</p>
                                     )}
                                 </div>
                             ))}

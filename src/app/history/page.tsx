@@ -7,6 +7,7 @@ import { Activity } from "@/types/activity";
 import { getFilteringActivities } from "@/services/activities";
 import styles from "./history.module.css";
 import { ActivityCard, Loader } from "@/components";
+
 export default function History() {
   const { user } = useUserStore();
   const [giverActivities, setGiverActivities] = useState<Activity[]>([]);
@@ -31,7 +32,7 @@ export default function History() {
 
         const activities: Activity[] = await getFilteringActivities(
           "history",
-          user._id
+          user._id as string
         );
 
         const giver = activities.filter(
