@@ -14,17 +14,6 @@ interface RegisterProps {
   setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// type RegisterFormFields = {
-//   firstName: string;
-//   lastName: string;
-//   address: string;
-//   gender: string;
-//   email: string;
-//   phoneNumber: string;
-//   dateOfBirth: string;
-//   password: string;
-// };
-
 const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
   const [error, setError] = useState<string>("");
   const router = useRouter();

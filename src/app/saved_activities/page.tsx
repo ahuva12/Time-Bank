@@ -20,7 +20,7 @@ const SavedActivities = () => {
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['savedActivities'],
-    queryFn: () => getFilteringActivities('caughted', user?._id as string),
+    queryFn: () => getFilteringActivities('caughted', user._id),
     staleTime: 10000,
     enabled: isLoggedIn, 
   });
@@ -67,7 +67,7 @@ const SavedActivities = () => {
     updateStatusMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'accepted',
-      receiverId: user?._id as string,
+      receiverId: user._id,
     });
   };
 
@@ -78,7 +78,7 @@ const SavedActivities = () => {
     updateStatusMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'proposed',
-      receiverId: user?._id as string,
+      receiverId: user._id,
     });
   };
 
