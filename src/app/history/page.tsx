@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Activity } from "@/types/activity";
 import { getFilteringActivities } from "@/services/activities";
 import styles from "./history.module.css";
-import { ActivityCard } from "@/components";
+import { ActivityCard, Loader } from "@/components";
 export default function History() {
   const { user } = useUserStore();
   const [giverActivities, setGiverActivities] = useState<Activity[]>([]);
@@ -68,7 +68,7 @@ export default function History() {
         <strong>ההיסטוריה שלך</strong>
       </h1>
       {loading ? (
-        <p>טוען נתונים...</p>
+        <Loader />
       ) : error ? (
         <p>{error}</p>
       ) : (
