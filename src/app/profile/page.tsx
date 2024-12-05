@@ -12,6 +12,7 @@ import { FaEdit } from 'react-icons/fa';
 import { Activity } from '@/types/activity';
 import { getFilteringActivities } from '@/services/activities';
 import { CiUser } from "react-icons/ci";
+import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 
 // Define Zod schema for the form
 const editableFieldsSchema = userSchema.pick({
@@ -40,6 +41,18 @@ interface Wallet {
 }
 
 const Profile: React.FC = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+        localStorage.getItem('LoggedIn') === 'true'
+    );
+    if (!isLoggedIn) {
+        return (
+            <ErrorMessage
+                message_line1="אתה לא מחובר!"
+                message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+            />
+        );
+    }
+
     // const { user, setUser } = useUserStore();
     const setUser = useUserStore((state) => state.setUser);
     const user = useUserStore((state) => state.user);
