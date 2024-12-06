@@ -38,7 +38,7 @@ export const registerUser = async (newUser:User) => {
 };
 
 // update remainingHours of the giver and receiver
-export const updateStatusActivity = async (giverId: string, receiverId: string, durationHoursActivity: number) => {
+export const updateRemainingHoursAndStatusActivity = async (giverId: string, receiverId: string, durationHoursActivity: number) => {
 
     if (typeof durationHoursActivity !== 'number' || durationHoursActivity <= 0) {
         throw new Error("Invalid hoursActivity value");
