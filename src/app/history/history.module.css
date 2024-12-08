@@ -7,7 +7,7 @@
   font-size: 1.7rem;
   font-weight: 600;
   text-align: center;
-  padding: 0.5rem 0;
+  padding-top: 1rem ;
 }
 
 .title {
@@ -52,12 +52,10 @@
 .explain {
   font-size: 1rem; 
   text-align: center; 
-  margin-top: 0.2rem; 
   margin-bottom: 2rem;
-  width: 90%; 
+  width: 100%; 
   line-height: 1.6; 
   font-weight: 400; 
-  max-width: 800px; 
   color: #555 ;
 } 
  
