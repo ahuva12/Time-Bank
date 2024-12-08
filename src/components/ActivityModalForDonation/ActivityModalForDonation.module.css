@@ -216,3 +216,7 @@
     cursor: pointer;
     margin-top: 20px;
 }
+
+.reciverTitle {
+    font-weight: bold;
+}

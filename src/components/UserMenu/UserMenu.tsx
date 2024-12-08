@@ -79,4 +79,3 @@ export default function UserMenu({ logout }: { logout: Function }) {
         </div>
     );
 }
-

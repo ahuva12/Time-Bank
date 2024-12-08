@@ -12,7 +12,7 @@ interface ActivityModalProps {
     isModeCancellig:boolean;
     onClose: () => void;
     activity: Activity;
-    user: User;
+    user: User | null;
     handlesMoreOptions: {
         handleAcceptActivity?: () => void;
         handleCancellRequestActivity?: () => void;
@@ -63,7 +63,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="שמחים שנהנית :)"
-                    message_line2={`יתרת השעות שלך עומדת על: ${user.remainingHours}`}
+                    message_line2={`יתרת השעות שלך עומדת על: ${user?.remainingHours}`}
                     message_line3={`תמיד נשמח לקבל משוב על הפעילות במייל TimeBank@gmail.com`}
                 />
             );
@@ -73,7 +73,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="ביטול הפעילות התקבל בהצלחה"
-                    message_line2={`יתרת השעות שלך עודכנה ל: ${user.remainingHours}`}
+                    message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours}`}
                 />
             );
         }
@@ -101,7 +101,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                 <SuccessMessage
                     message_line1="תודה על התעניינותך"
                     message_line2="הודענו על כך למבצע הפעילות"
-                    message_line3={`תוכל ליצור איתו קשר במייל: ${user.email}`}
+                    message_line3={`תוכל ליצור איתו קשר במייל: ${user?.email}`}
                 />
             );
         }
@@ -145,9 +145,9 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                                 <div className={styles.profileIcon}>
                                     <CiUser className={styles.icon} />
                                 </div>
-                                <p className={styles.text}>{user.firstName} {user.lastName}</p>
-                                <p className={styles.text}>{user.gender === "male" ? "בן" : "בת"} {calculateAge(user.dateOfBirth)}</p>
-                                <p className={styles.text}>{user.address}</p>
+                                <p className={styles.text}>{user?.firstName} {user?.lastName}</p>
+                                <p className={styles.text}>{user?.gender === "male" ? "בן" : "בת"} {calculateAge(user?.dateOfBirth ?? "0")}</p>
+                                <p className={styles.text}>{user?.address}</p>
                             </div>
                         </div>
                     </div>
