@@ -15,9 +15,12 @@ import { Activity } from "@/types/activity";
 
 const myDonation = () => {
   const { user } = useUserStore();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-    localStorage.getItem("LoggedIn") === "true"
-  );
+
+  let isLoggedIn = false;
+  if (typeof window !== "undefined") {
+    isLoggedIn = !!localStorage.getItem("LoggedIn");
+  } else { console.log("==4======= localStorage is not available in the server environment") }
+
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
