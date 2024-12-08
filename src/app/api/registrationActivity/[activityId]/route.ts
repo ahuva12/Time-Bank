@@ -1,25 +1,27 @@
-import { connectDatabase, updateDocuments, updateDocument } from '@/services/mongo';
+import { connectDatabase, updateDocuments, updateDocument, getDocument } from '@/services/mongo';
 import { NextResponse } from 'next/server';
 import { ObjectId, ClientSession } from 'mongodb';
 
-export async function GET(req: Request, { params }: { params: Promise<{ activityId: string }> }) {
-    //add checking that the activity it for these users
+export async function PATCH(req: Request, { params }: { params: { activityId: string } }) {
+    //add check 
     let session: ClientSession | undefined;
 
     try {
-        const { activityId } = await params;
+        const { activityId } = params;
         if (!activityId) {
-            return NextResponse.json({ message: "activity ID is required" }, { status: 400 });
+            return NextResponse.json({ message: "Activity ID is required" }, { status: 400 });
         }
 
-        const { durationHoursActivity, status, giverHoursId, receiverHoursId  } = await req.json();
-        if (!giverHoursId || !receiverHoursId)  {
-            return NextResponse.json({ message: "giver ID and receiver ID are required" }, { status: 400 });
+        const { durationHoursActivity, status, giverHoursId, receiverHoursId } = await req.json();
+        if (!giverHoursId || !receiverHoursId) {
+            return NextResponse.json({ message: "Giver ID and receiver ID are required" }, { status: 400 });
         }
+
         if (typeof durationHoursActivity !== 'number' || durationHoursActivity <= 0) {
             return NextResponse.json({ message: "Invalid hoursActivity value" }, { status: 400 });
         }
-        if (status !== 'accepted' || status !== 'proposed') {
+
+        if (status !== 'caughted' && status !== 'proposed') {
             return NextResponse.json({ message: "Invalid status value" }, { status: 400 });
         }
 
@@ -27,11 +29,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ activity
         session = client.startSession();
         session.startTransaction();
 
+        const activity = await getDocument(client, 'activities', {_id: new ObjectId(activityId)})
+
+        console.log(activity)
+        
+
         const filter = {
-            $or: [
-                { _id: new ObjectId(giverHoursId), remainingHours: { $gte: durationHoursActivity } },
-                { _id: new ObjectId(receiverHoursId) },
-            ],
+            _id: { $in: [new ObjectId(giverHoursId), new ObjectId(receiverHoursId)] },
         };
 
         const updateRemainingHours = [
@@ -48,19 +52,26 @@ export async function GET(req: Request, { params }: { params: Promise<{ activity
             },
         ];
 
-        const updateStatusActivity = {
-            status,
-            receiverId: new ObjectId(giverHoursId),
-        };
-
         const updateResult = await updateDocuments(client, 'users', filter, updateRemainingHours, session);
 
-        if (updateResult.matchedCount !== 2 || updateResult.modifiedCount !== 2) {
+        if (updateResult.modifiedCount !== 2) {
             await session.abortTransaction();
             return NextResponse.json({ message: "Updating remainingHours failed, transaction aborted" }, { status: 400 });
         }
 
-        const result = await updateDocument(client, 'activities', { _id: new ObjectId(activityId) }, updateStatusActivity, session);
+        // Update the activity status
+        const updateActivity = {
+            status,
+            receiverId: new ObjectId(giverHoursId),
+        };
+
+        const result = await updateDocument(
+            client,
+            'activities',
+            { _id: new ObjectId(activityId) },
+            updateActivity,
+            session
+        );
 
         if (result.modifiedCount !== 1) {
             await session.abortTransaction();
@@ -68,7 +79,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ activity
         }
 
         await session.commitTransaction();
-
         return NextResponse.json({ message: "RemainingHours and activity status updated successfully" }, { status: 200 });
 
     } catch (error) {
