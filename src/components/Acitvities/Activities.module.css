@@ -1,9 +1,19 @@
-.tableActivities {
+/* .tableActivities {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
   gap: 1rem; 
   padding: 1rem 6rem; 
+} */
+
+.tableActivities {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  margin-right: 2rem;
+  margin-left: 2rem;
 }
+
 
 .noActivities {
   margin-top: 2.7rem;

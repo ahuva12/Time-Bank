@@ -5,11 +5,11 @@
   justify-content: space-between;
   text-align: right; 
   background-color: #ffffff;
-  border-radius: 25px;
+  border-radius: 8px;
   padding: 20px;
   width: 220px;
-  margin: 10px auto;
-  border: 1px solid black; /* delete */
+  margin: 10px;
+  max-height: 18rem;
 }
 .name {
   font-size: 1.5rem;
@@ -47,4 +47,17 @@
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1rem;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon {
+  font-size: x-large;
+  cursor: pointer;
+  color: rgb(255, 222, 38);
+  align-self: start;
 }
