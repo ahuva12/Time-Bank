@@ -1,5 +1,5 @@
 .container {
-  background-color: #E0F5F8;
+  background-color: #e0f5f8;
   padding: 20px;
 }
 
@@ -7,8 +7,7 @@
   font-size: 1.7rem;
   font-weight: 600;
   text-align: center;
-  padding: 1rem 0;
-
+  padding: 0.5rem 0;
 }
 
 .title {
@@ -24,7 +23,7 @@
   justify-content: space-between;
   margin-right: 2rem;
   margin-left: 2rem;
-}
+} 
 
 .act {
   display: flex;
@@ -48,4 +47,17 @@
 .paginationButton:disabled {
   cursor: not-allowed;
   color: #000000;
+}
+
+.explain {
+  font-size: 1rem; 
+  text-align: center; 
+  margin-top: 0.2rem; 
+  margin-bottom: 2rem;
+  width: 90%; 
+  line-height: 1.6; 
+  font-weight: 400; 
+  max-width: 800px; 
+  color: #555 ;
 } 
+ 

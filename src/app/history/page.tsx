@@ -1,4 +1,3 @@
-
 "use client";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import useUserStore from "@/store/useUserStore";
@@ -17,7 +16,9 @@ export default function History() {
   const [itemsPerPage] = useState(4);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
+    null
+  );
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
 
   useEffect(() => {
@@ -77,6 +78,10 @@ export default function History() {
       <h1 className={styles.heading}>
         <strong>ההיסטוריה שלך</strong>
       </h1>
+      <h3 className={styles.explain}>
+         כאן תוכלו לצפות בפעילויות שתרמתם ובפעילויות שלקחתם לעצמכם, כל
+        הפעילויות שתכננתם והשלמתם יופיעו כאן.
+      </h3>
       {loading ? (
         <Loader />
       ) : error ? (
