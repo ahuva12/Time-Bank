@@ -55,7 +55,7 @@ export const updateActivity = async (updatedActivity:Activity) => {
 export const updateStatusActivity = async ({ activityId, status, receiverId }: { 
   activityId: string;
   status: string;
-  receiverId: string;}) => {
+  receiverId: string|null;}) => {
 
   if (!receiverId || !activityId || !status) {
     throw new Error('Receiver ID, activityId and status are required');

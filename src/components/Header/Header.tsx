@@ -2,11 +2,10 @@
 import { useAuthStore } from '@/store/authStore';
 import styles from './Header.module.css';
 import Image from 'next/image';
-import UserMenu from '../UserMenu/UserMenu';
 import logo from '../../../public/images/logo.gif';
-import { Login, Register} from '@/components'; 
 import { useState, useEffect  } from 'react';
 import Link from 'next/link';
+import { Login, Register, UserMenu} from '@/components'; 
 
 export default function Header() {
   const { isLoggedIn, logout, login, signup } = useAuthStore();

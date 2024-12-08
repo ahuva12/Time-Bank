@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ClientSession } from "mongodb";
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
@@ -78,27 +78,28 @@ export async function deleteDocument(client: MongoClient, collection: string, fi
     }
 }
 
-export async function updateDocument(client: MongoClient, collection: string, filter: object, update: object) {
+export async function updateDocument(client: MongoClient, collection: string, filter: object, update: object, session?: ClientSession) {
     try {
         const db = client.db('time-bank');
-        const result = await db.collection(collection).updateOne(filter, { $set: update });
+        const result = await db.collection(collection).updateOne(filter, { $set: update }, { session });
         return result;
     } catch (error) {
         console.error("Error updating document:", error);
+        throw error;
+    }
+}
+
+export async function updateDocuments(client: MongoClient, collection: string, filter: object, update: object, session?: ClientSession) {
+    try {
+        const db = client.db('time-bank');
+        const result = await db.collection(collection).updateMany(filter, update, { session });
+        return result;
+    } catch (error) {
+        console.error("Error updating multiple documents:", error);
         throw error;
     }
 }
  
-export async function incFieldInDocument(client: MongoClient, collection: string, filter: object, update: object) {
-    try {
-        const db = client.db('time-bank');
-        const result = await db.collection(collection).updateOne(filter, update);
-        return result;
-    } catch (error) {
-        console.error("Error updating document:", error);
-        throw error;
-    }
-}
 
 
 

@@ -91,3 +91,4 @@ export async function GET(req: Request, { params }: { params: Promise<{ userId: 
         return NextResponse.json({ message: "Internal server error" }, { status: 500 });
     }
 }
+

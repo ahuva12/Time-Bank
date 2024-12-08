@@ -89,7 +89,7 @@ const ActivityModalForDonation: React.FC<ActivityModalForDonationProps> = ({ mod
                             <p className={styles.text} style={{ color: 'red' }}>{error}</p>
                         ) : recipient ? (
                             <div className={styles.description}>
-                                <h1>המקבל:</h1>
+                                <h1 className={styles.reciverTitle}>המקבל:</h1>
                                 <div className={styles.profileIcon}>
                                     <CiUser className={styles.icon} />
                                 </div>
