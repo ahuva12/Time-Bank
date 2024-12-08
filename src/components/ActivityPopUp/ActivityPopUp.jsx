@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { updateActivity } from '@/services/activities'
 
-export default function ActivityPopUp({activity, closePopup}) {
+export default function ActivityPopUp({activity/*, closePopup*/}) {
   const [nameActivity, setNameActivity] = useState(activity.nameActivity);
   const [tags, setTags] = useState(activity.tags);
   const [numberOfHours, setNumberOfHours] = useState(activity.numberOfHours);
