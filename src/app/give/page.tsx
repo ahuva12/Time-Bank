@@ -18,10 +18,12 @@ import { useState /*, useEffect*/ } from "react";
 import { Activity } from "@/types/activity";
 
 const give = () => {
+  let isLoggedIn = false;
+  if (typeof window !== "undefined") {
+    isLoggedIn = !!localStorage.getItem("LoggedIn");
+  } else { console.log("==1======= localStorage is not available in the server environment") }
+
   const { user } = useUserStore();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-    localStorage.getItem("LoggedIn") === "true"
-  );
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
