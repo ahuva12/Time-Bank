@@ -8,7 +8,8 @@ import Link from 'next/link';
 import { Login, Register, UserMenu} from '@/components'; 
 
 export default function Header() {
-  const { isLoggedIn, logout, login, signup } = useAuthStore();
+  // const { isLoggedIn, logout, login, signup } = useAuthStore();
+  const isLoggedIn = true;
   const [isClient, setIsClient] = useState(false); 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -28,7 +29,9 @@ export default function Header() {
     <header className={styles.header}>
       {isLoggedIn ? (
           <nav className={styles.navigation}>
-            <UserMenu logout={logout} />
+            {/* <UserMenu logout={logout} /> */}
+            <UserMenu logout={() => console.log('logout')} />
+
             <Link href="/home" className={styles.navItem}>
             דף הבית
             </Link>
