@@ -1,28 +1,43 @@
 'use client';
 import { create } from 'zustand';
 import { getUserById } from '@/services/users';
+import { User } from '@/types/user';
 
 interface AuthState {
-  user: any;
+  user: User;
   getUser: () => Promise<any>; 
   setUser: (user: any) => void;
   clearUser: () => void;
 }
 
+const defaultUser: User = {
+  _id: "",
+  firstName: "לא מחובר",
+  lastName: "",
+  address: "",
+  gender: "",
+  email: "",
+  phoneNumber: "",
+  dateOfBirth: "",
+  password: "",
+  remainingHours: 0,
+};
+
 export const useUserStore = create<AuthState>((set, get) => ({
   // user: null,
-      user : {
-      _id: "6745ce841396a6f699f26d13",
-      firstName: "נעמה",
-      lastName: "אילוז",
-      address: "תל אביב",
-      gender: "female",
-      email: "naama@gmail.com",
-      phoneNumber: "0521234567",
-      dateOfBirth: "2014-11-10",
-      password:"$2a$12$O3HzvCKZQ3zzabnwJq7DVOReHCC8CdryvaO8lErDvYL2gn5.NvTDq",
-      remainingHours: 3
-    },
+    //   user : {
+    //   _id: "6745ce841396a6f699f26d13",
+    //   firstName: "נעמה",
+    //   lastName: "אילוז",
+    //   address: "תל אביב",
+    //   gender: "female",
+    //   email: "naama@gmail.com",
+    //   phoneNumber: "0521234567",
+    //   dateOfBirth: "2014-11-10",
+    //   password:"$2a$12$O3HzvCKZQ3zzabnwJq7DVOReHCC8CdryvaO8lErDvYL2gn5.NvTDq",
+    //   remainingHours: 3
+    // },
+  user : defaultUser,
   getUser: async () => {
     const state = get(); 
     console.log(state);
@@ -40,13 +55,13 @@ export const useUserStore = create<AuthState>((set, get) => ({
           return user;
         } else {
           console.error("No UserId found in localStorage");
-          set({ user: null });
-          return null; // Return null if no UserId in localStorage
+          set({ user: defaultUser });
+          return defaultUser; // Return null if no UserId in localStorage
         }
       } catch (error) {
         console.error("Failed to fetch user:", error);
-        set({ user: null });
-        return null; // Return null if error occurs
+        set({ user: defaultUser });
+        return defaultUser; // Return null if error occurs
       }
     }
   },
@@ -58,7 +73,7 @@ export const useUserStore = create<AuthState>((set, get) => ({
   },
   clearUser: () => {
     localStorage.removeItem("UserId"); // Remove user ID from localStorage
-    set({ user: null }); // Clear the user from Zustand state
+    set({ user: defaultUser }); // Clear the user from Zustand state
   },
 }));
 

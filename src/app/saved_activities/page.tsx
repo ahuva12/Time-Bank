@@ -11,7 +11,6 @@ import { Activity } from '@/types/activity';
 const SavedActivities = () => {
 
   const { isLoggedIn } = useAuthStore();
-
   console.log(isLoggedIn)
 
   // let isLoggedIn = false;
@@ -100,7 +99,7 @@ const SavedActivities = () => {
   // Render content based on the query's state
   if (isError) {
     return (
-      <ErrorMessage message_line1="משהו השתבש..." message_line2='תוכל לנסות שוב במועד מאוחר יותר'/>
+      <ErrorMessage message_line1="אופס... משהו השתבש" message_line2='תוכל לנסות שוב במועד מאוחר יותר'/>
     )
   }
 

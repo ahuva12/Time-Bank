@@ -1,3 +1,33 @@
+'use client';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+interface AuthState {
+  isLoggedIn: boolean;
+  login: () => void;
+  signup: () => void;
+  logout: () => void;
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      isLoggedIn: false, 
+      login: () => {
+        set({ isLoggedIn: true });
+      },
+      signup: () => {
+      },
+      logout: () => {
+        set({ isLoggedIn: false });
+      },
+    }),
+    {
+      name: 'auth-user', 
+    }
+  )
+);
+
 // 'use client'
 // import { create } from 'zustand';
 // import { persist } from 'zustand/middleware';
@@ -37,32 +67,3 @@
 //   };
 // });
 
-'use client';
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-interface AuthState {
-  isLoggedIn: boolean;
-  login: () => void;
-  signup: () => void;
-  logout: () => void;
-}
-
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      isLoggedIn: false, 
-      login: () => {
-        set({ isLoggedIn: true });
-      },
-      signup: () => {
-      },
-      logout: () => {
-        set({ isLoggedIn: false });
-      },
-    }),
-    {
-      name: 'auth-user', 
-    }
-  )
-);

@@ -15,8 +15,10 @@ export default function Header() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   // const { getUser } = useUserStore();
+    const { user } = useUserStore();
 
   useEffect(() => {
+    console.log(user)
     setIsClient(true);
   }, [])
 

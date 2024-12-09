@@ -13,7 +13,7 @@ import {
   getFilteringActivities,
   updateStatusActivity,
 } from "@/services/activities";
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { useState /*, useEffect*/ } from "react";
 import { Activity } from "@/types/activity";
 
