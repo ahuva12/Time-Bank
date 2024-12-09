@@ -13,6 +13,7 @@ import { Activity } from '@/types/activity';
 import { getFilteringActivities } from '@/services/activities';
 import { CiUser } from "react-icons/ci";
 import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
+import { useAuthStore } from '@/store/authStore';
 
 // Define Zod schema for the form
 const editableFieldsSchema = userSchema.pick({
@@ -42,12 +43,7 @@ interface Wallet {
 
 const Profile: React.FC = () => {
 
-    let isLoggedIn = false;
-    if (typeof window !== "undefined") {
-        isLoggedIn = !!localStorage.getItem("LoggedIn");
-    } else { console.log("==2======= localStorage is not available in the server environment") }
-
-
+    const { isLoggedIn } = useAuthStore();
     if (!isLoggedIn) {
         return (
             <ErrorMessage

@@ -10,14 +10,15 @@ import { useUserStore } from '@/store/useUserStore';
 
 export default function Header() {
   const { isLoggedIn, login, signup } = useAuthStore();
-  // const isLoggedIn = true;
   const [isClient, setIsClient] = useState(false); 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  // const { getUser } = useUserStore();
-    const { user } = useUserStore();
+  const { getUser } = useUserStore();
+  const { user } = useUserStore();
 
   useEffect(() => {
+    const user1 = getUser();
+    console.log(user1)
     console.log(user)
     setIsClient(true);
   }, [])
