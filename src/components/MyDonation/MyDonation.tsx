@@ -30,7 +30,7 @@ const myDonation = () => {
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonation"],
-    queryFn: () => getFilteringActivities("caughtedGiver", user._id),
+    queryFn: () => getFilteringActivities("caughtedGiver", user._id as string),
     staleTime: 10000,
     enabled: isLoggedIn,
   });

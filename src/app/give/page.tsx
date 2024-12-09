@@ -34,7 +34,7 @@ const give = () => {
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonatiom"],
-    queryFn: () => getFilteringActivities("proposedGiver", user._id),
+    queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
     staleTime: 10000,
     enabled: isLoggedIn,
   });

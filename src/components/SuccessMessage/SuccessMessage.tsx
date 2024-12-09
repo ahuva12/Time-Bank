@@ -7,7 +7,7 @@ interface SuccessMessageProps {
     message_line1: string; 
     message_line2: string; 
     message_line3?: string;
-    onOkClick: Function; // Function to call when OK is clicked
+    onOkClick?: Function; // Function to call when OK is clicked
 }
 
 const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_line2, message_line3, onOkClick }) => {
@@ -16,7 +16,7 @@ const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_
     
     const handleOkClick = () => {
         setIsShow(false); // Hide the success message
-        onOkClick(); // Call the onOkClick function to log out and redirect
+        onOkClick && onOkClick(); // Call the onOkClick function to log out and redirect
     };
 
     return (

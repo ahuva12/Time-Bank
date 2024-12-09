@@ -35,7 +35,7 @@ export default function History() {
 
         const activities: Activity[] = await getFilteringActivities(
           "history",
-          user._id
+          user._id as string
         );
 
         const giver = activities.filter(
