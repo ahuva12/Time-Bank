@@ -8,10 +8,15 @@ import { useState  } from 'react';
 import { Activity } from '@/types/activity';
 
 const SavedActivities = () => {
+
+  let isLoggedIn = false;
+  if (typeof window !== "undefined") {
+    isLoggedIn = !!localStorage.getItem("LoggedIn");
+  } else { console.log("==3== localStorage is not available in the server environment") }
+
+
   const { user } = useUserStore();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-    localStorage.getItem('LoggedIn') === 'true'
-  );
+
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -96,6 +101,8 @@ const SavedActivities = () => {
   return (
     <div className={styles.savedActivities}>
       <h1 className={styles.title}>הפעילויות השמורות שלי</h1>
+      <h3 className={styles.explain}>
+      בעמוד זה תוכלו לראות את כל הפעילויות שאליהן נרשמתם אך עדיין לא השתתפתם בהן בפועל.      </h3>
       {(isLoading || isFetching) ? (
         <Loader />
       ) : (

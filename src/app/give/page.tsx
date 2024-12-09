@@ -8,12 +8,12 @@ import useUserStore from '@/store/useUserStore';
 import { useState /*, useEffect*/ } from 'react';
 import { Activity } from '@/types/activity';
 
-
 const give = () => {
   const { user } = useUserStore();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-    localStorage.getItem('LoggedIn') === 'true'
-  );
+  let isLoggedIn = false;
+  if (typeof window !== "undefined") {
+    isLoggedIn = !!localStorage.getItem("LoggedIn");
+  } else { console.log("==1======= localStorage is not available in the server environment") }
 
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>('close');
@@ -28,9 +28,14 @@ const give = () => {
     setIsPopUpOpen(false); // Close the pop-up
   };
 
+ 
+
+
+  // const queryClient = useQueryClient();
+
   const { data, isLoading, isFetching, isError } = useQuery({
-    queryKey: ['myDonatiom'],
-    queryFn: () => getFilteringActivities('proposedGiver', user._id),
+    queryKey: ["myDonatiom"],
+    queryFn: () => getFilteringActivities("proposedGiver", user._id),
     staleTime: 10000,
     enabled: isLoggedIn,
   });
