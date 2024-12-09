@@ -1,4 +1,4 @@
-import { connectDatabase, deleteDocument, getDocument, updateDocument, getDocuments } from '@/services/mongo';
+import { connectDatabase, getDocuments } from '@/services/mongo';
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 
@@ -11,17 +11,17 @@ export async function GET(req: Request, { params }: { params: Promise<{ activity
         }
 
         const client = await connectDatabase();
-        const activities = await getDocuments(client, 'activities', { 
+        const activities = await getDocuments(client, 'activities', {
             $and: [
                 { status: "accepted" },
-                { 
+                {
                     $or: [
                         { giverId: new ObjectId(activityId) },
                         { receiverId: new ObjectId(activityId) }
                     ]
                 }
             ]
-        });        
+        });
         return NextResponse.json(activities);
 
     } catch (error) {
@@ -30,9 +30,81 @@ export async function GET(req: Request, { params }: { params: Promise<{ activity
     }
 }
 
+const getCaughtActivitiesFilter = (userId: string) => {
+    return {
+        $and: [
+            {
+                receiverId: new ObjectId(userId),
+            },
+            {
+                status: 'caughted',
+            },
+        ],
+    }
+}
+
+const getActivitiesHistoryFilter = (userId: string) => {
+    return {
+        $and: [
+            { status: "accepted" },
+            {
+                $or: [
+                    { giverId: new ObjectId(userId) },
+                    { receiverId: new ObjectId(userId) }
+                ]
+            }
+        ]
+    }
+}
+
+const getActivitiesProposedFilter = (userId: string) => {
+    return {
+        $and: [
+            {
+                giverId: { $ne: new ObjectId(userId) },
+            },
+            {
+                receiverId: null,
+            },
+            {
+                status: 'proposed',
+            },
+        ]
+    }
+}
+
+const getCaughtActivitiesGiverFilter = (userId: string) => {
+    return {
+        $and: [
+            {
+                giverId: new ObjectId(userId),
+            },
+            {
+                status: 'caughted',
+            },
+        ]
+    }
+}
+
+const getProposedActivitiesGiverFilter = (userId: string) => {
+    return {
+        $and: [
+            {
+                giverId: new ObjectId(userId),
+            },
+            {
+                receiverId: null,
+            },
+            {
+                status: 'proposed',
+            },
+        ]
+    }
+}
+
 export async function POST(req: Request, { params }: { params: { userId: string } }) {
     try {
-        const { filterType } = await req.json(); 
+        const { filterType } = await req.json();
         const { userId } = params;
 
         if (!filterType || !userId) {
@@ -46,21 +118,21 @@ export async function POST(req: Request, { params }: { params: { userId: string 
 
         switch (filterType) {
             case 'caughted':
-                filter = getCaughtActivitiesFilter(userId); 
+                filter = getCaughtActivitiesFilter(userId);
                 break;
             case 'history':
-                filter = getActivitiesHistoryFilter(userId); 
+                filter = getActivitiesHistoryFilter(userId);
                 break;
             case 'proposed':
-                filter = getActivitiesProposedFilter(userId); 
+                filter = getActivitiesProposedFilter(userId);
                 break;
             case 'caughtedGiver':
-                filter = getCaughtActivitiesGiverFilter(userId); 
+                filter = getCaughtActivitiesGiverFilter(userId);
                 break;
             case 'proposedGiver':
-                filter = getProposedActivitiesGiverFilter(userId); 
+                filter = getProposedActivitiesGiverFilter(userId);
                 break;
-             
+
             default:
                 return NextResponse.json(
                     { message: 'Invalid filter type provided.' },
@@ -80,60 +152,3 @@ export async function POST(req: Request, { params }: { params: { userId: string 
         );
     }
 }
-
-const getCaughtActivitiesFilter = (userId:string) => {
-    return {
-                $and: [
-                { receiverId: new ObjectId(userId), },
-                { status: 'caughted', },
-                ],
-            }
-}
-
-const getActivitiesHistoryFilter = (userId:string) => {
-    return {
-            $or: [
-                {
-                    $and: [
-                    { giverId: new ObjectId(userId) },
-                    { status: 'accepted' }
-                    ]
-                },
-                {
-                    $and: [
-                    { receiverId: new ObjectId(userId) },
-                    { status: 'accepted' }
-                    ]
-                }
-            ]
-        }
-}
-
-const getActivitiesProposedFilter = (userId:string) => {
-    return {
-            $and: [
-                    { giverId: { $ne: new ObjectId(userId) }, },
-                    { receiverId: { $eq: null }, },
-                    { status: 'proposed', },
-                ]
-        }
-}
-
-const getCaughtActivitiesGiverFilter = (userId:string) => {
-    return {
-        $and: [
-                { giverId: new ObjectId(userId), },
-                { status: 'caughted', },
-            ]
-        }
-}
-
-const getProposedActivitiesGiverFilter = (userId:string) => {
-    return {
-        $and: [
-            { giverId: new ObjectId(userId), },
-            { status: 'proposed', },
-        ]
-    }
-}
-

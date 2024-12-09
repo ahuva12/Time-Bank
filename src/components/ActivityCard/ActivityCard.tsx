@@ -1,16 +1,25 @@
+
 import React, { useState, useEffect } from "react";
 import styles from "./ActivityCard.module.css";
 import { Activity } from "@/types/activity";
+
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { updateStatusActivity, updateActivity } from '@/services/activities';
+import { ActivityPopUp } from '@/components'
 
 interface ActivityCardProps {
   activity: Activity;
   onMoreDetails: () => void;
-  onToggleFavorite: (activityId: string, isFavorite: boolean) => void; // New prop
+  onToggleFavorite: (activityId: string, isFavorite: boolean) => void;
   isGeneral?: boolean;
+  flag: boolean;
+  handlesMoreOptions: null | {
+    onUpdate: () => void;
+    setSelectedActivity: any
+  };
 }
 
-const ActivityCard = ({ activity, onMoreDetails, onToggleFavorite, isGeneral }: ActivityCardProps) => {
+const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onToggleFavorite, isGeneral }: ActivityCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
@@ -22,6 +31,24 @@ const ActivityCard = ({ activity, onMoreDetails, onToggleFavorite, isGeneral }: 
     const activityId = activity._id as string;
     setIsFavorite((prev) => !prev);
     onToggleFavorite(activityId, isFavorite); // Notify the parent
+  }
+
+  const onUpdate = (): void => {
+    handlesMoreOptions?.setSelectedActivity(activity);
+    handlesMoreOptions?.onUpdate();
+  };
+
+  const onDelete = async (): Promise<void> => {
+    try {
+      await updateStatusActivity({
+        activityId: activity._id as string,
+        status: 'cancelled',
+        receiverId: null,
+      });
+      console.log("Activity deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting activity:", error);
+    }
   };
 
   return (
@@ -49,6 +76,16 @@ const ActivityCard = ({ activity, onMoreDetails, onToggleFavorite, isGeneral }: 
       <button className={styles.link} onClick={onMoreDetails}>
         פרטים נוספים
       </button>
+      {flag && (
+        <div className={styles.buttonsContainer}>
+          <button className={styles.moreOptionButton} onClick={onUpdate}>
+            עדכון
+          </button>
+          <button className={styles.moreOptionButton} onClick={onDelete}>
+            מחיקה
+          </button>
+        </div>
+      )}
     </div>
   );
 };

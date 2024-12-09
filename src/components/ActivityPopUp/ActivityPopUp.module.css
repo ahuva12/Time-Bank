@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px;
+    width: 500px;
+}
+
+.title {
+    text-align: center;
+    font-size: xx-large;
+}
+
+.inputFields {
+    width: 375px;
+    height: 50px;
+    align-self: center;
+    background-color: #e0f5f8;
+    border-bottom: 2px solid #048ebc;
+}
+
+.button {
+    background-color: #048ebc;
+    color: white;
+    border-radius: 10px;
+    width: 100px;
+    height: 35px;
+    margin-right: 50px;
+}
+
+.innerDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.registerText {
+    font-size: small;
+}
+
+

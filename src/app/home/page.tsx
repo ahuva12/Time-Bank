@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./home.module.css";
 export default function Home() {
@@ -6,7 +8,7 @@ export default function Home() {
       <header className={styles.header}>
         <div className={styles.textContent}>
           <h1>ברוכים הבאים לבנק הזמן</h1>
-          <h2 className={styles.highlight}>מקום שבו הזמן שווה כסף!</h2>
+          <h2 className={styles.highlight}>מקום שבו הזמן שלך שווה כסף!</h2>
           <p>חווה את כוחה של הקהילה באמצעות בנק הזמן</p>
         </div>
         <Image

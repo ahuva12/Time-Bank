@@ -8,9 +8,15 @@ interface ActivitiesProps {
     onMoreDetails: (activity: Activity) => void;
     onToggleFavorite: (activityId: string, isFavorite: boolean) => void; // New prop
     isGeneral?: boolean;
+    flag: boolean;
+    handlesMoreOptions:  {
+        onUpdate: () => void; 
+        setSelectedActivity: any;
+    } | null;
 }
 
-const Activities = ({ activities, onMoreDetails, onToggleFavorite, isGeneral }: ActivitiesProps) => {
+
+const Activities = ({ activities, onMoreDetails, flag, handlesMoreOptions, onToggleFavorite, isGeneral }: ActivitiesProps) => {
     return (
         <div className={styles.tableActivities}>
             {!activities || activities.length === 0 ? (
@@ -23,6 +29,8 @@ const Activities = ({ activities, onMoreDetails, onToggleFavorite, isGeneral }: 
                         onMoreDetails={() => onMoreDetails(activity)}
                         onToggleFavorite={onToggleFavorite} // Pass down to ActivityCard
                         isGeneral={isGeneral}
+                        flag={flag}
+                        handlesMoreOptions={handlesMoreOptions}
                     />
                 ))
             )}
