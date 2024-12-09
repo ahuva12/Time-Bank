@@ -69,11 +69,11 @@ export default function UserMenu({ logout }: { logout: Function }) {
             <li className={`${styles.welcomeItem} ${styles.noHover}`}>
               <div>
                 שלום,&nbsp;
-                <span>{user ? user.firstName : "משתמש"}</span>
+                <span><strong>{user ? user.firstName : "משתמש"}</strong></span>
               </div>
               <div>
                 יתרת השעות שלי:&nbsp;
-                <span>{user ? user.remainingHours : "אין נתונים"}</span>
+                <span><strong>{user ? user.remainingHours : "אין נתונים"}</strong></span>
               </div>
             </li>
             <li onClick={() => handleRedirect("profile")}>פרופיל</li>
