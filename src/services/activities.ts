@@ -5,7 +5,7 @@ import { updateRemainingHours } from './users';
 //get activities based on filtering 
 //(the filters are can be: 'caughted', 'history', 'proposed', 'caughtedGiver', 'proposedGiver')
 export const getFilteringActivities = async (filterType:string, userId:string) => {
-
+  console.log('getFilteringActivities');
   const body = { filterType };
 
   try {

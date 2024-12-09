@@ -5,11 +5,11 @@ import { Activity } from "@/types/activity";
 import { User } from "@/types/user";
 import { calculateAge } from "@/services/utils";
 import { CiUser } from "react-icons/ci";
-import {ErrorMessage, SuccessMessage} from '@/components';
+import { ErrorMessage, SuccessMessage } from '@/components';
 
 interface ActivityModalProps {
     modeModel: string;
-    isModeCancellig:boolean;
+    isModeCancellig: boolean;
     onClose: () => void;
     activity: Activity;
     user: User;
@@ -27,34 +27,35 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
 
     const renderButtons = () => {
         const buttonConfig = [
-            { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי' },
-            { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול' },
-            { handler: handlesMoreOptions.handleRegistrationActivity, label: 'אני מעוניין בפעילות זו' },
-            { handler: handlesMoreOptions.handleUpdateActivity, label: 'עדכון' },
-            { handler: handlesMoreOptions.handleCancellProposalActivity, label: 'מחיקה' },
+            { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי', block: false },
+            { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול', block: false },
+            { handler: handlesMoreOptions.handleRegistrationActivity, label: 'אני מעוניין בפעילות זו', block: user.remainingHours < activity.durationHours },
+            { handler: handlesMoreOptions.handleUpdateActivity, label: 'עדכון', block: false },
+            { handler: handlesMoreOptions.handleCancellProposalActivity, label: 'מחיקה', block: false },
         ];
 
         return (
             <div className={styles.buttonsContainer}>
-                {buttonConfig.map(
-                    (button, index) =>
-                        button.handler && (
-                            <button
-                                key={index}
-                                className={styles.moreOptionButton}
-                                onClick={button.handler}
-                            >
-                                {button.label}
-                            </button>
-                        )
-                )}
+                {buttonConfig.map((button, index) => (
+                    button.handler && (
+                        <button
+                            key={index}
+                            className={`${styles.moreOptionButton} ${button.block ? styles.disabledButton : ''
+                                }`}
+                            onClick={button.handler}
+                            disabled={button.block} // Disable the button if the condition is true
+                        >
+                            {button.label}
+                        </button>
+                    )
+                ))}
             </div>
         );
     };
 
     const errorModal = () => {
         return (
-            <ErrorMessage message_line1="משהו השתבש... פעולתך נכשלה" message_line2='תוכל לנסות שוב במועד מאוחר יותר'/>
+            <ErrorMessage message_line1="משהו השתבש... פעולתך נכשלה" message_line2='תוכל לנסות שוב במועד מאוחר יותר' />
         );
     };
 
@@ -68,7 +69,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                 />
             );
         }
-    
+
         if (handlesMoreOptions.handleCancellRequestActivity && isModeCancellig) {
             return (
                 <SuccessMessage
@@ -77,7 +78,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                 />
             );
         }
-    
+
         if (handlesMoreOptions.handleUpdateActivity && isModeCancellig) {
             return (
                 <SuccessMessage
@@ -86,7 +87,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                 />
             );
         }
-    
+
         if (handlesMoreOptions.handleCancellProposalActivity && !isModeCancellig) {
             return (
                 <SuccessMessage
@@ -95,19 +96,29 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                 />
             );
         }
-    
+
         if (handlesMoreOptions.handleRegistrationActivity) {
-            return (
-                <SuccessMessage
-                    message_line1="תודה על התעניינותך"
-                    message_line2="הודענו על כך למבצע הפעילות" //i want the mail of giver
-                    message_line3={`תוכל ליצור איתו קשר במייל: ${user.email}`}
-                />
-            );
+            if (user.remainingHours >= activity.durationHours) {
+                return (
+                    <SuccessMessage
+                        message_line1="תודה על התעניינותך"
+                        message_line2="הודענו על כך למבצע הפעילות" //i want the mail of giver
+                        message_line3={`תוכל ליצור איתו קשר במייל: ${user.email}`}
+                    />
+                );
+            } else {
+                return (
+                    <ErrorMessage
+                        message_line1="אי�� לך ��מ�� ��תפ�� לפעי��ות ��ו"
+                        message_line2="אנא ����ה שו�� במו��ד מאו��ר יותר"
+                    />
+                );
+            }
+
         }
-    
-        return null; 
-    };  
+
+        return null;
+    };
 
     const activityModalOpen = () => {
         return (
