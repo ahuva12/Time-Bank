@@ -1,6 +1,6 @@
 'use client';
 import { useState, FormEvent  } from "react";
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from '@/store/authStore';
 import Styles from './Login.module.css'
 import { useRouter } from 'next/navigation';
@@ -22,7 +22,8 @@ type LoginFormFileds = {
 const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen }) => {
   const { login } = useAuthStore();
   const [error, setError] = useState("");
-  const setUser = useUserStore((state) => state.setUser);
+  // const setUser = useUserStore((state) => state.setUser);
+  const { setUser } = useUserStore();
   const router = useRouter();
 
   const {

@@ -6,13 +6,15 @@ import logo from '../../../public/images/logo.gif';
 import { useState, useEffect  } from 'react';
 import Link from 'next/link';
 import { Login, Register, UserMenu} from '@/components'; 
+import { useUserStore } from '@/store/useUserStore';
 
 export default function Header() {
-  // const { isLoggedIn, logout, login, signup } = useAuthStore();
-  const isLoggedIn = true;
+  const { isLoggedIn, login, signup } = useAuthStore();
+  // const isLoggedIn = true;
   const [isClient, setIsClient] = useState(false); 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  // const { getUser } = useUserStore();
 
   useEffect(() => {
     setIsClient(true);
@@ -29,8 +31,7 @@ export default function Header() {
     <header className={styles.header}>
       {isLoggedIn ? (
           <nav className={styles.navigation}>
-            {/* <UserMenu logout={logout} /> */}
-            <UserMenu logout={() => console.log('logout')} />
+            <UserMenu/>
 
             <Link href="/home" className={styles.navItem}>
             דף הבית

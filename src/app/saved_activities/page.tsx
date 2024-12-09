@@ -3,15 +3,14 @@ import styles from './savedActivities.module.css';
 import { Activities, Loader, ActivityModal, ErrorMessage } from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
-import useUserStore from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 import { useAuthStore } from '@/store/authStore';
 import { useState  } from 'react';
 import { Activity } from '@/types/activity';
 
 const SavedActivities = () => {
 
-  // const { isLoggedIn } = useAuthStore();
-  const isLoggedIn = true;
+  const { isLoggedIn } = useAuthStore();
 
   console.log(isLoggedIn)
 
@@ -41,6 +40,7 @@ const SavedActivities = () => {
       <ErrorMessage
         message_line1="אתה לא מחובר!"
         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
       />
     );
   }

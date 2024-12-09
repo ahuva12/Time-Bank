@@ -2,16 +2,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './UserMenu.module.css';
 import { useRouter } from 'next/navigation';
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { CiUser } from "react-icons/ci";
+import { useAuthStore } from '@/store/authStore';
 
-
-export default function UserMenu({ logout }: { logout: Function }) {
+export default function UserMenu() {
     const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null); // Ref for the dropdown
+    const dropdownRef = useRef<HTMLDivElement>(null); 
     const router = useRouter();
     const clearUser = useUserStore((state) => state.clearUser);
     const { user } = useUserStore();
+    console.log(user)
+    const { logout, isLoggedIn } = useAuthStore();
+    // const { getUser } = useUserStore();
+    // const user = getUser();
+    console.log(isLoggedIn)
+
+
+
 
     const handleLogout = () => {
         clearUser(); // Clear user data from Zustand store
