@@ -9,7 +9,7 @@ import {
 } from "@/components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getFilteringActivities } from "@/services/activities";
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { useState /*, useEffect*/ } from "react";
 import { Activity } from "@/types/activity";
 

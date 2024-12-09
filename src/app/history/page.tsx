@@ -1,6 +1,6 @@
 "use client";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { useEffect, useState } from "react";
 import { Activity } from "@/types/activity";
 import { getFilteringActivities } from "@/services/activities";
