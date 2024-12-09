@@ -5,7 +5,9 @@ import { Activity } from "@/types/activity";
 
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { updateStatusActivity, updateActivity } from '@/services/activities';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import { ActivityPopUp } from '@/components'
+
 
 interface ActivityCardProps {
   activity: Activity;
@@ -40,6 +42,11 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
 
   const onDelete = async (): Promise<void> => {
     try {
+      console.log({
+        activityId: activity._id as string,
+        status: 'cancelled',
+        receiverId: null,
+      })
       await updateStatusActivity({
         activityId: activity._id as string,
         status: 'cancelled',
@@ -54,22 +61,26 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
   return (
     <div className={styles.card}>
       <div className={styles.content}>
-        <div className={styles.wrapper}>
+        <div>
           <p className={styles.name}>
             <strong>{activity.nameActivity}</strong>
           </p>
-          {isGeneral && (
-            isFavorite ? (
-              <FaStar className={styles.icon} onClick={toggleFavorite} />
-            ) : (
-              <FaRegStar className={styles.icon} onClick={toggleFavorite} />
-            )
-          )}
+          <p className={styles.hour}>
+            {activity.durationHours} {"שעות"}
+          </p>
         </div>
+        {flag && (
+          <div className={styles.icons}>
+            <FaEdit className={styles.editIcon} onClick={onUpdate} />
+            <FaTrash className={styles.editIcon} onClick={onDelete} />
+          </div>
+        )}
         <p>{activity.description}</p>
         <div className={styles.tags}>
           {activity.tags.map((tag, index) => (
-            <span key={index} className={styles.tag}>{tag}</span>
+            <span key={index} className={styles.tag}>
+              {tag}
+            </span>
           ))}
         </div>
       </div>
