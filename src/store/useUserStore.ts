@@ -65,9 +65,9 @@ export const useUserStore = create<AuthState>((set, get) => ({
       }
     }
   },
-  setUser: (user: any) => {
+  setUser: (user: User) => {
     if (user?._id) {
-      localStorage.setItem("UserId", user._id); // Save user ID in localStorage
+      localStorage.setItem("UserId", user._id as string); // Save user ID in localStorage
     }
     set({ user }); // Update user in Zustand state
   },

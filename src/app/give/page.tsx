@@ -14,15 +14,13 @@ import {
   updateStatusActivity,
 } from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
+import { useAuthStore } from '@/store/authStore';
 import { useState /*, useEffect*/ } from "react";
 import { Activity } from "@/types/activity";
 
 const give = () => {
-  let isLoggedIn = false;
-  if (typeof window !== "undefined") {
-    isLoggedIn = !!localStorage.getItem("LoggedIn");
-  } else { console.log("==1======= localStorage is not available in the server environment") }
 
+  const { isLoggedIn } = useAuthStore();
   const { user } = useUserStore();
 
   const queryClient = useQueryClient();
@@ -44,6 +42,7 @@ const give = () => {
       <ErrorMessage
         message_line1="אתה לא מחובר!"
         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
       />
     );
   }

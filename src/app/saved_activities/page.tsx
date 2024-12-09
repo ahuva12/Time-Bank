@@ -11,16 +11,7 @@ import { Activity } from '@/types/activity';
 const SavedActivities = () => {
 
   const { isLoggedIn } = useAuthStore();
-  console.log(isLoggedIn)
-
-  // let isLoggedIn = false;
-  // if (typeof window !== "undefined") {
-  //   isLoggedIn = !!localStorage.getItem("LoggedIn");
-  // } else { console.log("==3== localStorage is not available in the server environment") }
-
-
   const { user } = useUserStore();
-
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
