@@ -1,6 +1,6 @@
 "use client";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { useEffect, useState } from "react";
 import { Activity } from "@/types/activity";
 import { getFilteringActivities } from "@/services/activities";
@@ -35,7 +35,7 @@ export default function History() {
 
         const activities: Activity[] = await getFilteringActivities(
           "history",
-          user._id
+          user._id as string
         );
 
         const giver = activities.filter(

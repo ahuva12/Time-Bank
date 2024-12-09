@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { number, z } from 'zod';
 import styles from './profile.module.css';
-import useUserStore from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 import { userSchema } from '@/validations/validationsClient/user';
 import { updateUser } from '@/services/users';
 import { FaEdit } from 'react-icons/fa';
@@ -37,7 +37,7 @@ const fieldMappings: { [key in keyof EditableFields]: string } = {
 interface Wallet {
     hoursGiven: number;
     hoursReceived: number;
-    hoursToReceive: number;
+    hoursToReceive?: number;
 }
 
 const Profile: React.FC = () => {
@@ -53,6 +53,7 @@ const Profile: React.FC = () => {
             <ErrorMessage
                 message_line1="אתה לא מחובר!"
                 message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+                link='/home'
             />
         );
     }
@@ -70,7 +71,7 @@ const Profile: React.FC = () => {
 
     const getWallet = async () => {
         try {
-            const activities: Activity[] = await getFilteringActivities("history", user._id);
+            const activities: Activity[] = await getFilteringActivities("history", user._id as string);
             const hoursGiven = activities.filter((activity) => activity.giverId === user._id).length;
             const hoursReceived = activities.filter((activity) => activity.receiverId === user._id).length;
             const hoursToReceive = user.remainingHours;

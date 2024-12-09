@@ -7,8 +7,8 @@ export interface User {
     address: string;
     email: string;
     phoneNumber: string;
-    gender: "male" | "female";   
-    dateOfBirth: Date;
+    gender: "male" | "female" | "";   
+    dateOfBirth: Date | "";
     password: string;
     remainingHours?: number;
 }
