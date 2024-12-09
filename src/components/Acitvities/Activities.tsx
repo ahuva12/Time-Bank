@@ -6,6 +6,8 @@ import { ActivityCard } from '@/components';
 interface ActivitiesProps {
     activities: Activity[];
     onMoreDetails: (activity: Activity) => void;
+    onToggleFavorite: (activityId: string, isFavorite: boolean) => void; // New prop
+    isGeneral?: boolean;
     flag: boolean;
     handlesMoreOptions:  {
         onUpdate: () => void; 
@@ -13,24 +15,20 @@ interface ActivitiesProps {
     } | null;
 }
 
-const Activities = ({ activities, onMoreDetails, flag, handlesMoreOptions }: ActivitiesProps) => {
+
+const Activities = ({ activities, onMoreDetails, flag, handlesMoreOptions, onToggleFavorite, isGeneral }: ActivitiesProps) => {
     return (
         <div className={styles.tableActivities}>
             {!activities || activities.length === 0 ? (
-                // <div className={styles.noActivities}>
-                //     אין לך פעילויות שמורות. רוצה גם אתה להרשם לפעילות בבנק הזמן?
-                //     <a className={styles.link} href="#">לחץ כאן</a>
-                //     על מנת לחפש פעילות להרשם אליה:)
-                // </div>
-                <div className={styles.noActivities}>
-                    אין מידע רלוונטי להציג
-                </div>
+                <div className={styles.noActivities}>אין לך פעילויות שמורות...</div>
             ) : (
                 activities.map((activity, index) => (
                     <ActivityCard
                         key={index}
                         activity={activity}
                         onMoreDetails={() => onMoreDetails(activity)}
+                        onToggleFavorite={onToggleFavorite} // Pass down to ActivityCard
+                        isGeneral={isGeneral}
                         flag={flag}
                         handlesMoreOptions={handlesMoreOptions}
                     />
@@ -39,5 +37,6 @@ const Activities = ({ activities, onMoreDetails, flag, handlesMoreOptions }: Act
         </div>
     );
 };
+
 
 export default Activities;

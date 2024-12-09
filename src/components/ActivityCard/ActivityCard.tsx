@@ -1,23 +1,40 @@
-import React from "react";
-import { useState /*, useEffect*/ } from 'react';
+
+import React, { useState, useEffect } from "react";
 import styles from "./ActivityCard.module.css";
 import { Activity } from "@/types/activity";
+
+import { FaStar, FaRegStar } from "react-icons/fa";
 import { updateStatusActivity, updateActivity } from '@/services/activities';
-import { FaEdit, FaTrash  } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { ActivityPopUp } from '@/components'
 
 
 interface ActivityCardProps {
   activity: Activity;
   onMoreDetails: () => void;
+  onToggleFavorite: (activityId: string, isFavorite: boolean) => void;
+  isGeneral?: boolean;
   flag: boolean;
-  handlesMoreOptions:  {
-    onUpdate: () => void; 
+  handlesMoreOptions: null | {
+    onUpdate: () => void;
     setSelectedActivity: any
-} | null;
+  };
 }
 
-const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions }: ActivityCardProps) => {
-  
+const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onToggleFavorite, isGeneral }: ActivityCardProps) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+    setIsFavorite(favorites.includes(activity._id));
+  }, [activity._id]);
+
+  const toggleFavorite = () => {
+    const activityId = activity._id as string;
+    setIsFavorite((prev) => !prev);
+    onToggleFavorite(activityId, isFavorite); // Notify the parent
+  }
+
   const onUpdate = (): void => {
     handlesMoreOptions?.setSelectedActivity(activity);
     handlesMoreOptions?.onUpdate();
@@ -44,7 +61,6 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions }: Act
   return (
     <div className={styles.card}>
       <div className={styles.content}>
-        <div className={styles.innerConatainer}>
         <div>
           <p className={styles.name}>
             <strong>{activity.nameActivity}</strong>
@@ -53,13 +69,12 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions }: Act
             {activity.durationHours} {"שעות"}
           </p>
         </div>
-        {flag &&(
+        {flag && (
           <div className={styles.icons}>
-          <FaEdit className={styles.editIcon} onClick={onUpdate}/>
-        <FaTrash className={styles.editIcon} onClick={onDelete}/>
-        </div>
-      )}
-        </div>
+            <FaEdit className={styles.editIcon} onClick={onUpdate} />
+            <FaTrash className={styles.editIcon} onClick={onDelete} />
+          </div>
+        )}
         <p>{activity.description}</p>
         <div className={styles.tags}>
           {activity.tags.map((tag, index) => (
@@ -72,7 +87,19 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions }: Act
       <button className={styles.link} onClick={onMoreDetails}>
         פרטים נוספים
       </button>
+      {flag && (
+        <div className={styles.buttonsContainer}>
+          <button className={styles.moreOptionButton} onClick={onUpdate}>
+            עדכון
+          </button>
+          <button className={styles.moreOptionButton} onClick={onDelete}>
+            מחיקה
+          </button>
+        </div>
+      )}
     </div>
   );
 };
+
+
 export default ActivityCard;
