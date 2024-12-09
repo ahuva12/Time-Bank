@@ -11,9 +11,12 @@ export const activitySchema = z.object({
 });
 
 export const updatingStatusSchema = z.object({
-    receiverId: z.string().refine((value) => ObjectId.isValid(value), {
+    receiverId: z.string().nullable().refine((value) => value === null || ObjectId.isValid(value), {
         message: "Invalid ObjectId format",
     }), 
+    // receiverId: z.string().refine((value) => ObjectId.isValid(value), {
+    //     message: "Invalid ObjectId format",
+    //     }),
     status: z.enum(["proposed", "caughted", "accepted", "cancelled"]),
 });
 

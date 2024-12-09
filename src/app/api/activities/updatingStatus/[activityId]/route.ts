@@ -3,15 +3,18 @@ import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { updatingStatusSchema } from '@/validations/validationsServer/activity';
 import { z } from "zod";
+import { Console } from 'console';
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ activityId: string }> }) {
     try {
+        
         const { activityId } = await params;
         if (!activityId) {
             return NextResponse.json({ message: "Activity ID is required" }, { status: 400 });
         }
 
         const body = await req.json(); 
+        console.log(body)
         const validatedUpdatedStatus = updatingStatusSchema.parse(body);
 
         const { receiverId, ...rest } = validatedUpdatedStatus;

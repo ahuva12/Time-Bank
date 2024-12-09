@@ -3,7 +3,8 @@ import { useState /*, useEffect*/ } from 'react';
 import styles from "./ActivityCard.module.css";
 import { Activity } from "@/types/activity";
 import { updateStatusActivity, updateActivity } from '@/services/activities';
-import { ActivityPopUp } from '@/components'
+import { FaEdit, FaTrash  } from 'react-icons/fa';
+
 
 interface ActivityCardProps {
   activity: Activity;
@@ -24,6 +25,11 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions }: Act
 
   const onDelete = async (): Promise<void> => {
     try {
+      console.log({
+        activityId: activity._id as string,
+        status: 'cancelled',
+        receiverId: null,
+      })
       await updateStatusActivity({
         activityId: activity._id as string,
         status: 'cancelled',
@@ -38,6 +44,7 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions }: Act
   return (
     <div className={styles.card}>
       <div className={styles.content}>
+        <div className={styles.innerConatainer}>
         <div>
           <p className={styles.name}>
             <strong>{activity.nameActivity}</strong>
@@ -45,6 +52,13 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions }: Act
           <p className={styles.hour}>
             {activity.durationHours} {"שעות"}
           </p>
+        </div>
+        {flag &&(
+          <div className={styles.icons}>
+          <FaEdit className={styles.editIcon} onClick={onUpdate}/>
+        <FaTrash className={styles.editIcon} onClick={onDelete}/>
+        </div>
+      )}
         </div>
         <p>{activity.description}</p>
         <div className={styles.tags}>
@@ -58,16 +72,6 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions }: Act
       <button className={styles.link} onClick={onMoreDetails}>
         פרטים נוספים
       </button>
-      {flag && (
-        <div className={styles.buttonsContainer}>
-          <button className={styles.moreOptionButton} onClick={onUpdate}>
-            עדכון
-          </button>
-          <button className={styles.moreOptionButton} onClick={onDelete}>
-            מחיקה
-          </button>
-        </div>
-      )}
     </div>
   );
 };
