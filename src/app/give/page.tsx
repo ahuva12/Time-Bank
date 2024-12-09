@@ -10,7 +10,7 @@ import { Activity } from '@/types/activity';
 
 const give = () => {
   const { user } = useUserStore();
-  let isLoggedIn = false;
+  let isLoggedIn = true;
   if (typeof window !== "undefined") {
     isLoggedIn = !!localStorage.getItem("LoggedIn");
   } else { console.log("==1======= localStorage is not available in the server environment") }
@@ -72,6 +72,9 @@ const give = () => {
       <MyDonation></MyDonation>
       {/* <ActivityPopUp activity={selectedActivity}></ActivityPopUp> */}
       <h1 className={styles.title}>מה אני תורם</h1>
+      <h3 className={styles.explain}>
+        כאן תוכלו לעקוב ולערוך את כל הפעילויות שהצעתם בתרומה ושאנשים עוד לא נרשמו אליהן.
+      </h3>
       {(isLoading || isFetching) ? (
         <Loader />
       ) : (
