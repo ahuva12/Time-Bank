@@ -6,9 +6,14 @@ import { ActivityCard } from '@/components';
 interface ActivitiesProps {
     activities: Activity[];
     onMoreDetails: (activity: Activity) => void;
+    flag: boolean;
+    handlesMoreOptions:  {
+        onUpdate: () => void; 
+        setSelectedActivity: any;
+    } | null;
 }
 
-const Activities = ({ activities, onMoreDetails }: ActivitiesProps) => {
+const Activities = ({ activities, onMoreDetails, flag, handlesMoreOptions }: ActivitiesProps) => {
     return (
         <div className={styles.tableActivities}>
             {!activities || activities.length === 0 ? (
@@ -26,6 +31,8 @@ const Activities = ({ activities, onMoreDetails }: ActivitiesProps) => {
                         key={index}
                         activity={activity}
                         onMoreDetails={() => onMoreDetails(activity)}
+                        flag={flag}
+                        handlesMoreOptions={handlesMoreOptions}
                     />
                 ))
             )}

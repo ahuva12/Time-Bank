@@ -101,6 +101,8 @@ export default function History() {
                       key={activity._id as string}
                       activity={activity}
                       onMoreDetails={() => handleMoreDetails(activity)}
+                      flag={false}
+                      handlesMoreOptions={null}
                     />
                   ))
                 ) : (
@@ -137,6 +139,8 @@ export default function History() {
                       key={activity._id as string}
                       activity={activity}
                       onMoreDetails={() => handleMoreDetails(activity)}
+                      flag={false}
+                      handlesMoreOptions={null}
                     />
                   ))
                 ) : (

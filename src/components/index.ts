@@ -9,8 +9,7 @@ export { default as ErrorMessage} from './ErrorMessage/ErrorMessage';
 export { default as SuccessMessage} from './SuccessMessage/SuccessMessage';
 export { default as ActivityModalForDonation} from './ActivityModalForDonation/ActivityModalForDonation';
 export { default as MyDonation} from './MyDonation/MyDonation';
-
-
+export { default as ActivityPopUp} from './ActivityPopUp/ActivityPopUp';
 
 
 
