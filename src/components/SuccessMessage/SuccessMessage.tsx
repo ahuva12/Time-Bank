@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import styles from './SuccessMessage.module.css';
 import { FaCheckCircle } from 'react-icons/fa';
@@ -5,13 +6,19 @@ import { FaCheckCircle } from 'react-icons/fa';
 interface SuccessMessageProps {
     message_line1: string; 
     message_line2: string; 
-    message_line3?:string
+    message_line3?: string;
+    onOkClick: Function; // Function to call when OK is clicked
 }
 
-const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_line2, message_line3 }) => {
+const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_line2, message_line3, onOkClick }) => {
 
-    const [isShow, setIsShow] = useState<boolean>(true)
+    const [isShow, setIsShow] = useState<boolean>(true);
     
+    const handleOkClick = () => {
+        setIsShow(false); // Hide the success message
+        onOkClick(); // Call the onOkClick function to log out and redirect
+    };
+
     return (
         isShow && (
             <div className={styles.overlay}>
@@ -33,7 +40,7 @@ const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_
                             </>
                         )}
                     </p>
-                    <button className={styles.buttonSucc} onClick={() => setIsShow(false)}>
+                    <button className={styles.buttonSucc} onClick={handleOkClick}>
                         OK
                     </button>
                 </div>
@@ -43,4 +50,3 @@ const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_
 };
 
 export default SuccessMessage;
-
