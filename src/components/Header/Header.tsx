@@ -34,7 +34,7 @@ export default function Header() {
             <Link href="/home" className={styles.navItem}>
             דף הבית
             </Link>
-            <Link href="/activities" className={styles.navItem}>
+            <Link href="/all_activities" className={styles.navItem}>
             פעילויות
             </Link>
             <Link href="/give" className={styles.navItem}>

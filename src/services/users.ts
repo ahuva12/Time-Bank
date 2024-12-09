@@ -2,7 +2,7 @@ import { http } from '@/services/http';
 import { User } from '@/types/user';
 
 // update remainingHours of the giver and receiver
-export const updateStatusActivity = async (giverId: string, receiverId: string, durationHoursActivity: number) => {
+export const updateRemainingHours = async (giverId: string, receiverId: string, durationHoursActivity: number) => {
 
     if (typeof durationHoursActivity !== 'number' || durationHoursActivity <= 0) {
         throw new Error("Invalid hoursActivity value");
@@ -41,14 +41,14 @@ export const updateUser = async (updatedUser: User) => {
 
 export const getUserById = async (userId: string) => {
     try {
-      const response = await http.get(`/users/${userId}`);
-      if (response.status !== 200) {
-        throw new Error(`User not found. ID: ${userId}`);
-      }
-      // console.log("User data:", response.data);
-      return response.data.user;
+        const response = await http.get(`/users/${userId}`);
+        if (response.status !== 200) {
+            throw new Error(`User not found. ID: ${userId}`);
+        }
+        // console.log("User data:", response.data);
+        return response.data.user;
     } catch (error) {
-      console.error("Error fetching user:", error);
-      throw error;
+        console.error("Error fetching user:", error);
+        throw error;
     }
 }
