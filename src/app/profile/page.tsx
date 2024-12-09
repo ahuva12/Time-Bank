@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import styles from './profile.module.css';
-import useUserStore from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 import { userSchema } from '@/validations/validationsClient/user';
 import { updateUser } from '@/services/users';
 import { FaEdit } from 'react-icons/fa';
@@ -53,6 +53,7 @@ const Profile: React.FC = () => {
             <ErrorMessage
                 message_line1="אתה לא מחובר!"
                 message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+                link='/home'
             />
         );
     }
