@@ -41,9 +41,13 @@ interface Wallet {
 }
 
 const Profile: React.FC = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-        localStorage.getItem('LoggedIn') === 'true'
-    );
+
+    let isLoggedIn = false;
+    if (typeof window !== "undefined") {
+        isLoggedIn = !!localStorage.getItem("LoggedIn");
+    } else { console.log("==2======= localStorage is not available in the server environment") }
+
+
     if (!isLoggedIn) {
         return (
             <ErrorMessage

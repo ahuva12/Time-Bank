@@ -36,6 +36,9 @@ const getActivitiesProposedFilter = (userId:string) => {
                         giverId: { $ne: new ObjectId(userId) }, 
                     },
                     {
+                        receiverId: null, 
+                    },
+                    {
                         status: 'proposed',
                     },
                 ]
