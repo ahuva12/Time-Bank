@@ -6,7 +6,7 @@ export const activitySchema = z.object({
     durationHours: z.number().min(0, "Duration hours must be 0 or greater"),
     description: z.string().min(1, "Description is required"),
     giverId: z.string().min(1, "Giver ID is required"),
-    receiverId: z.string().min(1, "Receiver ID is required"),
+    // receiverId: z.string().min(1, "Receiver ID is required").optional(),
     status: z.enum(["proposed", "caught", "accepted", "cancelled"])
 });
 
