@@ -1,12 +1,10 @@
-'use client';
 import { create } from 'zustand';
-import { getUserById } from '@/services/users';
+import { persist } from 'zustand/middleware';
 import { User } from '@/types/user';
 
 interface AuthState {
   user: User;
-  getUser: () => Promise<any>; 
-  setUser: (user: any) => void;
+  setUser: (user: User) => void;
   clearUser: () => void;
 }
 
@@ -23,59 +21,155 @@ const defaultUser: User = {
   remainingHours: 0,
 };
 
-export const useUserStore = create<AuthState>((set, get) => ({
-  // user: null,
-    //   user : {
-    //   _id: "6745ce841396a6f699f26d13",
-    //   firstName: "נעמה",
-    //   lastName: "אילוז",
-    //   address: "תל אביב",
-    //   gender: "female",
-    //   email: "naama@gmail.com",
-    //   phoneNumber: "0521234567",
-    //   dateOfBirth: "2014-11-10",
-    //   password:"$2a$12$O3HzvCKZQ3zzabnwJq7DVOReHCC8CdryvaO8lErDvYL2gn5.NvTDq",
-    //   remainingHours: 3
-    // },
-  user : defaultUser,
-  getUser: async () => {
-    const state = get(); 
-    console.log(state);
-    
-    // If user is already set, return it
-    if (state.user) {
-      return state.user;
-    } else {
-      try {
-        // Try to fetch user from localStorage
-        const userId = localStorage.getItem("UserId");
-        if (userId) {
-          const user = await getUserById(userId); 
-          set({ user }); // Update state with the user
-          return user;
-        } else {
-          console.error("No UserId found in localStorage");
-          set({ user: defaultUser });
-          return defaultUser; // Return null if no UserId in localStorage
-        }
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
+export const useUserStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: defaultUser,
+      setUser: (user: User) => {
+        set({ user });
+      },
+      clearUser: () => {
         set({ user: defaultUser });
-        return defaultUser; // Return null if error occurs
-      }
+      },
+    }),
+    {
+      name: 'user', 
+      partialize: (state) => {
+        const { user } = state;
+        const { password, ...userWithoutPassword } = user; 
+        return { user: userWithoutPassword };
+      },
     }
-  },
-  setUser: (user: User) => {
-    if (user?._id) {
-      localStorage.setItem("UserId", user._id as string); // Save user ID in localStorage
-    }
-    set({ user }); // Update user in Zustand state
-  },
-  clearUser: () => {
-    localStorage.removeItem("UserId"); // Remove user ID from localStorage
-    set({ user: defaultUser }); // Clear the user from Zustand state
-  },
-}));
+  )
+);
+
+
+
+
+// 'use client';
+// import { create } from 'zustand';
+// import { getUserById } from '@/services/users';
+// import { User } from '@/types/user';
+
+// interface AuthState {
+//   user: User;
+//   getUser: () => Promise<any>; 
+//   setUser: (user: any) => void;
+//   clearUser: () => void;
+// }
+
+// const defaultUser: User = {
+//   _id: "",
+//   firstName: "לא מחובר",
+//   lastName: "",
+//   address: "",
+//   gender: "",
+//   email: "",
+//   phoneNumber: "",
+//   dateOfBirth: "",
+//   password: "",
+//   remainingHours: 0,
+// };
+
+// export const useUserStore = create<AuthState>((set, get) => ({
+//   // user: null,
+//   user : defaultUser,
+//   getUser: async () => {
+//     const state = get(); 
+//     console.log(state);
+    
+//     // If user is already set, return it
+//     if (state.user !== defaultUser) {
+//       return state.user;
+//     } else {
+//       try {
+//         // Try to fetch user from localStorage
+//         const userId = localStorage.getItem("UserId");
+//         if (userId) {
+//           const user = await getUserById(userId); 
+//           set({ user }); 
+//           return user;
+//         } else {
+//           console.error("UserId not found in localStorage");
+//           set({ user: defaultUser });
+//           return defaultUser; 
+//         }
+//       } catch (error) {
+//         console.error("Failed to fetch user:", error);
+//         set({ user: defaultUser });
+//         return defaultUser; 
+//       }
+//     }
+//   },
+//   setUser: (user: User) => {
+//     if (user?._id) {
+//       localStorage.setItem("UserId", user._id as string);
+//     }
+//     set({ user }); 
+//   },
+//   clearUser: () => {
+//     localStorage.removeItem("UserId"); 
+//     set({ user: defaultUser }); 
+//   },
+// }));
+
+//gpt proposed:
+// import { create } from 'zustand';
+
+// interface AuthState {
+//   user: User;
+//   isLoading: boolean;
+//   getUser: () => Promise<void>; // fetch user data
+//   setUser: (user: User) => void;
+//   clearUser: () => void;
+// }
+
+// const defaultUser: User = {
+//   _id: "",
+//   firstName: "לא מחובר",
+//   lastName: "",
+//   address: "",
+//   gender: "",
+//   email: "",
+//   phoneNumber: "",
+//   dateOfBirth: "",
+//   password: "",
+//   remainingHours: 0,
+// };
+
+// export const useUserStore = create<AuthState>((set) => ({
+//   user: defaultUser,
+//   isLoading: true,
+//   getUser: async () => {
+//     const userId = localStorage.getItem("UserId");
+
+//     if (userId) {
+//       try {
+//         const user = await fetchUserFromDatabase(userId); // Assume this is a function to fetch user data
+//         set({ user, isLoading: false });
+//       } catch (error) {
+//         console.error("Failed to fetch user:", error);
+//         set({ user: defaultUser, isLoading: false });
+//       }
+//     } else {
+//       set({ user: defaultUser, isLoading: false });
+//     }
+//   },
+//   setUser: (user: User) => {
+//     if (user?._id) {
+//       localStorage.setItem("UserId", user._id);
+//     }
+//     set({ user });
+//   },
+//   clearUser: () => {
+//     localStorage.removeItem("UserId");
+//     set({ user: defaultUser });
+//   },
+// }));
+
+// // Call getUser when the store is initialized to fetch the user
+// useUserStore.getState().getUser();
+
 
 
 

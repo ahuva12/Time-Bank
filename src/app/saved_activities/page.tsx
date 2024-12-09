@@ -5,11 +5,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
 import { useUserStore } from '@/store/useUserStore';
 import { useAuthStore } from '@/store/authStore';
-import { useState  } from 'react';
+import { useState, useEffect } from 'react';
 import { Activity } from '@/types/activity';
-
+//בהתחלה יש לי את המשתנים ואז אין לי ולכן כל פעם יש מספר שונה של יוק שמתרנדרים
 const SavedActivities = () => {
-
   const { isLoggedIn } = useAuthStore();
   const { user } = useUserStore();
 
@@ -17,13 +16,38 @@ const SavedActivities = () => {
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>('close');
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  if (typeof window === "undefined") {
+      console.log('the window is undefined')
+      console.log(user)
+      console.log(isLoggedIn)
+  }
+
+  else {
+    console.log('the window is defined')
+    console.log(user)
+    console.log(isLoggedIn)
+  }
+
+  // Initialize Zustand state readiness
+  useEffect(() => {
+    if (typeof window !== "undefined" && isLoggedIn !== undefined && user !== undefined) {
+      console.log('setIsInitialized(true)')
+      setIsInitialized(true);
+    }
+  }, [isLoggedIn, user]);
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['savedActivities'],
     queryFn: () => getFilteringActivities('caughted', user._id as string),
     staleTime: 10000,
-    enabled: isLoggedIn, 
+    enabled: isLoggedIn && user && isInitialized, 
   });
+
+  if (!isInitialized) {
+    return <Loader />;
+  }
 
   if (!isLoggedIn) {
     return (
