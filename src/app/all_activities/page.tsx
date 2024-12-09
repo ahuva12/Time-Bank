@@ -11,9 +11,6 @@ import { useAuthStore } from '@/store/authStore';
 const AllActivities = () => {
   const { user } = useUserStore();
   const { isLoggedIn } = useAuthStore();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-    localStorage.getItem('LoggedIn') === 'true'
-  );
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
