@@ -1,5 +1,4 @@
 "use client";
-
 import styles from "./give.module.css";
 import {
   Activities,

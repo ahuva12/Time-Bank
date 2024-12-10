@@ -12,20 +12,13 @@ export default function UserMenu() {
     const router = useRouter();
     const clearUser = useUserStore((state) => state.clearUser);
     const { user } = useUserStore();
-    console.log(user)
     const { logout, isLoggedIn } = useAuthStore();
-    // const { getUser } = useUserStore();
-    // const user = getUser();
-    console.log(isLoggedIn)
-
-
-
 
     const handleLogout = () => {
         clearUser(); // Clear user data from Zustand store
-        alert("Logged out successfully!");
         logout();
-        window.location.href = "/home"; // Redirect to login page
+        router.push('/home'); 
+        alert("Logged out successfully!");
     };
 
     const toggleDropdown = () => {

@@ -3,7 +3,7 @@ import { useAuthStore } from '@/store/authStore';
 import styles from './Header.module.css';
 import Image from 'next/image';
 import logo from '../../../public/images/logo.gif';
-import { useState, useEffect  } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Login, Register, UserMenu} from '@/components'; 
 import { useUserStore } from '@/store/useUserStore';
@@ -13,13 +13,8 @@ export default function Header() {
   const [isClient, setIsClient] = useState(false); 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  const { getUser } = useUserStore();
-  const { user } = useUserStore();
-
+  
   useEffect(() => {
-    const user1 = getUser();
-    console.log(user1)
-    console.log(user)
     setIsClient(true);
   }, [])
 
