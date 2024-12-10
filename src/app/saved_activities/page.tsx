@@ -9,18 +9,24 @@ import { useState, useEffect } from 'react';
 import { Activity } from '@/types/activity';
 
 const SavedActivities = () => {
-  const { isLoggedIn } = useAuthStore();
+  // const { isLoggedIn } = useAuthStore();
   const { user } = useUserStore();
+  const { isLoggedIn: authIsLoggedIn } = useAuthStore();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authIsLoggedIn);
 
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // useEffect(() => {
+  //   if (isLoggedIn && user) {
+  //     setIsInitialized(true);
+  //   } else {
+  //     setIsInitialized(false); 
+  //   }
+  // }, [isLoggedIn, user]);
+
   useEffect(() => {
-    if (isLoggedIn && user) {
-      setIsInitialized(true);
-    } else {
       setIsInitialized(false); 
-    }
-  }, [isLoggedIn, user]);
+  }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -31,7 +37,7 @@ const SavedActivities = () => {
     queryKey: ['savedActivities'],
     queryFn: () => getFilteringActivities('caughted', user._id as string),
     staleTime: 10000,
-    enabled: isLoggedIn, 
+    enabled: isLoggedIn && user._id !== '', 
   });
 
 
@@ -88,7 +94,6 @@ const SavedActivities = () => {
   };
 
   if (!isLoggedIn && isInitialized) {
-    console.log(user)
     return (
       <ErrorMessage
         message_line1="אתה לא מחובר!"
