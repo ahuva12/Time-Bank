@@ -25,7 +25,7 @@ const SavedActivities = () => {
   // }, [isLoggedIn, user]);
 
   useEffect(() => {
-      setIsInitialized(false); 
+      setIsInitialized(true); 
   }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
@@ -37,9 +37,18 @@ const SavedActivities = () => {
     queryKey: ['savedActivities'],
     queryFn: () => getFilteringActivities('caughted', user._id as string),
     staleTime: 10000,
-    enabled: isLoggedIn && user._id !== '', 
+    enabled: isLoggedIn, 
   });
 
+  if (!isLoggedIn) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
+      />
+    );
+  }
 
   const updateStatusMutation = useMutation({
     mutationFn: updateStatusActivity,
@@ -93,15 +102,15 @@ const SavedActivities = () => {
     setModeActivityModel('close');
   };
 
-  if (!isLoggedIn && isInitialized) {
-    return (
-      <ErrorMessage
-        message_line1="אתה לא מחובר!"
-        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-        link='/home'
-      />
-    );
-  }
+  // if (!isLoggedIn && isInitialized) {
+  //   return (
+  //     <ErrorMessage
+  //       message_line1="אתה לא מחובר!"
+  //       message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+  //       link='/home'
+  //     />
+  //   );
+  // }
 
   // Render content based on the query's state
   if (isError) {
