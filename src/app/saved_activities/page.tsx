@@ -7,7 +7,7 @@ import { useUserStore } from '@/store/useUserStore';
 import { useAuthStore } from '@/store/authStore';
 import { useState, useEffect } from 'react';
 import { Activity } from '@/types/activity';
-//בהתחלה יש לי את המשתנים ואז אין לי ולכן כל פעם יש מספר שונה של יוק שמתרנדרים
+
 const SavedActivities = () => {
   const { isLoggedIn } = useAuthStore();
   const { user } = useUserStore();
