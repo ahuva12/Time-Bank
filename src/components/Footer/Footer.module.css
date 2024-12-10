@@ -19,9 +19,6 @@
     gap: 10px; 
 }
 
-.logo {
-    border-radius: 50%; 
-}
 
 .links {
     display: flex;
