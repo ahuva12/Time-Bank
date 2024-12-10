@@ -14,13 +14,18 @@ import {
 } from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from '@/store/authStore';
-import { useState /*, useEffect*/ } from "react";
+import { useState, useEffect} from "react";
 import { Activity } from "@/types/activity";
 
 const give = () => {
 
-  const { isLoggedIn } = useAuthStore();
   const { user } = useUserStore();
+  const { isLoggedIn } = useAuthStore();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+      setIsInitialized(true); 
+  }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
@@ -36,15 +41,6 @@ const give = () => {
     enabled: isLoggedIn,
   });
 
-  if (!isLoggedIn) {
-    return (
-      <ErrorMessage
-        message_line1="אתה לא מחובר!"
-        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-        link='/home'
-      />
-    );
-  }
   //mutationFn: updateActivity
 
   const updateStatusMutation = useMutation({
@@ -105,6 +101,16 @@ const give = () => {
   const closeModal = () => {
     setModeActivityModel("close");
   };
+
+  if (!isLoggedIn && isInitialized) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
+      />
+    );
+  }
 
   // Render content based on the query's state
   if (isError) {
