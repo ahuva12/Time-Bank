@@ -13,6 +13,7 @@ import { Activity } from '@/types/activity';
 import { getFilteringActivities } from '@/services/activities';
 import { CiUser } from "react-icons/ci";
 import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
+import PasswordModal from '@/components/PasswordModal/PasswordModal';
 
 // Define Zod schema for the form
 const editableFieldsSchema = userSchema.pick({
@@ -47,7 +48,6 @@ const Profile: React.FC = () => {
         isLoggedIn = !!localStorage.getItem("LoggedIn");
     } else { console.log("==2======= localStorage is not available in the server environment") }
 
-
     if (!isLoggedIn) {
         return (
             <ErrorMessage
@@ -57,7 +57,6 @@ const Profile: React.FC = () => {
         );
     }
 
-    // const { user, setUser } = useUserStore();
     const setUser = useUserStore((state) => state.setUser);
     const user = useUserStore((state) => state.user);
 
@@ -87,6 +86,19 @@ const Profile: React.FC = () => {
             getWallet();
         }
     }, []);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handlePasswordChange = async (newPassword: string) => {
+        try {
+            const updatedUser = { ...user, password: newPassword };
+            const response = await updateUser(updatedUser);
+            setUser(updatedUser);
+            alert('Password changed successfully!');
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile.');
+        }
+    };
 
     // Form handling using React Hook Form and Zod
     const {
@@ -198,6 +210,16 @@ const Profile: React.FC = () => {
                                 <p>{wallet.hoursToReceive}</p>
                             </div>
                         </div>
+                        <>
+                            <button onClick={() => setIsModalOpen(true)}>שנה סיסמה</button>
+                            {isModalOpen && (
+                                <PasswordModal
+                                    user={user}
+                                    onClose={() => setIsModalOpen(false)}
+                                    onSubmit={handlePasswordChange}
+                                />
+                            )}
+                        </>
                     </div>
                 </div>
             </main>
