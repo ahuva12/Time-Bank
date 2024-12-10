@@ -9,55 +9,30 @@ import { useState, useEffect } from 'react';
 import { Activity } from '@/types/activity';
 //בהתחלה יש לי את המשתנים ואז אין לי ולכן כל פעם יש מספר שונה של יוק שמתרנדרים
 const SavedActivities = () => {
-  const { isLoggedIn } = useAuthStore();
+  // const { isLoggedIn } = useAuthStore();
   const { user } = useUserStore();
+
+  const { isLoggedIn: authIsLoggedIn } = useAuthStore();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authIsLoggedIn);
+
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    setIsInitialized(true);
+  }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>('close');
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  if (typeof window === "undefined") {
-      console.log('the window is undefined')
-      console.log(user)
-      console.log(isLoggedIn)
-  }
-
-  else {
-    console.log('the window is defined')
-    console.log(user)
-    console.log(isLoggedIn)
-  }
-
-  // Initialize Zustand state readiness
-  useEffect(() => {
-    if (typeof window !== "undefined" && isLoggedIn !== undefined && user !== undefined) {
-      console.log('setIsInitialized(true)')
-      setIsInitialized(true);
-    }
-  }, [isLoggedIn, user]);
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['savedActivities'],
     queryFn: () => getFilteringActivities('caughted', user._id as string),
     staleTime: 10000,
-    enabled: isLoggedIn && user && isInitialized, 
+    enabled: isLoggedIn, 
   });
 
-  if (!isInitialized) {
-    return <Loader />;
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <ErrorMessage
-        message_line1="אתה לא מחובר!"
-        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-        link='/home'
-      />
-    );
-  }
 
   const updateStatusMutation = useMutation({
     mutationFn: updateStatusActivity,
@@ -110,6 +85,16 @@ const SavedActivities = () => {
   const closeModal = () => {
     setModeActivityModel('close');
   };
+
+  if (!isLoggedIn) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
+      />
+    );
+  }
 
   // Render content based on the query's state
   if (isError) {
