@@ -25,15 +25,12 @@ export const useUserStore = create<AuthState>()(
   persist(
     (set) => ({
       user: defaultUser,
-      setUser: (user: User) => {
-        set({ user });
-      },
-      clearUser: () => {
-        set({ user: defaultUser });
-      },
+      setUser: (user: User) => {set({ user })},
+      clearUser: () => {set({ user: defaultUser })},
     }),
+
     {
-      name: 'user', 
+      name: 'userStore', 
       partialize: (state) => {
         const { user } = state;
         const { password, ...userWithoutPassword } = user; 

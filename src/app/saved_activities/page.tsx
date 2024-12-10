@@ -9,17 +9,18 @@ import { useState, useEffect } from 'react';
 import { Activity } from '@/types/activity';
 //בהתחלה יש לי את המשתנים ואז אין לי ולכן כל פעם יש מספר שונה של יוק שמתרנדרים
 const SavedActivities = () => {
-  // const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn } = useAuthStore();
   const { user } = useUserStore();
-
-  const { isLoggedIn: authIsLoggedIn } = useAuthStore();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authIsLoggedIn);
 
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    setIsInitialized(true);
-  }, [isLoggedIn]);
+    if (isLoggedIn && user) {
+      setIsInitialized(true);
+    } else {
+      setIsInitialized(false); 
+    }
+  }, [isLoggedIn, user]);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -86,7 +87,8 @@ const SavedActivities = () => {
     setModeActivityModel('close');
   };
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn && isInitialized) {
+    console.log(user)
     return (
       <ErrorMessage
         message_line1="אתה לא מחובר!"
