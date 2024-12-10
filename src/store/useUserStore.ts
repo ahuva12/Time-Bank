@@ -30,7 +30,7 @@ export const useUserStore = create<AuthState>()(
     }),
 
     {
-      name: 'userStore', 
+      name: 'user-store', 
       partialize: (state) => {
         const { user } = state;
         const { password, ...userWithoutPassword } = user; 

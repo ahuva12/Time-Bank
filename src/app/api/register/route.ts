@@ -6,6 +6,7 @@ import { z } from "zod";
 
 
 export async function POST(req:Request)  {
+    console.log('register')
 
     try {
       const body = await req.json();
@@ -30,6 +31,7 @@ export async function POST(req:Request)  {
       return NextResponse.json({message: "User registered successfully.",  _id: res._id }, { status: 201 });
 
     } catch (error) {
+        console.log(error)
         if (error instanceof z.ZodError) {
           return NextResponse.json(
               { error: "Validation failed", details: error.errors },

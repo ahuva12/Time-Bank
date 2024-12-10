@@ -17,8 +17,8 @@ export default function UserMenu() {
     const handleLogout = () => {
         clearUser(); // Clear user data from Zustand store
         logout();
+        router.push('/home'); 
         alert("Logged out successfully!");
-        window.location.href = "/home"; 
     };
 
     const toggleDropdown = () => {
