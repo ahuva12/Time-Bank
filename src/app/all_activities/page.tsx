@@ -4,14 +4,13 @@ import styles from './allActivities.module.css';
 import { Activities, Loader, ActivityModal, ErrorMessage } from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
-import useUserStore from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 import { Activity } from '@/types/activity';
+import { useAuthStore } from '@/store/authStore';
 
 const AllActivities = () => {
   const { user } = useUserStore();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-    localStorage.getItem('LoggedIn') === 'true'
-  );
+  const { isLoggedIn } = useAuthStore();
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -28,7 +27,7 @@ const AllActivities = () => {
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['allActivities'],
-    queryFn: () => getFilteringActivities('proposed', user._id),
+    queryFn: () => getFilteringActivities('proposed', user._id as string),
     staleTime: 10000,
     enabled: isLoggedIn,
   });
@@ -56,6 +55,7 @@ const AllActivities = () => {
       <ErrorMessage
         message_line1="אתה לא מחובר!"
         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
       />
     );
   }
@@ -95,7 +95,7 @@ const AllActivities = () => {
     updateStatusMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'caughted',
-      receiverId: user._id,
+      receiverId: user._id as string,
     });
   };
 
