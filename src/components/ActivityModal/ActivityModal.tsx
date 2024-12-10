@@ -29,7 +29,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
         const buttonConfig = [
             { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי', block: false },
             { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול', block: false },
-            { handler: handlesMoreOptions.handleRegistrationActivity, label: 'אני מעוניין בפעילות זו', block: user.remainingHours < activity.durationHours },
+            { handler: handlesMoreOptions.handleRegistrationActivity, label: 'אני מעוניין בפעילות זו', block: !user?.remainingHours || user.remainingHours < activity.durationHours },
             { handler: handlesMoreOptions.handleUpdateActivity, label: 'עדכון', block: false },
             { handler: handlesMoreOptions.handleCancellProposalActivity, label: 'מחיקה', block: false },
         ];
