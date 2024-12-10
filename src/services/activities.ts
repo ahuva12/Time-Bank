@@ -24,7 +24,8 @@ export const getFilteringActivities = async (filterType:string, userId:string) =
 // Post activitiy
 export const postActivity = async (newActivity: Activity) => {
     try {
-      const response = await http.post('/activities', newActivity);
+      // console.log(newActivity)
+      const response = await http.post('/activities', {...newActivity, status: 'proposed', receiverId: null});
 
       if (response.status !== 201)
         throw new Error(`${response.status}: error posting activitiy`);

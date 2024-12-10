@@ -6,7 +6,7 @@ import { ActivityCard } from '@/components';
 interface ActivitiesProps {
     activities: Activity[];
     onMoreDetails: (activity: Activity) => void;
-    onToggleFavorite: (activityId: string, isFavorite: boolean) => void; // New prop
+    onToggleFavorite?: (activityId: string, isFavorite: boolean) => void; // New prop
     isGeneral?: boolean;
     flag: boolean;
     handlesMoreOptions:  {
