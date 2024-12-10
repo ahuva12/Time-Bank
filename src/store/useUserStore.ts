@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { User } from '@/types/user';
+import { getUserById } from '@/services/users';
 
 interface AuthState {
   user: User;
@@ -21,32 +21,89 @@ const defaultUser: User = {
   remainingHours: 0,
 };
 
-export const useUserStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: defaultUser,
-      setUser: (user: User) => {set({ user })},
-      clearUser: () => {set({ user: defaultUser })},
-    }),
-
-    {
-      name: 'user-store', 
-      partialize: (state) => {
-        const { user } = state;
-        const { password, ...userWithoutPassword } = user; 
-        return { user: userWithoutPassword };
-      },
+export const useUserStore = create<AuthState>()((set) => {
+  const initializeUser = async () => {
+    if (typeof window !== 'undefined') {
+      const userId = localStorage.getItem("UserId");
+      if (userId) {
+        try {
+          const fetchedUser = await getUserById(userId);
+          if (fetchedUser) {
+            set({ user: fetchedUser });
+          }
+        } catch (error) {
+          console.error("Failed to fetch user:", error);
+          set({ user: defaultUser });
+        }
+      }
     }
-  )
-);
+  };
 
+  // Call the initialization function when the store is created
+  initializeUser();
 
+  return {
+    user: defaultUser,
 
+    setUser: (user) => {
+      if (user._id !== "") {
+        localStorage.setItem("UserId", user._id as string);
+      }
+      set({ user });
+    },
 
-// 'use client';
+    clearUser: () => {
+      localStorage.removeItem("UserId"); // Clear UserId from localStorage
+      set({ user: defaultUser });
+    },
+  };
+});
+
 // import { create } from 'zustand';
-// import { getUserById } from '@/services/users';
+// import { persist } from 'zustand/middleware';
 // import { User } from '@/types/user';
+
+// interface AuthState {
+//   user: User;
+//   setUser: (user: User) => void;
+//   clearUser: () => void;
+// }
+
+// const defaultUser: User = {
+//   _id: "",
+//   firstName: "לא מחובר",
+//   lastName: "",
+//   address: "",
+//   gender: "",
+//   email: "",
+//   phoneNumber: "",
+//   dateOfBirth: "",
+//   password: "",
+//   remainingHours: 0,
+// };
+
+// export const useUserStore = create<AuthState>()(
+//   persist(
+//     (set) => ({
+//       user: defaultUser,
+//       setUser: (user: User) => {set({ user })},
+//       clearUser: () => {set({ user: defaultUser })},
+//     }),
+
+//     {
+//       name: 'user-store', 
+//       partialize: (state) => {
+//         const { user } = state;
+//         const { password, ...userWithoutPassword } = user; 
+//         return { user: userWithoutPassword };
+//       },
+//     }
+//   )
+// );
+
+
+
+
 
 // interface AuthState {
 //   user: User;
@@ -182,28 +239,28 @@ export const useUserStore = create<AuthState>()(
 // };
 
 // const useUserStore = create((set) => {
-//   const initializeUser = async () => {
-//     if (typeof window !== 'undefined') {
+  // const initializeUser = async () => {
+  //   if (typeof window !== 'undefined') {
 
-//       let userId;
+  //     let userId;
 
-//       if (typeof window !== 'undefined') {
-//         userId = localStorage.getItem("UserId");
-//       }
+  //     if (typeof window !== 'undefined') {
+  //       userId = localStorage.getItem("UserId");
+  //     }
 
-//       if (userId) {
-//         try {
-//           const user = await fetchUserFromDatabase(userId);
-//           set({ user });
-//         } catch (error) {
-//           console.error("Failed to fetch user:", error);
-//         }
-//       }
-//     }
-//   };
+  //     if (userId) {
+  //       try {
+  //         const user = await fetchUserFromDatabase(userId);
+  //         set({ user });
+  //       } catch (error) {
+  //         console.error("Failed to fetch user:", error);
+  //       }
+  //     }
+  //   }
+  // };
 
-//   // Initialize the user when the store is created
-//   initializeUser();
+  // // Initialize the user when the store is created
+  // initializeUser();
 
 //   return {
 //     // user: null,
