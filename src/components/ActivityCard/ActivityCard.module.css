@@ -115,13 +115,11 @@
   color: #c3c6ce;
   cursor: pointer;
 }
-
 .innerConatainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-
 .icons {
   display: flex;
   flex-direction: row;

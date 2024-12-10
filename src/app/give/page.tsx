@@ -19,10 +19,23 @@ const give = () => {
   const [modeActivityModel, setModeActivityModel] = useState<string>('close');
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
   const [isPopUpOpen, setIsPopUpOpen] = useState<boolean>(false);
+  const [isAddingActivity, setIsAddingActivity] = useState<boolean>(false);
 
-  const onUpdate = () => {
+  const onAddActivity = () => {
+    setSelectedActivity(null); // Clear selected activity for a new activity
+    setIsAddingActivity(true); // Set to "add mode"
     setIsPopUpOpen(true); // Open the pop-up
   };
+
+  const onUpdate = () => {
+    setIsAddingActivity(false); // Set to "update mode"
+    setIsPopUpOpen(true); // Open the pop-up
+    
+  };
+ 
+  // const onUpdate = () => {
+  //   setIsPopUpOpen(true); // Open the pop-up
+  // };
 
   const onClosePopUp = (): void => {
     setIsPopUpOpen(false); // Close the pop-up
@@ -69,7 +82,10 @@ const give = () => {
 
   return (
     <div className={styles.savedActivities}>
-      <MyDonation></MyDonation>
+      <button className={styles.addButton} onClick={onAddActivity}>
+        + הוספת פעילות
+      </button>
+      {/* <MyDonation></MyDonation> */}
       {/* <ActivityPopUp activity={selectedActivity}></ActivityPopUp> */}
       <h1 className={styles.title}>מה אני תורם</h1>
       <h3 className={styles.explain}>
@@ -91,6 +107,7 @@ const give = () => {
           }}
         />
       )}
+      <MyDonation></MyDonation>
       {isPopUpOpen && (
         <div className={styles.popUpOverlay}>
           <div className={styles.popUpContent}>
@@ -100,7 +117,12 @@ const give = () => {
             >
               ×
             </button>
-            <ActivityPopUp activity={selectedActivity} closePopup={onClosePopUp} />
+            {/* <ActivityPopUp activity={selectedActivity} closePopup={onClosePopUp} /> */}
+            <ActivityPopUp
+              activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
+              closePopup={onClosePopUp}
+              isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
+            />
           </div>
         </div>
       )}
