@@ -49,8 +49,11 @@
     flex: 1;
     /* Let the activities container take the remaining space */
     display: flex;
-    flex-direction: row;
     /* Ensure cards stack vertically */
     gap: 15px;
     /* Add spacing between cards */
+}
+
+.activities {
+    flex-grow: 1;
 }

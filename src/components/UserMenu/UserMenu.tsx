@@ -91,7 +91,7 @@ export default function UserMenu() {
       {showSuccessMessage && (
         <SuccessMessage
           message_line1="התנתקת בהצלחה!"
-          message_line2="נשמח לראותך שוב בקרוב."
+          message_line2="נשמח לראותך שוב בקרוב:)"
           onOkClick={handleOkClick} // Pass the handleOkClick function as a prop
         />
       )}
