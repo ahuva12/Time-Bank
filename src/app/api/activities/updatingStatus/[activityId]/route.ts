@@ -18,10 +18,18 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ activi
         const validatedUpdatedStatus = updatingStatusSchema.parse(body);
 
         const { receiverId, ...rest } = validatedUpdatedStatus;
-        const updateData = {
+        // const updateData = {
+        //     ...rest,
+        //     receiverId: new ObjectId(receiverId),
+        // };
+        const updateData: Record<string, any> = {
             ...rest,
-            receiverId: new ObjectId(receiverId),
         };
+        if (receiverId !== null) {
+            updateData.receiverId = new ObjectId(receiverId);
+        } else {
+            updateData.receiverId = null; 
+        }
 
         const client = await connectDatabase();
         const result = await updateDocument(client, 'activities', { _id: new ObjectId(activityId) }, updateData);
