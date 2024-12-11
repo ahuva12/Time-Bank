@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { number, z } from 'zod';
 import styles from './profile.module.css';
-import useUserStore from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 import { userSchema } from '@/validations/validationsClient/user';
 import { updateUser } from '@/services/users';
 import { FaEdit } from 'react-icons/fa';
@@ -13,6 +13,8 @@ import { Activity } from '@/types/activity';
 import { getFilteringActivities } from '@/services/activities';
 import { CiUser } from "react-icons/ci";
 import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
+import PasswordModal from '@/components/PasswordModal/PasswordModal';
+import { useAuthStore } from '@/store/authStore';
 
 // Define Zod schema for the form
 const editableFieldsSchema = userSchema.pick({
@@ -37,27 +39,22 @@ const fieldMappings: { [key in keyof EditableFields]: string } = {
 interface Wallet {
     hoursGiven: number;
     hoursReceived: number;
-    hoursToReceive: number;
+    hoursToReceive?: number;
 }
 
 const Profile: React.FC = () => {
 
-    let isLoggedIn = false;
-    if (typeof window !== "undefined") {
-        isLoggedIn = !!localStorage.getItem("LoggedIn");
-    } else { console.log("==2======= localStorage is not available in the server environment") }
-
-
+    const { isLoggedIn } = useAuthStore();
     if (!isLoggedIn) {
         return (
             <ErrorMessage
                 message_line1="אתה לא מחובר!"
                 message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+                link='/home'
             />
         );
     }
 
-    // const { user, setUser } = useUserStore();
     const setUser = useUserStore((state) => state.setUser);
     const user = useUserStore((state) => state.user);
 
@@ -70,7 +67,7 @@ const Profile: React.FC = () => {
 
     const getWallet = async () => {
         try {
-            const activities: Activity[] = await getFilteringActivities("history", user._id);
+            const activities: Activity[] = await getFilteringActivities("history", user._id as string);
             const hoursGiven = activities.filter((activity) => activity.giverId === user._id).length;
             const hoursReceived = activities.filter((activity) => activity.receiverId === user._id).length;
             const hoursToReceive = user.remainingHours;
@@ -87,6 +84,19 @@ const Profile: React.FC = () => {
             getWallet();
         }
     }, []);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handlePasswordChange = async (newPassword: string) => {
+        try {
+            const updatedUser = { ...user, password: newPassword };
+            const response = await updateUser(updatedUser);
+            setUser(updatedUser);
+            alert('Password changed successfully!');
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile.');
+        }
+    };
 
     // Form handling using React Hook Form and Zod
     const {
@@ -198,6 +208,16 @@ const Profile: React.FC = () => {
                                 <p>{wallet.hoursToReceive}</p>
                             </div>
                         </div>
+                        <>
+                            <button onClick={() => setIsModalOpen(true)}>שנה סיסמה</button>
+                            {isModalOpen && (
+                                <PasswordModal
+                                    user={user}
+                                    onClose={() => setIsModalOpen(false)}
+                                    onSubmit={handlePasswordChange}
+                                />
+                            )}
+                        </>
                     </div>
                 </div>
             </main>

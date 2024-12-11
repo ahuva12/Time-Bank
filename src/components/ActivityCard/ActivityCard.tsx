@@ -71,6 +71,13 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
               {activity.durationHours} {"שעות"}
             </p>
           </div>
+          {isGeneral && (
+            isFavorite ? (
+              <FaStar className={styles.icon} onClick={toggleFavorite} />
+            ) : (
+              <FaRegStar className={styles.icon} onClick={toggleFavorite} />
+            )
+          )}
           {flag && (
             <div className={styles.icons}>
               <FaEdit className={styles.editIcon} onClick={onUpdate} />
