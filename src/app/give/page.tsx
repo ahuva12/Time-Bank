@@ -63,15 +63,6 @@ const give = () => {
     enabled: isLoggedIn,
   });
 
-  if (!isLoggedIn) {
-    return (
-      <ErrorMessage
-        message_line1="אתה לא מחובר!"
-        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-      />
-    );
-  }
-
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
     setSelectedActivity(activity);
@@ -96,7 +87,7 @@ const give = () => {
   if (isError) {
     return (
       <ErrorMessage
-        message_line1="משהו השתבש..."
+        message_line1="אופס... משהו השתבש"
         message_line2="תוכל לנסות שוב במועד מאוחר יותר"
       />
     );

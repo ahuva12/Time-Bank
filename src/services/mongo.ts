@@ -93,6 +93,7 @@ export async function updateDocuments(client: MongoClient, collection: string, f
     try {
         const db = client.db('time-bank');
         const result = await db.collection(collection).updateMany(filter, update, { session });
+
         return result;
     } catch (error) {
         console.error("Error updating multiple documents:", error);
