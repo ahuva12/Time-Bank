@@ -8,8 +8,6 @@ import { useUserStore } from '@/store/useUserStore';
 import { Activity } from '@/types/activity';
 import { useAuthStore } from '@/store/authStore';
 
-//שגיאה בהתנתקות
-
 const AllActivities = () => {
   const { user } = useUserStore();
   const { isLoggedIn } = useAuthStore();
