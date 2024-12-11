@@ -7,6 +7,7 @@ import { getFilteringActivities, updateStatusActivity } from '@/services/activit
 import { useUserStore } from '@/store/useUserStore';
 import { Activity } from '@/types/activity';
 import { useAuthStore } from '@/store/authStore';
+import { registrationForActivity, RegistrationActivityPayload } from '@/services/registrationForActivity';
 
 const AllActivities = () => {
   const { user } = useUserStore();
@@ -65,16 +66,23 @@ const AllActivities = () => {
     //     );
     // }
 
-
-  const updateStatusMutation = useMutation({
-    mutationFn: updateStatusActivity,
-    onMutate: async ({ activityId }: { activityId: string }) => {
+  const registerForActivityMutation = useMutation({
+    mutationFn: registrationForActivity,
+    onMutate: async ({
+      activityId,
+      giverId,
+      receiverId,
+      status,
+    }: RegistrationActivityPayload) => {
       await queryClient.cancelQueries({ queryKey: ['allActivities'] });
+  
       const previousSavedActivities = queryClient.getQueryData<Activity[]>(['allActivities']);
+  
       queryClient.setQueryData<Activity[]>(
         ['allActivities'],
         (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
       );
+  
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
@@ -94,15 +102,19 @@ const AllActivities = () => {
     setModeActivityModel('open');
   };
 
+  //לוודא שהרישום עובד
+  //אחר כך לעשות שגם הביטול רישום יעבוד
+
   const handleRegistrationActivity = () => {
     if (!selectedActivity) return;
     setIsModeCancellig(false);
     setModeActivityModel('success');
-    updateStatusMutation.mutate({
+    registerForActivityMutation.mutate({
       activityId: selectedActivity._id as string,
-      status: 'caughted',
+      giverId: selectedActivity.giverId as string,
       receiverId: user._id as string,
-    });
+      status: 'caughted',
+    });  
   };
 
   const handleToggleFavorite = (activityId: string, isFavorite: boolean) => {
