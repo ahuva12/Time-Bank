@@ -6,16 +6,15 @@ import {
   ErrorMessage,
   ActivityModal,
   MyDonation,
+  ActivityPopUp,
 } from "@/components";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  getFilteringActivities,
-  updateStatusActivity,
-} from "@/services/activities";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getFilteringActivities } from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from '@/store/authStore';
 import { useState, useEffect} from "react";
 import { Activity } from "@/types/activity";
+import { FaPlus } from "react-icons/fa";
 
 const give = () => {
 
@@ -33,6 +32,29 @@ const give = () => {
   );
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
+  const [isPopUpOpen, setIsPopUpOpen] = useState<boolean>(false);
+  const [isAddingActivity, setIsAddingActivity] = useState<boolean>(false);
+
+  const onAddActivity = () => {
+    setSelectedActivity(null); // Clear selected activity for a new activity
+    setIsAddingActivity(true); // Set to "add mode"
+    setIsPopUpOpen(true); // Open the pop-up
+  };
+
+  const onUpdate = () => {
+    setIsAddingActivity(false); // Set to "update mode"
+    setIsPopUpOpen(true); // Open the pop-up
+  };
+
+  // const onUpdate = () => {
+  //   setIsPopUpOpen(true); // Open the pop-up
+  // };
+
+  const onClosePopUp = (): void => {
+    setIsPopUpOpen(false); // Close the pop-up
+  };
+
+  // const queryClient = useQueryClient();
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonatiom"],
@@ -41,61 +63,19 @@ const give = () => {
     enabled: isLoggedIn,
   });
 
-  //mutationFn: updateActivity
-
-  const updateStatusMutation = useMutation({
-    mutationFn: updateStatusActivity,
-    onMutate: async ({ activityId }: { activityId: string }) => {
-      await queryClient.cancelQueries({ queryKey: ["give"] });
-      const previousGive = queryClient.getQueryData<Activity[]>(["give"]);
-      queryClient.setQueryData<Activity[]>(["give"], (old) =>
-        old ? old.filter((activity) => activity._id !== activityId) : []
-      );
-      return { previousGive };
-    },
-    onError: (error, variables, context: any) => {
-      if (context?.previousGive) {
-        queryClient.setQueryData(["give"], context.previousGive);
-      }
-      setModeActivityModel("error");
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["give"] });
-    },
-  });
+  if (!isLoggedIn) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+      />
+    );
+  }
 
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
     setSelectedActivity(activity);
     setModeActivityModel("open");
-  };
-
-  const handleCancellProposalActivity = () => {
-    if (!selectedActivity) return;
-    setIsModeCancellig(false);
-    setModeActivityModel("success");
-    updateStatusMutation.mutate({
-      activityId: selectedActivity._id as string,
-      status: "cancelled",
-      receiverId: null,
-    });
-  };
-
-  const handleUpdateActivity = () => {
-    if (!selectedActivity) return;
-    setIsModeCancellig(false);
-    setModeActivityModel("success");
-
-    //TO DO: open popup that takes the new updates and add it to new Activity
-    // updateActivityMutation.mutate({
-    //   activityId: selectedActivity._id as string,
-    //   status: 'proposed',
-    //   receiverId: selectedActivity.receiverId as string,
-    //   nameActivity: string;
-    //   durationHours: number;
-    //  description: string;
-    //  tags: Array<string> | [];
-    // } as Activity);
   };
 
   const closeModal = () => {
@@ -124,16 +104,34 @@ const give = () => {
 
   return (
     <div className={styles.savedActivities}>
-      <MyDonation></MyDonation>
-      <h1 className={styles.title}>מה אני תורם</h1>
-      <h3 className={styles.explain}>
-        בעמוד זה מופיעות כל הפעילויות שהצעתם בתרומה ושעדיין לא נרשמו להן
-        משתתפים. תוכלו לעדכן, לשפר או לקדם את הפעילויות.
-      </h3>
+      {/* <MyDonation></MyDonation> */}
+      {/* <ActivityPopUp activity={selectedActivity}></ActivityPopUp> */}
+      <div className={styles.headerCom}>
+        <div className={styles.textContainer}>
+          <h1 className={styles.title}>מה אני תורם</h1>
+          <h3 className={styles.explain}>
+            כאן תוכלו לעקוב ולערוך את כל הפעילויות שהצעתם בתרומה ושאנשים עוד לא
+            נרשמו אליהן.
+          </h3>
+        </div>
+        <button className={styles.addBtn} onClick={onAddActivity}>
+          <div className={styles.btnText}>הוספת פעילות חדשה</div>
+          <div className={styles.plusSign}>
+            {" "}
+            <FaPlus />
+          </div>
+        </button>
+      </div>
+
       {isLoading || isFetching ? (
         <Loader />
       ) : (
-        <Activities activities={data} onMoreDetails={handleMoreDetails} />
+        <Activities
+          activities={data}
+          onMoreDetails={handleMoreDetails}
+          flag={true}
+          handlesMoreOptions={{ onUpdate, setSelectedActivity }}
+        />
       )}
       {modeActivityModel !== "close" && selectedActivity && (
         <ActivityModal
@@ -142,11 +140,24 @@ const give = () => {
           onClose={closeModal}
           activity={selectedActivity}
           user={user}
-          handlesMoreOptions={{
-            handleCancellProposalActivity,
-            handleUpdateActivity,
-          }}
+          handlesMoreOptions={{}}
         />
+      )}
+      <MyDonation></MyDonation>
+      {isPopUpOpen && (
+        <div className={styles.popUpOverlay}>
+          <div className={styles.popUpContent}>
+            <button className={styles.closeButton} onClick={onClosePopUp}>
+              ×
+            </button>
+            {/* <ActivityPopUp activity={selectedActivity} closePopup={onClosePopUp} /> */}
+            <ActivityPopUp
+              activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
+              closePopup={onClosePopUp}
+              isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
+            />
+          </div>
+        </div>
       )}
     </div>
   );

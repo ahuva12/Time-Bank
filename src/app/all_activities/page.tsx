@@ -8,6 +8,8 @@ import { useUserStore } from '@/store/useUserStore';
 import { Activity } from '@/types/activity';
 import { useAuthStore } from '@/store/authStore';
 
+//שגיאה בהתנתקות
+
 const AllActivities = () => {
   const { user } = useUserStore();
   const { isLoggedIn } = useAuthStore();
@@ -55,15 +57,15 @@ const AllActivities = () => {
     }
   }, [activeTab, data, favorites]);
 
-    if (!isLoggedIn && isInitialized) {
-        return (
-            <ErrorMessage
-            message_line1="אתה לא מחובר!"
-            message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-            link='/home'
-            />
-        );
-    }
+    // if (!isLoggedIn && isInitialized) {
+    //     return (
+    //         <ErrorMessage
+    //         message_line1="אתה לא מחובר!"
+    //         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+    //         link='/home'
+    //         />
+    //     );
+    // }
 
 
   const updateStatusMutation = useMutation({

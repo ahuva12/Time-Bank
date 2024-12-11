@@ -43,6 +43,4 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message_line1, message_line
         )
     );
 };
-
-
 export default ErrorMessage;

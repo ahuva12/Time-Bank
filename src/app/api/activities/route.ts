@@ -1,14 +1,17 @@
 import { connectDatabase, getAllDocuments, insertDocument } from "@/services/mongo";
 import { NextResponse } from "next/server";
-import { User } from "@/types/user";
+import { Activity } from "@/types/activity";
 import { activitySchema } from "@/validations/validationsServer/activity";
 import { z } from "zod";
+import { ObjectId } from "mongodb";
 
 export async function POST(req: Request) {
     try {
-        const body: User = await req.json();
-
+        const body: Activity = await req.json();
+        console.log("Adding activity")
+        console.log(body)
         const validatedActivity = activitySchema.parse(body);
+        body.giverId = new ObjectId(body.giverId);
         const client = await connectDatabase();
         const res = await insertDocument(client, 'activities', body);
 

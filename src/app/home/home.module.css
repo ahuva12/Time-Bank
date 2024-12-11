@@ -5,10 +5,11 @@
   margin-left: 4rem;
   margin-right: 4rem;
   background-color: #f4f4f9;
+  width: 100vhw;
 }
 
 .container {
-  width: 100%;
+  width: 100vw;
   box-sizing: border-box;
 }
 

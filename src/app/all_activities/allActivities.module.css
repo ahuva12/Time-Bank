@@ -1,0 +1,56 @@
+.savedActivities {
+    background-color: #effdff;
+}
+
+.title {
+    font-size: 1.7rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    border: 1px solid #ddd;
+}
+
+.sidebar {
+    width: 200px;
+    border-left: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #333;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+    background-color: #f9f9f9;
+}
+
+.activeTab {
+    background-color: #f0f4f8;
+    font-weight: bold;
+    border-left: 3px solid #048ebc;
+}
+
+.content {
+    padding: 20px;
+    flex: 1;
+}
+
+.activitiesContainer {
+    flex: 1;
+    /* Let the activities container take the remaining space */
+    display: flex;
+    flex-direction: row;
+    /* Ensure cards stack vertically */
+    gap: 15px;
+    /* Add spacing between cards */
+}
