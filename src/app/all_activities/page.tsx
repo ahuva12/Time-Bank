@@ -122,7 +122,6 @@ const AllActivities = () => {
     }
   };
 
-
   const closeModal = () => {
     setModeActivityModel('close');
   };
@@ -149,7 +148,7 @@ const AllActivities = () => {
   if (isError) {
     return (
       <ErrorMessage
-        message_line1="משהו השתבש..."
+        message_line1="אופס... משהו השתבש"
         message_line2="תוכל לנסות שוב במועד מאוחר יותר"
       />
     );
@@ -165,14 +164,16 @@ const AllActivities = () => {
       ) : (
         <div className={styles.activitiesContainer}>
           <SideBar />
-          <Activities
-            activities={filteredActivities}
-            onMoreDetails={handleMoreDetails}
-            onToggleFavorite={handleToggleFavorite}
-            isGeneral={true}
-            flag={false}
-            handlesMoreOptions={null}
-          />
+          <div className={styles.activities}>
+            <Activities
+              activities={filteredActivities}
+              onMoreDetails={handleMoreDetails}
+              onToggleFavorite={handleToggleFavorite}
+              isGeneral={true}
+              flag={false}
+              handlesMoreOptions={null}
+            />
+          </div>
         </div>
       )}
       {modeActivityModel !== 'close' && selectedActivity && (
