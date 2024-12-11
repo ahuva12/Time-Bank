@@ -5,7 +5,7 @@ import {
   Activities,
   Loader,
   ErrorMessage,
-  ActivityModalForDonation,
+  ActivityModal,
 } from "@/components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getFilteringActivities } from "@/services/activities";
@@ -26,6 +26,7 @@ const myDonation = () => {
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
     null
   );
+  const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
 
   const { data, isLoading, isFetching, isError } = useQuery({
@@ -35,14 +36,6 @@ const myDonation = () => {
     enabled: isLoggedIn,
   });
 
-  // if (!isLoggedIn) {
-  //   return (
-  //     <ErrorMessage
-  //       message_line1="אתה לא מחובר!"
-  //       message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-  //     />
-  //   );
-  // }
 
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
@@ -74,14 +67,18 @@ const myDonation = () => {
       {isLoading || isFetching ? (
         <Loader />
       ) : (
-        <Activities activities={data} onMoreDetails={handleMoreDetails} />
+        <Activities activities={data} onMoreDetails={handleMoreDetails} flag={false} handlesMoreOptions={null}/>
       )}
       {modeActivityModel !== "close" && selectedActivity && (
-        <ActivityModalForDonation
+        <ActivityModal
+        isModeCancellig={isModeCancellig}
           modeModel={modeActivityModel}
           onClose={closeModal}
           activity={selectedActivity}
-        />
+          user={user}
+          handlesMoreOptions={{
+          }}
+          />
       )}
     </div>
   );
