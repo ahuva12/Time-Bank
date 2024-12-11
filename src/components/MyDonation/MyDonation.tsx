@@ -74,7 +74,7 @@ const myDonation = () => {
       {isLoading || isFetching ? (
         <Loader />
       ) : (
-        <Activities activities={data} onMoreDetails={handleMoreDetails} />
+        <Activities activities={data} onMoreDetails={handleMoreDetails} flag={false} handlesMoreOptions={null} />
       )}
       {modeActivityModel !== "close" && selectedActivity && (
         <ActivityModalForDonation
