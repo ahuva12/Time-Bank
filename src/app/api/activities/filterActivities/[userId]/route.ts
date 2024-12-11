@@ -74,6 +74,7 @@ const getActivitiesProposedFilter = (userId: string) => {
 }
 
 const getCaughtActivitiesGiverFilter = (userId: string) => {
+    console.log('getCaughtActivitiesGiverFilter')
     return {
         $and: [
             {
@@ -106,6 +107,7 @@ export async function POST(req: Request, { params }: { params: { userId: string 
     try {
         const { filterType } = await req.json();
         const { userId } = params;
+        console.log(filterType)
 
         if (!filterType || !userId) {
             return NextResponse.json(
@@ -142,6 +144,8 @@ export async function POST(req: Request, { params }: { params: { userId: string 
 
         const client = await connectDatabase();
         const activities = await getDocuments(client, 'activities', filter);
+        console.log(filter)
+        console.log(activities)
 
         return NextResponse.json(activities);
     } catch (error) {
