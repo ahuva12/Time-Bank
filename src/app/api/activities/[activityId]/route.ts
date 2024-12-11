@@ -6,15 +6,17 @@ import { z } from "zod";
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ activityId: string }> }) {
     try {
+        console.log("in api/activities/id")
         const { activityId } = await params;
         const body = await req.json(); 
-
         if (!activityId) {
             return NextResponse.json({ message: "Activity ID is required" }, { status: 400 });
         }
+        
         const validatedActivity = activitySchema.parse(body);
 
         const { _id, ...updateFields } = body;
+        updateFields.giverId = new ObjectId(body.giverId)
 
         if (Object.keys(updateFields).length === 0) {
             return NextResponse.json({ message: "No fields to update" }, { status: 400 });

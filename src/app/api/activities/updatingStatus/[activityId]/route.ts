@@ -3,22 +3,33 @@ import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { updatingStatusSchema } from '@/validations/validationsServer/activity';
 import { z } from "zod";
+import { Console } from 'console';
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ activityId: string }> }) {
     try {
+        
         const { activityId } = await params;
         if (!activityId) {
             return NextResponse.json({ message: "Activity ID is required" }, { status: 400 });
         }
 
         const body = await req.json(); 
+        console.log(body)
         const validatedUpdatedStatus = updatingStatusSchema.parse(body);
 
         const { receiverId, ...rest } = validatedUpdatedStatus;
-        const updateData = {
+        // const updateData = {
+        //     ...rest,
+        //     receiverId: new ObjectId(receiverId),
+        // };
+        const updateData: Record<string, any> = {
             ...rest,
-            receiverId: new ObjectId(receiverId),
         };
+        if (receiverId !== null) {
+            updateData.receiverId = new ObjectId(receiverId);
+        } else {
+            updateData.receiverId = null; 
+        }
 
         const client = await connectDatabase();
         const result = await updateDocument(client, 'activities', { _id: new ObjectId(activityId) }, updateData);

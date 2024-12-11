@@ -6,7 +6,6 @@ import logo from '../../../public/images/logo.gif';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Login, Register, UserMenu} from '@/components'; 
-import { useUserStore } from '@/store/useUserStore';
 
 export default function Header() {
   const { isLoggedIn, login, signup } = useAuthStore();
@@ -34,7 +33,7 @@ export default function Header() {
               <Link href="/home" className={styles.navItem}>
               דף הבית
               </Link>
-              <Link href="/activities" className={styles.navItem}>
+              <Link href="/all_activities" className={styles.navItem}>
               פעילויות
               </Link>
               <Link href="/give" className={styles.navItem}>

@@ -17,18 +17,6 @@ const SavedActivities = () => {
       setIsInitialized(true); 
   }, [isLoggedIn]);
 
-  // useEffect(() => {
-  //   if (isLoggedIn && user) {
-  //     setIsInitialized(true);
-  //   } else {
-  //     setIsInitialized(false); 
-  //   }
-  // }, [isLoggedIn, user]);
-
-  useEffect(() => {
-      setIsInitialized(true); 
-  }, [isLoggedIn]);
-
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>('close');
@@ -118,7 +106,7 @@ const SavedActivities = () => {
       {(isLoading || isFetching) ? (
         <Loader />
       ) : (
-        <Activities activities={data} onMoreDetails={handleMoreDetails} />
+        <Activities activities={data} onMoreDetails={handleMoreDetails} flag={false} handlesMoreOptions={null}/>
       )}
       {modeActivityModel !== 'close' && selectedActivity && (
         <ActivityModal

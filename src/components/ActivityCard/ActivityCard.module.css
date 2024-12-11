@@ -5,8 +5,9 @@
   justify-content: center;
   text-align: right;
   background-color: #ffffff;
-  border-radius: 25px;
+  border-radius: 8px;
   padding: 20px;
+
   width: 250px; 
   height: 280px; 
   margin: 10px;
@@ -57,3 +58,71 @@
 
 }
 
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.icon {
+  font-size: x-large;
+  cursor: pointer;
+  color: rgb(255, 222, 38);
+  align-self: start;
+}
+
+
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon {
+  font-size: x-large;
+  cursor: pointer;
+  color: rgb(255, 222, 38);
+  align-self: start;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+} 
+
+.moreOptionButton {
+  background-color: #048ebc;
+  color: white;
+  border: none;
+  /* padding: 0.75rem 1.5rem; */
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 8rem;
+  height: 25px;
+  transition: background-color 0.2s ease;
+}
+
+.moreOptionButton:hover {
+  background-color: #036a8c;
+}
+
+.editIcon {
+  color: #c3c6ce;
+  cursor: pointer;
+}
+.innerConatainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 40px;
+}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from "@/store/useUserStore";
 import { CiUser } from "react-icons/ci";
 import { useAuthStore } from '@/store/authStore';
+import SuccessMessage from "../SuccessMessage/SuccessMessage";
 
 export default function UserMenu() {
     const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,7 @@ export default function UserMenu() {
     const clearUser = useUserStore((state) => state.clearUser);
     const { user } = useUserStore();
     const { logout, isLoggedIn } = useAuthStore();
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State for success message
 
     const handleLogout = () => {
         clearUser(); // Clear user data from Zustand store
@@ -46,6 +48,12 @@ export default function UserMenu() {
         };
     }, []);
 
+    // Function to handle OK click from SuccessMessage
+    const handleOkClick = () => {
+      setShowSuccessMessage(false); // Hide success message
+      handleLogout(); // Perform logout and redirect to home
+    };
+
     return (
         <div className={styles.profileContainer} ref={dropdownRef}>
             {/* Profile Icon */}
@@ -55,27 +63,38 @@ export default function UserMenu() {
                 </div>
             </div>
 
-            {/* Dropdown Menu */}
-            {isOpen && (
-                <div className={styles.dropdownMenu}>
-                    <ul>
-                        <li className={`${styles.welcomeItem} ${styles.noHover}`}>
-                            <div>
-                                שלום,&nbsp;
-                                <span style={{ fontWeight: 'bold' }}>{user.firstName}!</span>
-                            </div>
-                            <div>
-                                יתרת השעות שלי:&nbsp;
-                                <span style={{ fontWeight: 'bold' }}>{user.remainingHours}</span>
-                            </div>
-                        </li>
-                        <li onClick={() => handleRedirect('profile')}>פרופיל</li>
-                        <li onClick={() => handleRedirect('history')}>היסטוריה</li>
-                        <li onClick={() => handleRedirect('saved_activities')}>פעילויות שמורות</li>
-                        <li onClick={handleLogout}>התנתקות</li>
-                    </ul>
-                </div>
-            )}
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div className={styles.dropdownMenu}>
+          <ul>
+            <li className={`${styles.welcomeItem} ${styles.noHover}`}>
+              <div>
+                שלום,&nbsp;
+                <span><strong>{user ? user.firstName : "משתמש"}</strong></span>
+              </div>
+              <div>
+                יתרת השעות שלי:&nbsp;
+                <span><strong>{user ? user.remainingHours : "אין נתונים"}</strong></span>
+              </div>
+            </li>
+            <li onClick={() => handleRedirect("profile")}>פרופיל</li>
+            <li onClick={() => handleRedirect("history")}>היסטוריה</li>
+            <li onClick={() => handleRedirect("saved_activities")}>
+              פעילויות שמורות
+            </li>
+            <li onClick={() => setShowSuccessMessage(true)}>התנתקות</li>
+          </ul>
         </div>
-    );
+      )}
+
+      {/* Show Success Message with OK button */}
+      {showSuccessMessage && (
+        <SuccessMessage
+          message_line1="התנתקת בהצלחה!"
+          message_line2="נשמח לראותך שוב בקרוב."
+          onOkClick={handleOkClick} // Pass the handleOkClick function as a prop
+        />
+      )}
+    </div>
+  );
 }

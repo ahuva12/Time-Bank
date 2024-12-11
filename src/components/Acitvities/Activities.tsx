@@ -6,21 +6,19 @@ import { ActivityCard, ErrorMessage } from '@/components';
 interface ActivitiesProps {
     activities: Activity[];
     onMoreDetails: (activity: Activity) => void;
+    onToggleFavorite?: (activityId: string, isFavorite: boolean) => void; // New prop
+    isGeneral?: boolean;
+    flag: boolean;
+    handlesMoreOptions:  {
+        onUpdate: () => void; 
+        setSelectedActivity: any;
+    } | null;
 }
 
-const Activities = ({ activities, onMoreDetails }: ActivitiesProps) => {
-    console.log(activities)
+
+const Activities = ({ activities, onMoreDetails, flag, handlesMoreOptions, onToggleFavorite, isGeneral }: ActivitiesProps) => {
     if (!activities)
         return null
-    // if (!activities) {
-    //     return (
-    //       <ErrorMessage
-    //         message_line1="אתה לא מחובר!"
-    //         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-    //         link='/home'
-    //       />
-    //     );
-    //   }
 
     return (
         <div className={styles.tableActivities}>
@@ -39,11 +37,16 @@ const Activities = ({ activities, onMoreDetails }: ActivitiesProps) => {
                         key={index}
                         activity={activity}
                         onMoreDetails={() => onMoreDetails(activity)}
+                        onToggleFavorite={onToggleFavorite} // Pass down to ActivityCard
+                        isGeneral={isGeneral}
+                        flag={flag}
+                        handlesMoreOptions={handlesMoreOptions}
                     />
                 ))
             )}
         </div>
     );
 };
+
 
 export default Activities;

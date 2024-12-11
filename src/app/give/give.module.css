@@ -2,19 +2,144 @@
   background-color: #e0f5f8;
 }
 
+.popUpOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popUpContent {
+  background: #fff;
+  padding: 20px;
+  border-radius: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.headerCom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 1rem;
+  position: relative;
+  gap: 1rem;
+}
+
+.textContainer {
+  text-align: center; 
+  flex: 1; 
+}
+
 .title {
   font-size: 1.7rem;
   font-weight: 600;
-  text-align: center;
   padding-top: 1rem;
+  margin: 0; 
 }
+
 .explain {
-  font-size: 1rem; 
-  text-align: center; 
+  font-size: 1rem;
+  /* text-align: center; */
   margin-bottom: 2rem;
-  width: 100%; 
-  line-height: 1.6; 
-  font-weight: 400; 
-  color: #555 ;
-} 
- 
+  /* width: 100%; */
+  line-height: 1.6;
+  font-weight: 400;
+  color: #555;
+}
+
+.addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  /* position: relative; */
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: #048ebc;
+  margin-left: 4rem;
+}
+.plusSign {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.btnText {
+  /* position: absolute; */
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1em;
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+.addBtn:hover {
+  width: 250px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
+
+.addBtn:hover .plusSign {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 10px;
+}
+/* hover effect button's text */
+.addBtn:hover .btnText {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 4px;
+}
+/* button click effect*/
+.addBtn:active {
+  transform: translate(2px, 2px);
+}
+
+/* .closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  color: #444;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  outline: none;
+}
+
+.closeButton:hover {
+  color: #fff;
+  background-color: #d9534f; 
+ }
+
+.closeButton:focus {
+  outline: 2px solid #d9534f; 
+} */
