@@ -9,7 +9,7 @@ import {
 } from "@/components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getFilteringActivities } from "@/services/activities";
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { useState /*, useEffect*/ } from "react";
 import { Activity } from "@/types/activity";
 
@@ -30,7 +30,7 @@ const myDonation = () => {
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonation"],
-    queryFn: () => getFilteringActivities("caughtedGiver", user._id),
+    queryFn: () => getFilteringActivities("caughtedGiver", user._id as string),
     staleTime: 10000,
     enabled: isLoggedIn,
   });

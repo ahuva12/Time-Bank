@@ -1,7 +1,7 @@
 'use client';
 import styles from './Activities.module.css';
 import { Activity } from '@/types/activity';
-import { ActivityCard } from '@/components';
+import { ActivityCard, ErrorMessage } from '@/components';
 
 interface ActivitiesProps {
     activities: Activity[];
@@ -17,10 +17,20 @@ interface ActivitiesProps {
 
 
 const Activities = ({ activities, onMoreDetails, flag, handlesMoreOptions, onToggleFavorite, isGeneral }: ActivitiesProps) => {
+    if (!activities)
+        return null
+
     return (
         <div className={styles.tableActivities}>
-            {!activities || activities.length === 0 ? (
-                <div className={styles.noActivities}>אין לך פעילויות שמורות...</div>
+            {activities.length === 0 ? (
+                // <div className={styles.noActivities}>
+                //     אין לך פעילויות שמורות. רוצה גם אתה להרשם לפעילות בבנק הזמן?
+                //     <a className={styles.link} href="#">לחץ כאן</a>
+                //     על מנת לחפש פעילות להרשם אליה:)
+                // </div>
+                <div className={styles.noActivities}>
+                    אין מידע רלוונטי להציג
+                </div>
             ) : (
                 activities.map((activity, index) => (
                     <ActivityCard
