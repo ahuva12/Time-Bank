@@ -4,13 +4,18 @@ import styles from './allActivities.module.css';
 import { Activities, Loader, ActivityModal, ErrorMessage } from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
-import useUserStore from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 import { Activity } from '@/types/activity';
 import { useAuthStore } from '@/store/authStore';
 
 const AllActivities = () => {
   const { user } = useUserStore();
   const { isLoggedIn } = useAuthStore();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    setIsInitialized(true); 
+}, [isLoggedIn]);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -50,15 +55,16 @@ const AllActivities = () => {
     }
   }, [activeTab, data, favorites]);
 
-  if (!isLoggedIn) {
-    return (
-      <ErrorMessage
-        message_line1="אתה לא מחובר!"
-        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-        link='/home'
-      />
-    );
-  }
+    // if (!isLoggedIn && isInitialized) {
+    //     return (
+    //         <ErrorMessage
+    //         message_line1="אתה לא מחובר!"
+    //         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+    //         link='/home'
+    //         />
+    //     );
+    // }
+
 
   const updateStatusMutation = useMutation({
     mutationFn: updateStatusActivity,

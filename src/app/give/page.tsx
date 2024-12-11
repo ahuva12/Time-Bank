@@ -1,5 +1,4 @@
 "use client";
-
 import styles from "./give.module.css";
 import {
   Activities,
@@ -9,24 +8,25 @@ import {
   MyDonation,
   ActivityPopUp,
 } from "@/components";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities } from "@/services/activities";
-import useUserStore from "@/store/useUserStore";
-import { useState /*, useEffect*/ } from "react";
+import { useUserStore } from "@/store/useUserStore";
+import { useAuthStore } from '@/store/authStore';
+import { useState, useEffect} from "react";
 import { Activity } from "@/types/activity";
 import { FaPlus } from "react-icons/fa";
 
 const give = () => {
-  const { user } = useUserStore();
-  let isLoggedIn = true;
-  if (typeof window !== "undefined") {
-    isLoggedIn = !!localStorage.getItem("LoggedIn");
-  } else {
-    console.log(
-      "==1======= localStorage is not available in the server environment"
-    );
-  }
 
+  const { user } = useUserStore();
+  const { isLoggedIn } = useAuthStore();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+      setIsInitialized(true); 
+  }, [isLoggedIn]);
+
+  const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
     null
   );
@@ -58,7 +58,7 @@ const give = () => {
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonatiom"],
-    queryFn: () => getFilteringActivities("proposedGiver", user._id),
+    queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
     staleTime: 10000,
     enabled: isLoggedIn,
   });
@@ -81,6 +81,16 @@ const give = () => {
   const closeModal = () => {
     setModeActivityModel("close");
   };
+
+  if (!isLoggedIn && isInitialized) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
+      />
+    );
+  }
 
   // Render content based on the query's state
   if (isError) {

@@ -1,6 +1,6 @@
 'use client';
 import { useState } from "react";
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import Styles from './ActivityPopUp.module.css';
 import { postActivity, updateActivity } from '@/services/activities'; // Add createActivity
 import { useMutation, useQueryClient } from '@tanstack/react-query';

@@ -3,20 +3,19 @@ import styles from './savedActivities.module.css';
 import { Activities, Loader, ActivityModal, ErrorMessage } from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
-import useUserStore from '@/store/useUserStore';
-import { useState  } from 'react';
+import { useUserStore } from '@/store/useUserStore';
+import { useAuthStore } from '@/store/authStore';
+import { useState, useEffect } from 'react';
 import { Activity } from '@/types/activity';
 
 const SavedActivities = () => {
-
-  let isLoggedIn = false;
-  if (typeof window !== "undefined") {
-    isLoggedIn = !!localStorage.getItem("LoggedIn");
-  } else { console.log("==3== localStorage is not available in the server environment") }
-
-
   const { user } = useUserStore();
+  const { isLoggedIn } = useAuthStore();
+  const [isInitialized, setIsInitialized] = useState(false);
 
+  useEffect(() => {
+      setIsInitialized(true); 
+  }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -25,19 +24,10 @@ const SavedActivities = () => {
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['savedActivities'],
-    queryFn: () => getFilteringActivities('caughted', user._id),
+    queryFn: () => getFilteringActivities('caughted', user._id as string),
     staleTime: 10000,
     enabled: isLoggedIn, 
   });
-
-  if (!isLoggedIn) {
-    return (
-      <ErrorMessage
-        message_line1="אתה לא מחובר!"
-        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-      />
-    );
-  }
 
   const updateStatusMutation = useMutation({
     mutationFn: updateStatusActivity,
@@ -72,7 +62,7 @@ const SavedActivities = () => {
     updateStatusMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'accepted',
-      receiverId: user._id,
+      receiverId: user._id as string,
     });
   };
 
@@ -83,7 +73,7 @@ const SavedActivities = () => {
     updateStatusMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'proposed',
-      receiverId: user._id,
+      receiverId: user._id as string,
     });
   };
 
@@ -91,10 +81,20 @@ const SavedActivities = () => {
     setModeActivityModel('close');
   };
 
+  if (!isLoggedIn && isInitialized) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
+      />
+    );
+  }
+
   // Render content based on the query's state
   if (isError) {
     return (
-      <ErrorMessage message_line1="משהו השתבש..." message_line2='תוכל לנסות שוב במועד מאוחר יותר'/>
+      <ErrorMessage message_line1="אופס... משהו השתבש" message_line2='תוכל לנסות שוב במועד מאוחר יותר'/>
     )
   }
 

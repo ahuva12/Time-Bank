@@ -1,28 +1,16 @@
 "use client";
 
 import styles from "./myDonation.module.css";
-import {
-  Activities,
-  Loader,
-  ErrorMessage,
-  ActivityModal,
-} from "@/components";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Activities, Loader, ErrorMessage, ActivityModal } from "@/components";
+import { useQuery } from "@tanstack/react-query";
 import { getFilteringActivities } from "@/services/activities";
-import useUserStore from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { useState /*, useEffect*/ } from "react";
 import { Activity } from "@/types/activity";
 
 const myDonation = () => {
   const { user } = useUserStore();
-
-  let isLoggedIn = false;
-  if (typeof window !== "undefined") {
-    isLoggedIn = !!localStorage.getItem("LoggedIn");
-  } else { console.log("==4======= localStorage is not available in the server environment") }
-
-
-  const queryClient = useQueryClient();
+  
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
     null
   );
@@ -31,9 +19,8 @@ const myDonation = () => {
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonation"],
-    queryFn: () => getFilteringActivities("caughtedGiver", user._id),
+    queryFn: () => getFilteringActivities("caughtedGiver", user._id as string),
     staleTime: 10000,
-    enabled: isLoggedIn,
   });
 
 
