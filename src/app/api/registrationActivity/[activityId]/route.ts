@@ -160,12 +160,8 @@ const unregisterForActivity = async (activityId:ObjectId, giverId:ObjectId, rece
                 },
             },
         ];
-
-        // console.log(filter)
-        // console.log(updateRemainingHours)
         
         const updateResult = await updateDocuments(client, 'users', filter, updateRemainingHours, session);
-        console.log(updateResult)
 
         if (updateResult.modifiedCount !== 2) {
             await session.abortTransaction();

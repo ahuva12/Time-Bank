@@ -56,16 +56,6 @@ const AllActivities = () => {
     }
   }, [activeTab, data, favorites]);
 
-    // if (!isLoggedIn && isInitialized) {
-    //     return (
-    //         <ErrorMessage
-    //         message_line1="אתה לא מחובר!"
-    //         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-    //         link='/home'
-    //         />
-    //     );
-    // }
-
   const registerForActivityMutation = useMutation({
     mutationFn: registrationForActivity,
     onMutate: async ({
@@ -102,9 +92,6 @@ const AllActivities = () => {
     setModeActivityModel('open');
   };
 
-  //לוודא שהרישום עובד
-  //אחר כך לעשות שגם הביטול רישום יעבוד
-
   const handleRegistrationActivity = () => {
     if (!selectedActivity) return;
     setIsModeCancellig(false);
@@ -140,7 +127,6 @@ const AllActivities = () => {
 
   const SideBar = () => (
     <div className={styles.container}>
-      {/* Sidebar */}
       <div className={styles.sidebar}>
         {tabs.map((tab) => (
           <div
@@ -155,6 +141,16 @@ const AllActivities = () => {
       </div>
     </div>
   );
+
+    if (!isLoggedIn && isInitialized) {
+      return (
+          <ErrorMessage
+          message_line1="אתה לא מחובר!"
+          message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+          link='/home'
+          />
+      );
+  }
 
   // Render content based on the query's state
   if (isError) {
