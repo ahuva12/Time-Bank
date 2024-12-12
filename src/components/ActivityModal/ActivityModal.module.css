@@ -48,6 +48,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 75%;
 }
 
 /* Icon */
@@ -86,6 +87,19 @@
     background-color: #eaf8fb;
     border-radius: 12px;
     padding: 1rem;
+    width: 100%;
+}
+
+.textLimited {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 5;
+    line-height: 1.5;
+    max-height: 4.5em;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .formGroup {
@@ -221,4 +235,23 @@
     /* background-color: gray; */
     cursor: not-allowed;
     opacity: 0.6; /* Optional, to indicate disabled state */
+}
+
+.loader {
+    height: 104px;
+    position: relative;
+    left: 44%;
+    padding-top: 10px;
+}
+
+.loaderTest {
+    position: absolute;
+    font-size: 12px;
+    width: 102px;
+    right: 9px;
+    top: 35px;
+    text-align: center;
+    color: #4A90E2;
+    font-weight: 600; 
+
 }

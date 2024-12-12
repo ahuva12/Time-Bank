@@ -15,18 +15,17 @@
     background: white;
     border-radius: 10px;
     padding: 20px;
-    width: 400px;
+    width: 375px;
     text-align: center;
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    border: 3.5px #FF4C4C solid;
+    border: 3.5px #FFB300 solid;
 }
 
 .closeButton {
     position: absolute;
-    top: 1rem;
+    top: 0.5rem;
     right: 1rem;
     background: transparent;
     border: none;
@@ -35,20 +34,43 @@
 }
 
 .iconSucc {
-    margin-bottom: 20px;
+    margin: 8px 0 21px 0;
     align-self: center;
 }
 
 .text {
     color: #555;
+    font-size: 18px;
 }
 
-.buttonSucc {
-    background-color: #FF4C4C;
+.buttons {
+    margin-top: 12px;
+}
+
+.okButton {
+    margin: 20px 0 1px 13px;
+    background-color: #28A745; 
     color: white;
-    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
+    padding: 10px 22px;
+    font-size: 14px;
+}
+
+.okButton:hover {
+    background-color: #218838; 
+}
+
+.cancellButton {
+    margin: 20px 13px 0 0;
+    background-color: #FF4C4C; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 22px;
+    font-size: 14px;
+}
+
+.cancellButton:hover {
+    background-color: #D32F2F; 
 }

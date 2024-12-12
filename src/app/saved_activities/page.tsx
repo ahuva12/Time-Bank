@@ -135,7 +135,7 @@ const SavedActivities = () => {
     <div className={styles.savedActivities}>
       <h1 className={styles.title}>הפעילויות השמורות שלי</h1>
       <h3 className={styles.explain}>
-      בעמוד זה תוכלו לראות את כל הפעילויות שאליהן נרשמתם אך עדיין לא השתתפתם בהן בפועל.      </h3>
+      כאן תוכלו לראות את כל הפעילויות שאליהן נרשמתם אך עדיין לא השתתפתם בהן בפועל.      </h3>
       {(isLoading || isFetching) ? (
         <Loader />
       ) : (
