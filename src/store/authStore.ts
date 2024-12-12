@@ -13,11 +13,13 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       isLoggedIn: false, 
+      // TODO: change name to setLogin
       login: () => {
         set({ isLoggedIn: true });
       },
       signup: () => {
       },
+      // TODO: change name to setLogout
       logout: () => {
         set({ isLoggedIn: false });
       },

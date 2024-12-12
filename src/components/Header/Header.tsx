@@ -13,6 +13,7 @@ export default function Header() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   
+  // TODO: you can just initialize isClient with 'true' on the useState above. no need for useEffect
   useEffect(() => {
     setIsClient(true);
   }, [])

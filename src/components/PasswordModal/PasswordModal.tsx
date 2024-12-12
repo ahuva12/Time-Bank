@@ -32,6 +32,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
         onClose();
     };
 
+    // TODO: take this function out of the component to a service file
     const verifyPassword = async () => {
         const isMatch = await bcrypt.compare(oldPassword, user.password);
         if (!isMatch) {
