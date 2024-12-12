@@ -1,0 +1,25 @@
+.loader {
+    color: #4A90E2; 
+    padding-bottom: 250px;
+}
+
+.loader::before {
+    content: '';
+    width: 27px;
+    height: 27px;
+    border: 3.1px solid #4A90E2; 
+    border-top: 3.1px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
