@@ -1,13 +1,8 @@
 "use client";
 
 import styles from "./myDonation.module.css";
-import {
-  Activities,
-  Loader,
-  ErrorMessage,
-  ActivityModalForDonation,
-} from "@/components";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Activities, Loader, ErrorMessage, ActivityModal } from "@/components";
+import { useQuery } from "@tanstack/react-query";
 import { getFilteringActivities } from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
 import { useState /*, useEffect*/ } from "react";
@@ -15,34 +10,19 @@ import { Activity } from "@/types/activity";
 
 const myDonation = () => {
   const { user } = useUserStore();
-
-  let isLoggedIn = false;
-  if (typeof window !== "undefined") {
-    isLoggedIn = !!localStorage.getItem("LoggedIn");
-  } else { console.log("==4======= localStorage is not available in the server environment") }
-
-
-  const queryClient = useQueryClient();
+  
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
     null
   );
+  const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonation"],
     queryFn: () => getFilteringActivities("caughtedGiver", user._id as string),
     staleTime: 10000,
-    enabled: isLoggedIn,
   });
 
-  // if (!isLoggedIn) {
-  //   return (
-  //     <ErrorMessage
-  //       message_line1="אתה לא מחובר!"
-  //       message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-  //     />
-  //   );
-  // }
 
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
@@ -74,14 +54,18 @@ const myDonation = () => {
       {isLoading || isFetching ? (
         <Loader />
       ) : (
-        <Activities activities={data} onMoreDetails={handleMoreDetails} flag={false} handlesMoreOptions={null} />
+        <Activities activities={data} onMoreDetails={handleMoreDetails} flag={false} handlesMoreOptions={null}/>
       )}
       {modeActivityModel !== "close" && selectedActivity && (
-        <ActivityModalForDonation
+        <ActivityModal
+        isModeCancellig={isModeCancellig}
           modeModel={modeActivityModel}
           onClose={closeModal}
           activity={selectedActivity}
-        />
+          user={user}
+          handlesMoreOptions={{
+          }}
+          />
       )}
     </div>
   );
