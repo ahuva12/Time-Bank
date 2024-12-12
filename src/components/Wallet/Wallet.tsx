@@ -98,6 +98,7 @@ const Wallet: React.FC<WalletProps> = ({
       </div>
     </div>
   );
+
 };
 
 export default Wallet;
