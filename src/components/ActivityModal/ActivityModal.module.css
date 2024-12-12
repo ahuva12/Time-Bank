@@ -222,3 +222,22 @@
     cursor: not-allowed;
     opacity: 0.6; /* Optional, to indicate disabled state */
 }
+
+.loader {
+    height: 104px;
+    position: relative;
+    left: 44%;
+    padding-top: 10px;
+}
+
+.loaderTest {
+    position: absolute;
+    font-size: 12px;
+    width: 102px;
+    right: 9px;
+    top: 35px;
+    text-align: center;
+    color: #4A90E2;
+    font-weight: 600; 
+
+}

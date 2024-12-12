@@ -30,7 +30,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message_line1, message_line
                     <div className={styles.iconSucc}>
                         <AiOutlineCloseCircle color="#FF4C4C" size={50} />
                     </div>
-                    <p className={styles.textSucc}>
+                    <p className={styles.text}>
                         {message_line1}
                         <br />
                         {message_line2}

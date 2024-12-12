@@ -41,7 +41,7 @@ export default function Footer() {
       <div className={styles.bottomText}>
         <p>03-1234567</p>
         <span className={styles.separator}>|</span>
-        <p>Timebank@gmail.com</p>
+        <p>Timerepublic@gmail.com</p>
       </div>
     </footer>
   );

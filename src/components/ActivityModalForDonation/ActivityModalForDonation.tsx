@@ -127,7 +127,7 @@ import { Activity } from "@/types/activity";
 import { User } from "@/types/user";
 import { calculateAge } from "@/services/utils";
 import { CiUser } from "react-icons/ci";
-import { ErrorMessage, SuccessMessage } from '@/components';
+import { ErrorMessage, SuccessMessage, MiniLoader } from '@/components';
 import { useEffect, useState } from 'react';
 import { getUserById } from '@/services/users';
 
@@ -139,13 +139,12 @@ interface ActivityModalForDonationProps {
 
 const ActivityModalForDonation: React.FC<ActivityModalForDonationProps> = ({ modeModel, onClose, activity }) => {
     const [userDetails, setUserDetails] = useState<User | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loadingUserDetails, setLoadingUserDetails] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                setLoading(true);
                 const userId = activity.receiverId || activity.giverId; // Check recipient first, fallback to giver
                 if (userId) {
                     const user = await getUserById(userId as string); // Fetch user details
@@ -157,7 +156,7 @@ const ActivityModalForDonation: React.FC<ActivityModalForDonationProps> = ({ mod
                 console.error("Failed to fetch user details:", err);
                 setError("Failed to fetch user details. Please try again.");
             } finally {
-                setLoading(false);
+                setLoadingUserDetails(true);
             }
         };
 
@@ -209,27 +208,30 @@ const ActivityModalForDonation: React.FC<ActivityModalForDonationProps> = ({ mod
                     </div>
 
                     <div className={styles.content}>
-                        {loading ? (
-                            <p className={styles.text}>טוען פרטי המשתמש...</p>
-                        ) : error ? (
-                            <p className={styles.text} style={{ color: 'red' }}>{error}</p>
-                        ) : userDetails ? (
-                            <div className={styles.description}>
-                                <h1 className={styles.reciverTitle}>
-                                    {activity.receiverId ? 'המקבל:' : 'הנותן:'}
-                                </h1>
-                                <div className={styles.profileIcon}>
-                                    <CiUser className={styles.icon} />
-                                </div>
-                                <p className={styles.text}>{userDetails.firstName} {userDetails.lastName}</p>
-                                <p className={styles.text}>{userDetails.gender === "male" ? "בן" : "בת"} {calculateAge(userDetails.dateOfBirth)}</p>
-                                <p className={styles.text}>{userDetails.address}</p>
-                                <p className={styles.text}>דוא"ל: {userDetails.email}</p>
-                                <p className={styles.text}>טלפון: {userDetails.phoneNumber}</p>
-                            </div>
-                        ) : (
-                            <p className={styles.text}>לא נמצאו פרטי משתמש.</p>
-                        )}
+                    {loadingUserDetails ? (
+                                     <div className={styles.loader}>
+                                        <MiniLoader />
+                                        <div className={styles.loaderTest}>טוען פרטי משתמש...</div>
+                                    </div>
+                                ) : error ? (
+                                    <p className={styles.text} style={{ color: 'red' }}>{error}</p>
+                                ) : userDetails ? (
+                                    <div className={styles.description}>
+                                        <h1 className={styles.reciverTitle}>
+                                            {activity.receiverId ? 'המקבל:' : 'הנותן:'}
+                                        </h1>
+                                        <div className={styles.profileIcon}>
+                                            <CiUser className={styles.icon} />
+                                        </div>
+                                        <p className={styles.text}>{userDetails.firstName} {userDetails.lastName}</p>
+                                        <p className={styles.text}>{userDetails.gender === "male" ? "בן" : "בת"} {calculateAge(userDetails.dateOfBirth)}</p>
+                                        <p className={styles.text}>{userDetails.address}</p>
+                                        <p className={styles.text}>דוא"ל: {userDetails.email}</p>
+                                        <p className={styles.text}>טלפון: {userDetails.phoneNumber}</p>
+                                    </div>
+                                ) : (
+                                    <p className={styles.text}>לא נמצאו פרטי משתמש.</p>
+                                )}
                     </div>
                 </div>
             </div>
