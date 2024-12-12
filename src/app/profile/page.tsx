@@ -1,16 +1,15 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { number, z } from 'zod';
-import styles from './profile.module.css';
-import { useUserStore } from '@/store/useUserStore';
-import { userSchema } from '@/validations/validationsClient/user';
-import { updateUser } from '@/services/users';
-import { FaEdit } from 'react-icons/fa';
-import { Activity } from '@/types/activity';
-import { getFilteringActivities } from '@/services/activities';
+"use client";
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { number, z } from "zod";
+import styles from "./profile.module.css";
+import { useUserStore } from "@/store/useUserStore";
+import { userSchema } from "@/validations/validationsClient/user";
+import { updateUser } from "@/services/users";
+import { FaEdit } from "react-icons/fa";
+import { Activity } from "@/types/activity";
+import { getFilteringActivities } from "@/services/activities";
 import { CiUser } from "react-icons/ci";
 import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 import PasswordModal from '@/components/PasswordModal/PasswordModal';
