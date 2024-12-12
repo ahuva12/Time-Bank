@@ -6,6 +6,9 @@ import { User } from "@/types/user";
 import { calculateAge } from "@/services/utils";
 import { CiUser } from "react-icons/ci";
 import { ErrorMessage, SuccessMessage } from '@/components';
+import { useEffect, useState } from 'react';
+import { getUserById } from '@/services/users'
+import { ObjectId } from 'mongodb';
 
 interface ActivityModalProps {
     modeModel: string;
@@ -24,6 +27,38 @@ interface ActivityModalProps {
 
 const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, handlesMoreOptions }) => {
     if (modeModel === 'close') return null;
+    const [userDetails, setUserDetails] = useState<User | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                setLoading(true);
+                let userId = user?._id;
+                if (activity.giverId !== user?._id)
+                    userId = activity.giverId; // Check recipient first, fallback to giver
+                else if (activity.receiverId)
+                    userId = activity.receiverId;
+                else {
+                    setUserDetails(null);
+                    return;
+                }
+                if (userId) {
+                    const user = await getUserById(userId as string); // Fetch user details
+                    setUserDetails(user);
+                } else {
+                    setUserDetails(null);
+                }
+            } catch (err) {
+                console.error("Failed to fetch user details:", err);
+                // setError("Failed to fetch user details. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserDetails();
+    }, [activity.giverId]);
 
     const renderButtons = () => {
         const buttonConfig = [
@@ -136,7 +171,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>תיאור</label>
-                                    <div className={styles.text}>{activity.description}</div>
+                                    <div className={`${styles.text} ${styles.textLimited}`}>{activity.description}</div>
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>מספר שעות</label>
@@ -155,9 +190,15 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                                 <div className={styles.profileIcon}>
                                     <CiUser className={styles.icon} />
                                 </div>
-                                <p className={styles.text}>{user?.firstName} {user?.lastName}</p>
-                                <p className={styles.text}>{user?.gender === "male" ? "בן" : "בת"} {calculateAge(user?.dateOfBirth ?? "0")}</p>
-                                <p className={styles.text}>{user?.address}</p>
+                                {userDetails ? (
+                                    <div className={styles.description}>
+                                        <p className={styles.text}>{userDetails?.firstName} {userDetails?.lastName}</p>
+                                        <p className={styles.text}>{userDetails?.address}</p>
+                                        <p className={styles.text}>{userDetails?.email}</p>
+                                    </div>
+                                ) : (<p>אף אחד עדיין לא בחר את הפעילות הזאת</p>)
+                                }
+
                             </div>
                         </div>
                     </div>

@@ -55,12 +55,15 @@ const registrationForActivity = async (activityId:ObjectId, giverId:ObjectId, re
             await session.abortTransaction();
             return NextResponse.json({ message: 'The activity is not in "proposed" status.' }, { status: 400 });
         }
-
+      
         const filter = {
-            _id: { $in: [giverId, receiverId] },
-            remainingHours: { $gte: activity.durationHours }, 
+            _id: { $in: [giverId, receiverId] },  
+            $or: [
+                { _id: receiverId, remainingHours: { $gte: activity.durationHours } },
+                { _id: giverId }, 
+            ],
         };
-        
+
         const updateRemainingHours = [
             {
                 $set: {
@@ -137,8 +140,11 @@ const unregisterForActivity = async (activityId:ObjectId, giverId:ObjectId, rece
         }
 
         const filter = {
-            _id: { $in: [giverId, receiverId] },
-            remainingHours: { $gte: activity.durationHours }, 
+            _id: { $in: [giverId, receiverId] },  
+            $or: [
+                { _id: giverId, remainingHours: { $gte: activity.durationHours } },
+                { _id: receiverId }, 
+            ],
         };
         
         const updateRemainingHours = [

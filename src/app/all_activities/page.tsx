@@ -7,6 +7,7 @@ import { getFilteringActivities, updateStatusActivity } from '@/services/activit
 import { useUserStore } from '@/store/useUserStore';
 import { Activity } from '@/types/activity';
 import { useAuthStore } from '@/store/authStore';
+import { registrationForActivity, RegistrationActivityPayload } from '@/services/registrationForActivity';
 
 const AllActivities = () => {
   const { user } = useUserStore();
@@ -55,26 +56,23 @@ const AllActivities = () => {
     }
   }, [activeTab, data, favorites]);
 
-    // if (!isLoggedIn && isInitialized) {
-    //     return (
-    //         <ErrorMessage
-    //         message_line1="אתה לא מחובר!"
-    //         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-    //         link='/home'
-    //         />
-    //     );
-    // }
-
-
-  const updateStatusMutation = useMutation({
-    mutationFn: updateStatusActivity,
-    onMutate: async ({ activityId }: { activityId: string }) => {
+  const registerForActivityMutation = useMutation({
+    mutationFn: registrationForActivity,
+    onMutate: async ({
+      activityId,
+      giverId,
+      receiverId,
+      status,
+    }: RegistrationActivityPayload) => {
       await queryClient.cancelQueries({ queryKey: ['allActivities'] });
+  
       const previousSavedActivities = queryClient.getQueryData<Activity[]>(['allActivities']);
+  
       queryClient.setQueryData<Activity[]>(
         ['allActivities'],
         (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
       );
+  
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
@@ -98,11 +96,12 @@ const AllActivities = () => {
     if (!selectedActivity) return;
     setIsModeCancellig(false);
     setModeActivityModel('success');
-    updateStatusMutation.mutate({
+    registerForActivityMutation.mutate({
       activityId: selectedActivity._id as string,
-      status: 'caughted',
+      giverId: selectedActivity.giverId as string,
       receiverId: user._id as string,
-    });
+      status: 'caughted',
+    });  
   };
 
   const handleToggleFavorite = (activityId: string, isFavorite: boolean) => {
@@ -128,7 +127,6 @@ const AllActivities = () => {
 
   const SideBar = () => (
     <div className={styles.container}>
-      {/* Sidebar */}
       <div className={styles.sidebar}>
         {tabs.map((tab) => (
           <div
@@ -143,6 +141,16 @@ const AllActivities = () => {
       </div>
     </div>
   );
+
+    if (!isLoggedIn && isInitialized) {
+      return (
+          <ErrorMessage
+          message_line1="אתה לא מחובר!"
+          message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+          link='/home'
+          />
+      );
+  }
 
   // Render content based on the query's state
   if (isError) {

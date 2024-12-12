@@ -85,7 +85,7 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
             </div>
           )}
         </div>
-        <p>{activity.description}</p>
+        <p className={styles.description}>{activity.description}</p>
         <div className={styles.tags}>
           {activity.tags.map((tag, index) => (
             <span key={index} className={styles.tag}>
