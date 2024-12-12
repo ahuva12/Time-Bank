@@ -1,89 +1,132 @@
-'use client';
-import React, { useState, useRef, useEffect } from 'react';
-import styles from './UserMenu.module.css';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useState, useRef, useEffect } from "react";
+import styles from "./UserMenu.module.css";
+import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/useUserStore";
 import { CiUser } from "react-icons/ci";
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore } from "@/store/authStore";
 import SuccessMessage from "../SuccessMessage/SuccessMessage";
+import { CgProfile } from "react-icons/cg";
+import { FaRegStar } from "react-icons/fa";
+import { FaHistory } from "react-icons/fa";
+import { TbLogout } from "react-icons/tb";
 
 export default function UserMenu() {
-    const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null); 
-    const router = useRouter();
-    const clearUser = useUserStore((state) => state.clearUser);
-    const { user } = useUserStore();
-    const { logout, isLoggedIn } = useAuthStore();
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State for success message
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const clearUser = useUserStore((state) => state.clearUser);
+  const { user } = useUserStore();
+  const { logout, isLoggedIn } = useAuthStore();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State for success message
 
-    const handleLogout = () => {
-        clearUser(); // Clear user data from Zustand store
-        logout();
-        router.push('/home'); 
-    };
+  const handleLogout = () => {
+    clearUser(); // Clear user data from Zustand store
+    logout();
+    router.push("/home");
+  };
 
-    const toggleDropdown = () => {
-        setIsOpen((prev) => !prev);
-    };
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+  };
 
-    const handleRedirect = (path: string) => {
-        router.push(path); // Redirect to the specified route
+  const handleRedirect = (path: string) => {
+    router.push(path); // Redirect to the specified route
+    setIsOpen(false);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
+      }
     };
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target as Node)
-            ) {
-                setIsOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    // Function to handle OK click from SuccessMessage
-    const handleOkClick = () => {
-      setShowSuccessMessage(false); // Hide success message
-      handleLogout(); // Perform logout and redirect to home
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
 
-    return (
-        <div className={styles.profileContainer} ref={dropdownRef}>
-            {/* Profile Icon */}
-            <div className={styles.userMenu} onClick={toggleDropdown}>
-                <div className={styles.profileIcon}>
-                    <CiUser className={styles.icon} />
-                </div>
-            </div>
+  // Function to handle OK click from SuccessMessage
+  const handleOkClick = () => {
+    setShowSuccessMessage(false); // Hide success message
+    handleLogout(); // Perform logout and redirect to home
+  };
+
+  return (
+    <div className={styles.profileContainer} ref={dropdownRef}>
+      {/* Profile Icon */}
+      <div className={styles.userMenu} onClick={toggleDropdown}>
+        <div className={styles.profileIcon}>
+          <CiUser className={styles.icon} />
+        </div>
+      </div>
 
       {/* Dropdown Menu */}
       {isOpen && (
         <div className={styles.dropdownMenu}>
-          <ul>
-            <li className={`${styles.welcomeItem} ${styles.noHover}`}>
-              <div>
-                שלום,&nbsp;
-                <span><strong>{user ? user.firstName : "משתמש"}</strong></span>
-              </div>
-              <div>
-                יתרת השעות שלי:&nbsp;
-                <span><strong>{user ? user.remainingHours : "אין נתונים"}</strong></span>
-              </div>
-            </li>
-            <li onClick={() => handleRedirect("profile")}>פרופיל</li>
-            <li onClick={() => handleRedirect("history")}>היסטוריה</li>
-            <li onClick={() => handleRedirect("saved_activities")}>
-              פעילויות שמורות
-            </li>
-            <li onClick={() => setShowSuccessMessage(true)}>התנתקות</li>
-          </ul>
+          <div className={styles.card}>
+            <ul className={styles.list}>
+              <li className={`${styles.staticElement} ${styles.noHover}`}>
+                <div className={styles.label}>
+                  <p className={styles.hello}>
+                    שלום,&nbsp;
+                    <span>{user ? user.firstName : "משתמש"}</span>
+                  </p>
+                  <p className={styles.hours}>
+                    יתרת השעות שלי:&nbsp;
+                    <span>
+                      <strong>
+                        {user ? user.remainingHours : "אין נתונים"}
+                      </strong>
+                    </span>
+                  </p>
+                </div>
+              </li>
+            </ul>
+            <div className={styles.separator}></div>
+
+            <ul className={styles.list}>
+              <li
+                className={styles.element}
+                onClick={() => handleRedirect("profile")}
+              >
+                <CgProfile />
+                <p className={styles.label}>פרופיל</p>
+              </li>
+              <li
+                className={styles.element}
+                onClick={() => handleRedirect("history")}
+              >
+                <FaHistory />
+                <p className={styles.label}>היסטוריה</p>
+              </li>
+              <li
+                className={styles.element}
+                onClick={() => handleRedirect("saved_activities")}
+              >
+                <FaRegStar />
+                <p className={styles.label}>פעילויות שמורות</p>
+              </li>
+            </ul>
+
+            <div className={styles.separator}></div>
+
+            <ul className={styles.list}>
+              <li
+                className={styles.logOut}
+                onClick={() => setShowSuccessMessage(true)}
+              >
+                <TbLogout className={styles.outLogo} />
+                <p className={styles.label}>התנתקות</p>
+              </li>
+            </ul>
+          </div>
         </div>
       )}
 
