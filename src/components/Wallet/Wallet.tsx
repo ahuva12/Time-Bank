@@ -8,6 +8,7 @@ interface WalletProps {
   hoursReceived: number;
   hoursRemaining?: number;
 }
+
 const Wallet: React.FC<WalletProps> = ({
   hoursGiven,
   hoursReceived,
