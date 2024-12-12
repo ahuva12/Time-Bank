@@ -171,7 +171,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>תיאור</label>
-                                    <div className={styles.text}>{activity.description}</div>
+                                    <div className={`${styles.text} ${styles.textLimited}`}>{activity.description}</div>
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>מספר שעות</label>
