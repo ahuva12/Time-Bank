@@ -2,9 +2,10 @@ import { create } from 'zustand';
 import { User } from '@/types/user';
 import { getUserById } from '@/services/users';
 
-interface AuthState {
+interface UserState {
   user: User;
   setUser: (user: User) => void;
+  setUserField: (field: string, value: string | number | Date) => void; 
   clearUser: () => void;
 }
 
@@ -21,7 +22,7 @@ const defaultUser: User = {
   remainingHours: 0,
 };
 
-export const useUserStore = create<AuthState>()((set) => {
+export const useUserStore = create<UserState>()((set) => {
   const initializeUser = async () => {
     if (typeof window !== 'undefined') {
       const userId = localStorage.getItem("UserId");
@@ -51,7 +52,14 @@ export const useUserStore = create<AuthState>()((set) => {
       }
       set({ user });
     },
-
+    setUserField: (field: string, value: string | number | Date) => {
+      set((state) => ({
+        user: {
+          ...state.user, 
+          [field]: value, 
+        },
+      }));
+    },
     clearUser: () => {
       localStorage.removeItem("UserId"); 
       set({ user: defaultUser });

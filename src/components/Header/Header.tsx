@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { Login, Register, UserMenu} from '@/components'; 
 
 export default function Header() {
-  console.log('render header')
   const { isLoggedIn, login, signup } = useAuthStore();
   const [isClient, setIsClient] = useState(false); 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
