@@ -52,6 +52,7 @@ const give = () => {
 
   const onClosePopUp = (): void => {
     setIsPopUpOpen(false); // Close the pop-up
+    queryClient.invalidateQueries({ queryKey: ["myDonation"] }); // Refetch activities data
   };
 
   // const queryClient = useQueryClient();

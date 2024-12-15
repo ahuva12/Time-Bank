@@ -137,6 +137,7 @@ export default function Home() {
             <Login
               closePopup={toggleLogin}
               setIsRegisterOpen={setIsRegisterOpen}
+              setIsLoginOpen={setIsLoginOpen}
             />
           </div>
         </div>

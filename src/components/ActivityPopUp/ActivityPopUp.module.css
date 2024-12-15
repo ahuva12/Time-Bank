@@ -19,6 +19,12 @@
     border-bottom: 2px solid #048ebc;
 }
 
+.tagSelector {
+    width: 375px;
+    height: 50px;
+    align-self: center;
+}
+
 .button {
     background-color: #048ebc;
     color: white;

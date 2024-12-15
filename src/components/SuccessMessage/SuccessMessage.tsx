@@ -7,10 +7,11 @@ interface SuccessMessageProps {
     message_line1: string;
     message_line2: string;
     message_line3?: string;
+    message_line4?:string
     onOkClick?: Function; // Function to call when OK is clicked
 }
 
-const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_line2, message_line3, onOkClick }) => {
+const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_line2, message_line3, message_line4, onOkClick }) => {
 
     const [isShow, setIsShow] = useState<boolean>(true);
 
@@ -24,7 +25,7 @@ const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_
         isShow && (
             <div className={styles.overlay}>
                 <div className={styles.modalSucc}>
-                    <button className={styles.closeButton} onClick={() => setIsShow(false)}>
+                    <button className={styles.closeButton} onClick={handleOkClick}>
                         ✕
                     </button>
                     <div className={styles.iconSucc}>
@@ -40,6 +41,8 @@ const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_
                                 {message_line3}
                             </>
                         )}
+                        <br />
+                        {message_line4}
                     </p>
                     <button className={styles.buttonSucc} onClick={handleOkClick}>
                         OK

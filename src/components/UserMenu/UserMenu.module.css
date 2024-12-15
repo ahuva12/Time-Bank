@@ -29,51 +29,121 @@
   cursor: pointer;
 }
 
-/* Dropdown Menu */
 .dropdownMenu {
   position: absolute;
   top: 50px;
-  /* Adjust as needed to position below the icon */
   right: 30px;
-  /* Increase this value to move it left */
-  background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  width: 180px;
+  box-shadow: 2px 4px 10px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 200px;
   z-index: 100;
 }
 
-.welcomeItem {
-  background-color: #e0f5f8;
-  padding: 10px 15px;
-  font-size: 1rem;
-  color: #333;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+.card {
+  width: 200px;
+  background-color: white;
+  background-color: #e7f1f2;
+  border-radius: 10px;
+  padding: 15px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.welcomeItem div {
-  margin-bottom: 5px;
+.card .separator {
+  border-top: 1.5px solid #42434a;
 }
 
-/* Dropdown Menu Styling */
-.dropdownMenu ul {
+.card .list {
   list-style-type: none;
-  padding: 0;
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0px 10px;
 }
 
-.dropdownMenu li {
-  padding: 10px;
+.card .list .element {
+  display: flex;
+  align-items: center;
+  color: #7e8590;
+  gap: 10px;
+  transition: all 0.3s ease-out;
+  padding: 4px 7px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.dropdownMenu li:hover {
-  background-color: #f0f0f0;
+.card .list .element svg {
+  width: 19px;
+  height: 19px;
+  transition: all 0.3s ease-out;
 }
 
-.noHover {
-  pointer-events: none;
+.card .list .element .label {
+  font-weight: 600;
+}
+
+.card .list .element:hover {
+  background-color: #9ad0e1;
+  color: #000000;
+  transform: translate(1px, -1px);
+}
+
+.card .list .element:active {
+  transform: scale(0.99);
+}
+
+.logOut {
+  color: #e53935; 
+  font-weight: 600;
+  gap: 10px;
+  transition: all 0.3s ease-out;
+  padding: 4px 7px;
+  border-radius: 6px; 
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.logOut:hover {
+  background-color: #ffcccc; 
+  color: #b71c1c; 
+  transform: translate(1px, -1px); 
+}
+
+.logOut:active {
+  background-color: #e53935; 
+  color: #ffffff; 
+  transform: scale(0.99); 
+}
+
+.staticElement {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 7px;
+  border-radius: 6px;
+  cursor: default; 
+  color: #048ebc; 
+  font-weight: 600;
+}
+
+.staticElement:hover {
+  color: #048ebc; 
+  transform: none; 
+}
+
+.staticElement .label {
+  margin: 0; 
+  padding: 0; 
+  line-height: 1.2; 
+}
+
+.hello {
+  padding-bottom: 0.5rem;
+}
+
+.outLogo {
+  width: 1.5vw;
+  height: auto;
 }
