@@ -107,7 +107,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="ביטול הפעילות התקבל בהצלחה"
-                    message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours !== undefined ? (user.remainingHours + activity.durationHours) : 'undefined'}`}
+                    message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours}`}
                     />
             );
         }
@@ -125,33 +125,24 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="הפעילות שלך נמחקה בהצלחה"
-                    message_line2={`תמיד נשמח לקבל פרגונים במייל TimeBank@gmail.com`}
+                    message_line2={`תמיד נשמח לקבל פרגונים במייל Timerepublic@gmail.com`}
                 />
             );
         }
 
         if (handlesMoreOptions.handleRegistrationActivity) {
-            if (user?.remainingHours && user.remainingHours >= activity.durationHours) {
-                return (
-                    <SuccessMessage
-                        message_line1="נרשמת לפעילות בהצלחה!"
-                        message_line2={`הודענו על כך ל${userDetails?.firstName} ${userDetails?.lastName}`}
-                        message_line3={
-                            userDetails?.gender === 'female'
-                                ? `תוכל ליצור איתה קשר בטלפון: ${userDetails?.phoneNumber}`
-                                : `תוכל ליצור איתו קשר בטלפון: ${userDetails?.phoneNumber}`
-                        }
-                        message_line4={`או במייל ${userDetails?.email}`}
-                    />
-                );
-            } else {
-                return (
-                    <ErrorMessage
-                        message_line1=".אין אפשרות להשלים את הפעולה"
-                        message_line2="יתרת השעות שברשותך קטנה מהדרוש עבור פעילות זו."
-                    />
-                );
-            }
+            return (
+                <SuccessMessage
+                    message_line1="נרשמת לפעילות בהצלחה!"
+                    message_line2={`הודענו על כך ל${userDetails?.firstName} ${userDetails?.lastName}`}
+                    message_line3={
+                        userDetails?.gender === 'female'
+                            ? `תוכל ליצור איתה קשר בטלפון: ${userDetails?.phoneNumber}`
+                            : `תוכל ליצור איתו קשר בטלפון: ${userDetails?.phoneNumber}`
+                    }
+                    message_line4={`או במייל ${userDetails?.email}`}
+                />
+            );
         }
 
         return null;
@@ -188,8 +179,8 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                             </div>
                         </div>
 
-                        <div className={styles.content}>
-                            <div className={styles.description}>
+                        <div>
+                            <div className={styles.userDetailsDescription}>
                                 <div className={styles.profileIcon}>
                                     <CiUser className={styles.icon} />
                                 </div>
