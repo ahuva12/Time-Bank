@@ -165,6 +165,7 @@ const unregisterForActivity = async (activityId:ObjectId, giverId:ObjectId, rece
 
         if (updateResult.modifiedCount !== 2) {
             await session.abortTransaction();
+            console.log(updateResult)
             return NextResponse.json({ message: "Updating remainingHours failed, transaction aborted" }, { status: 400 });
         }
 
@@ -179,6 +180,7 @@ const unregisterForActivity = async (activityId:ObjectId, giverId:ObjectId, rece
         );
 
         if (updateStatusResult.modifiedCount !== 1) {
+            console.log(updateStatusResult)
             await session.abortTransaction();
             return NextResponse.json({ message: "Updating activity failed, transaction aborted" }, { status: 400 });
         }
