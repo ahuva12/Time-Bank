@@ -107,8 +107,8 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="ביטול הפעילות התקבל בהצלחה"
-                    message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours}`}
-                />
+                    message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours !== undefined ? (user.remainingHours + activity.durationHours) : 'undefined'}`}
+                    />
             );
         }
 
@@ -116,7 +116,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="עדכון פרטי הפעילות התבצע בהצלחה"
-                    message_line2={`תמיד נשמח לקבל פרגונים במייל TimeBank@gmail.com`}
+                    message_line2={`תמיד נשמח לקבל פרגונים במייל Timerepublic@gmail.com`}
                 />
             );
         }

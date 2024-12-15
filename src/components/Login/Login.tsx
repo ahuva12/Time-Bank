@@ -51,7 +51,6 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
   };
 
   const handleOkClick = () => {
-    setShowSuccessMessage(false);
     setIsLoginOpen(false)
     login(); 
   };
@@ -99,7 +98,7 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
     {showSuccessMessage && (
       <SuccessMessage
         message_line1="התחברת בהצלחה!"
-        message_line2="מוזמן להתחיל לגלוש ולראות מה חדש:)"
+        message_line2="כעת תוכל להתחיל לגלוש ולראות מה חדש:)"
         onOkClick={handleOkClick}
       />
     )}
