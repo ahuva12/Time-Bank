@@ -65,6 +65,12 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.container}>
         <h1 className={styles.title}>התחברות</h1>
+        
+        {isLoader && (
+        <div className={styles.loader}>
+          <MiniLoader/>
+        </div>)}
+
       <input className={styles.inputFields}
         type="email"
         placeholder="אמייל"
@@ -101,11 +107,6 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
         message_line2="כעת תוכל להתחיל לגלוש ולראות מה חדש:)"
         onOkClick={handleOkClick}
       />
-    )}
-    {isLoader && (
-      <div className={styles.loader}>
-          <MiniLoader/>
-      </div>
     )}
     </>
   );

@@ -179,8 +179,8 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                             </div>
                         </div>
 
-                        <div className={styles.content}>
-                            <div className={styles.description}>
+                        <div>
+                            <div className={styles.userDetailsDescription}>
                                 <div className={styles.profileIcon}>
                                     <CiUser className={styles.icon} />
                                 </div>
