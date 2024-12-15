@@ -4,9 +4,10 @@ import {
   Activities,
   Loader,
   ErrorMessage,
+  SuccessMessage,
   ActivityModal,
   MyDonation,
-  ActivityPopUp,
+  ActivityForm,
 } from "@/components";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities } from "@/services/activities";
@@ -32,6 +33,7 @@ const give = () => {
   );
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
+  const [isSuccessMessage, setIsSuccessMessage] = useState<boolean>(false);
   const [isPopUpOpen, setIsPopUpOpen] = useState<boolean>(false);
   const [isAddingActivity, setIsAddingActivity] = useState<boolean>(false);
 
@@ -133,13 +135,27 @@ const give = () => {
             <button className={styles.closeButton} onClick={onClosePopUp}>
               ×
             </button>
-            <ActivityPopUp
+            {/* <ActivityPopUp activity={selectedActivity} closePopup={onClosePopUp} /> */}
+            <ActivityForm
               activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
               closePopup={onClosePopUp}
+              setIsSuccessMessage={setIsSuccessMessage}
               isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
             />
           </div>
         </div>
+      )}
+      {isSuccessMessage && isAddingActivity && (
+        <SuccessMessage
+        message_line1="איזה כיף! הפעילות שלך נוספה בהצלחה"
+        message_line2={"נעדכן אותך כשמישהו ירשם אליה"}
+        />      
+      )}
+      {isSuccessMessage && !isAddingActivity && (
+        <SuccessMessage
+        message_line1="פרטי הפעילות שלך עודכנו בהצלחה:)"
+        message_line2={"נעדכן אותך כשמישהו ירשם אליה"}
+        />      
       )}
     </div>
   );

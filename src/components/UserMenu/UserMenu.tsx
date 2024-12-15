@@ -18,13 +18,7 @@ export default function UserMenu() {
   const clearUser = useUserStore((state) => state.clearUser);
   const { user } = useUserStore();
   const { logout, isLoggedIn } = useAuthStore();
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State for success message
-
-  const handleLogout = () => {
-    clearUser(); // Clear user data from Zustand store
-    logout();
-    router.push("/home");
-  };
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -52,11 +46,10 @@ export default function UserMenu() {
     };
   }, []);
 
-  // Function to handle OK click from SuccessMessage
-  const handleOkClick = () => {
-    setShowSuccessMessage(false); // Hide success message
-    handleLogout(); // Perform logout and redirect to home
-  };
+  const handleLogOut = () => {
+    clearUser();
+    setShowSuccessMessage(true); 
+  }
 
   return (
     <div className={styles.profileContainer} ref={dropdownRef}>
@@ -120,7 +113,7 @@ export default function UserMenu() {
             <ul className={styles.list}>
               <li
                 className={styles.logOut}
-                onClick={() => setShowSuccessMessage(true)}
+                onClick={handleLogOut}
               >
                 <TbLogout className={styles.outLogo} />
                 <p className={styles.label}>התנתקות</p>
@@ -135,7 +128,7 @@ export default function UserMenu() {
         <SuccessMessage
           message_line1="התנתקת בהצלחה!"
           message_line2="נשמח לראותך שוב בקרוב:)"
-          onOkClick={handleOkClick} // Pass the handleOkClick function as a prop
+          onOkClick={logout} 
         />
       )}
     </div>

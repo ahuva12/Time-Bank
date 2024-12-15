@@ -10,6 +10,7 @@ import { registerUser } from "@/services/users";
 import { User } from "@/types/user";
 import SuccessMessage from "../SuccessMessage/SuccessMessage";
 
+
 interface RegisterProps {
   closePopup: () => void;
   setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,6 +20,8 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
   const [successMessage, setSuccessMessage] = useState<string>(""); // State for success message
   const [error, setError] = useState<string>("");
   const router = useRouter();
+
+
 
   const {
     register,
@@ -58,6 +61,36 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
     router.push('home'); // Redirect to home page
   };
 
+
+
+  //השלמה אוטומטית 
+  const [addressSuggestions, setAddressSuggestions] = useState<string[]>([]);
+
+  const handleAddressInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    if (input.length > 2) {  // נבצע את הקריאה רק אם המשתמש הקליד לפחות 3 תווים
+      try {
+        // קריאה ל-Geoapify API
+        const response = await fetch(
+          `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(input)}&apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY}`
+        );
+        const data = await response.json();
+        // הצגת ההשלמות
+        setAddressSuggestions(data.features.map((feature: any) => feature.properties.formatted));
+      } catch (err) {
+        console.error("Error fetching address suggestions:", err);
+      }
+    } else {
+      setAddressSuggestions([]); // אם לא הוקלד מספיק תווים, נמחק את ההשלמות
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setAddressSuggestions([]);
+  };
+
+
+
   return (
     <>
       {successMessage && (
@@ -90,9 +123,31 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
             className={Styles.inputFields}
             type="text"
             placeholder="כתובת"
-            {...register("address")}
+            {...register("address",{
+              onChange: (e) =>{
+                handleAddressInputChange(e)
+              }
+            })}
           />
           {errors.address && <p>{errors.address.message}</p>}
+
+          {addressSuggestions.length > 0 && (
+            <ul className={Styles.suggestions}>
+              {addressSuggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  style={{
+                    cursor: "pointer",
+                    padding: "8px",
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  {suggestion}
+                </li>
+              ))}
+            </ul>
+          )}
 
           <input
             className={Styles.inputFields}
