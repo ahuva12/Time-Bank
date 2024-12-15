@@ -2,12 +2,10 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ActivityCard.module.css";
 import { Activity } from "@/types/activity";
-
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { updateStatusActivity, updateActivity } from '@/services/activities';
+import { updateStatusActivity } from '@/services/activities';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-
-
+import { WarningMessage } from '@/components';
 
 interface ActivityCardProps {
   activity: Activity;
@@ -22,7 +20,8 @@ interface ActivityCardProps {
 }
 
 const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onToggleFavorite, isGeneral }: ActivityCardProps) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isWarningMessage, setIsWarningMessage] = useState<boolean>(false);
 
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
@@ -41,7 +40,7 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
     handlesMoreOptions?.onUpdate();
   };
 
-  const onDelete = async (): Promise<void> => {
+  const deleteActivity = async (): Promise<void> => {
     try {
       console.log({
         activityId: activity._id as string,
@@ -54,6 +53,8 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
         receiverId: null,
       });
       console.log("Activity deleted successfully!");
+      setIsWarningMessage(false)
+
     } catch (error) {
       console.error("Error deleting activity:", error);
     }
@@ -81,11 +82,11 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
           {flag && (
             <div className={styles.icons}>
               <FaEdit className={styles.editIcon} onClick={onUpdate} />
-              <FaTrash className={styles.editIcon} onClick={onDelete} />
+              <FaTrash className={styles.editIcon} onClick={() => setIsWarningMessage(true)} />
             </div>
           )}
         </div>
-        <p>{activity.description}</p>
+        <p className={styles.description}>{activity.description}</p>
         <div className={styles.tags}>
           {activity.tags.map((tag, index) => (
             <span key={index} className={styles.tag}>
@@ -97,6 +98,11 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
       <button className={styles.link} onClick={onMoreDetails}>
         פרטים נוספים
       </button>
+      {flag && isWarningMessage && (
+        <WarningMessage message="אתה בטוח שברצונך למחוק את הפעילות?" 
+                        okfunction={deleteActivity} 
+                        setIsWarningMessage={setIsWarningMessage}/> 
+      )}
 
     </div>
   );

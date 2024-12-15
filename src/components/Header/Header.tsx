@@ -72,7 +72,9 @@ export default function Header() {
               >
                 ×
               </button>
-              <Login closePopup={toggleLogin} setIsRegisterOpen={setIsRegisterOpen}/>
+              <Login closePopup={toggleLogin} 
+                      setIsRegisterOpen={setIsRegisterOpen}
+                      setIsLoginOpen={setIsLoginOpen}/>
             </div>
           </div>
         )}

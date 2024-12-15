@@ -4,11 +4,12 @@ import { useUserStore } from "@/store/useUserStore";
 import Styles from './ActivityPopUp.module.css';
 import { postActivity, updateActivity } from '@/services/activities'; // Add createActivity
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
+import TagSelector from "../TagSelector/TagSelector";
+import { strict } from "assert";
 
 export default function ActivityPopUp({ activity, closePopup, isNew = false }) {
   const [nameActivity, setNameActivity] = useState(activity.nameActivity || "");
-  const [tags, setTags] = useState(activity.tags || "");
+  const [tags, setTags] = useState(activity.tags || []);
   const [numberOfHours, setNumberOfHours] = useState(activity.durationHours || "");
   const [description, setDescription] = useState(activity.description || "");
   const [error, setError] = useState("");
@@ -48,6 +49,12 @@ export default function ActivityPopUp({ activity, closePopup, isNew = false }) {
       queryClient.invalidateQueries({ queryKey: ['activities'] });
     },
   });
+
+  const handleTagChange = (newTags) => {
+    
+    setTags(newTags.join(', '));
+    console.log(newTags, tags);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,14 +98,15 @@ export default function ActivityPopUp({ activity, closePopup, isNew = false }) {
           onChange={(e) => setNameActivity(e.target.value)}
           required
         />
-        <input
+        <TagSelector className={Styles.tagSelector} existingTags={activityTags} tags={tags} onTagsChange={handleTagChange} />
+        {/* <input
           className={Styles.inputFields}
           type="text"
           placeholder="תגיות"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
           required
-        />
+        /> */}
         <input
           className={Styles.inputFields}
           type="number"
@@ -123,3 +131,47 @@ export default function ActivityPopUp({ activity, closePopup, isNew = false }) {
     </form>
   );
 }
+
+
+const activityTags = [
+  "ספורט",
+  "טיולים",
+  "אומנות",
+  "מוזיקה",
+  "בישול",
+  "קריאה",
+  "ריקוד",
+  "משחקים",
+  "גינון",
+  "צילום",
+  "עבודות יד",
+  "התנדבות",
+  "לימודים",
+  "מדיטציה",
+  "כושר",
+  "יוגה",
+  "קולנוע",
+  "תיאטרון",
+  "טכנולוגיה",
+  "מחשבים",
+  "עיצוב",
+  "רכיבה על אופניים",
+  "שחייה",
+  "ברידג'/שחמט",
+  "כתיבה יוצרת",
+  "אופנה",
+  "נסיעות",
+  "בריאות ורווחה",
+  "משחקי מחשב",
+  "מלאכת יד",
+  "קרמיקה",
+  "לימודי שפה",
+  "טיול בטבע",
+  "קמפינג",
+  "פאזלים",
+  "חקר היסטוריה",
+  "אירועים חברתיים",
+  "ספרות",
+  "אסטרונומיה",
+  "הופעות מוזיקה"
+];

@@ -7,6 +7,7 @@ import { useUserStore } from '@/store/useUserStore';
 import { useAuthStore } from '@/store/authStore';
 import { useState, useEffect } from 'react';
 import { Activity } from '@/types/activity';
+import { registrationForActivity, RegistrationActivityPayload } from '@/services/registrationForActivity';
 
 const SavedActivities = () => {
   const { user } = useUserStore();
@@ -29,7 +30,7 @@ const SavedActivities = () => {
     enabled: isLoggedIn, 
   });
 
-  const updateStatusMutation = useMutation({
+  const acceptActivityMutation = useMutation({
     mutationFn: updateStatusActivity,
     onMutate: async ({ activityId }: { activityId: string }) => {
       await queryClient.cancelQueries({ queryKey: ['savedActivities'] });
@@ -48,6 +49,37 @@ const SavedActivities = () => {
       queryClient.invalidateQueries({ queryKey: ['savedActivities'] });
     },
   });
+
+  const unregisterForActivityMutation = useMutation({
+    mutationFn: registrationForActivity,
+    onMutate: async ({
+      activityId,
+      giverId,
+      receiverId,
+      status,
+    }: RegistrationActivityPayload) => {
+      await queryClient.cancelQueries({ queryKey: ['allActivities'] });
+  
+      const previousSavedActivities = queryClient.getQueryData<Activity[]>(['allActivities']);
+  
+      queryClient.setQueryData<Activity[]>(
+        ['allActivities'],
+        (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
+      );
+  
+      return { previousSavedActivities };
+    },
+    onError: (error, variables, context: any) => {
+      if (context?.previousSavedActivities) {
+        queryClient.setQueryData(['allActivities'], context.previousSavedActivities);
+      }
+      setModeActivityModel('error');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['allActivities'] });
+    },
+  });
+
   
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
@@ -59,7 +91,7 @@ const SavedActivities = () => {
     if (!selectedActivity) return;
     setIsModeCancellig(false)
     setModeActivityModel('success');
-    updateStatusMutation.mutate({
+    acceptActivityMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'accepted',
       receiverId: user._id as string,
@@ -70,11 +102,12 @@ const SavedActivities = () => {
     if (!selectedActivity) return;
     setIsModeCancellig(true)
     setModeActivityModel('success');
-    updateStatusMutation.mutate({
+    unregisterForActivityMutation.mutate({
       activityId: selectedActivity._id as string,
-      status: 'proposed',
+      giverId: selectedActivity.giverId as string,
       receiverId: user._id as string,
-    });
+      status: 'proposed',
+    });  
   };
 
   const closeModal = () => {
@@ -102,7 +135,7 @@ const SavedActivities = () => {
     <div className={styles.savedActivities}>
       <h1 className={styles.title}>הפעילויות השמורות שלי</h1>
       <h3 className={styles.explain}>
-      בעמוד זה תוכלו לראות את כל הפעילויות שאליהן נרשמתם אך עדיין לא השתתפתם בהן בפועל.      </h3>
+      כאן תוכלו לראות את כל הפעילויות שאליהן נרשמתם אך עדיין לא השתתפתם בהן בפועל.      </h3>
       {(isLoading || isFetching) ? (
         <Loader />
       ) : (
