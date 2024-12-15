@@ -70,7 +70,7 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
         <div className={styles.loader}>
           <MiniLoader/>
         </div>)}
-
+        
       <input className={styles.inputFields}
         type="email"
         placeholder="אמייל"

@@ -9,20 +9,12 @@ import { Login, Register, UserMenu} from '@/components';
 
 export default function Header() {
   const { isLoggedIn, login, signup } = useAuthStore();
-  const [isClient, setIsClient] = useState(false); 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   
-  useEffect(() => {
-    setIsClient(true);
-  }, [])
-
   const toggleLogin = () => setIsLoginOpen((prev) => !prev);
   const toggleRegister = () => setIsRegisterOpen((prev) => !prev);
 
-  if (!isClient) {
-    return null; 
-  }
 
   if (isLoggedIn) {
     return (
