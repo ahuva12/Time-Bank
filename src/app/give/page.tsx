@@ -4,15 +4,16 @@ import {
   Activities,
   Loader,
   ErrorMessage,
+  SuccessMessage,
   ActivityModal,
   MyDonation,
-  ActivityPopUp,
+  ActivityForm,
 } from "@/components";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities } from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from '@/store/authStore';
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Activity } from "@/types/activity";
 import { FaPlus } from "react-icons/fa";
 
@@ -23,7 +24,7 @@ const give = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-      setIsInitialized(true); 
+    setIsInitialized(true);
   }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
@@ -32,6 +33,7 @@ const give = () => {
   );
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
+  const [isSuccessMessage, setIsSuccessMessage] = useState<boolean>(false);
   const [isPopUpOpen, setIsPopUpOpen] = useState<boolean>(false);
   const [isAddingActivity, setIsAddingActivity] = useState<boolean>(false);
 
@@ -46,15 +48,10 @@ const give = () => {
     setIsPopUpOpen(true); // Open the pop-up
   };
 
-  // const onUpdate = () => {
-  //   setIsPopUpOpen(true); // Open the pop-up
-  // };
-
   const onClosePopUp = (): void => {
     setIsPopUpOpen(false); // Close the pop-up
+    queryClient.invalidateQueries({ queryKey: ["myDonation"] }); // Refetch activities data
   };
-
-  // const queryClient = useQueryClient();
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonatiom"],
@@ -95,8 +92,6 @@ const give = () => {
 
   return (
     <div className={styles.savedActivities}>
-      {/* <MyDonation></MyDonation> */}
-      {/* <ActivityPopUp activity={selectedActivity}></ActivityPopUp> */}
       <div className={styles.headerCom}>
         <div className={styles.textContainer}>
           <h1 className={styles.title}>מה אני תורם</h1>
@@ -113,7 +108,6 @@ const give = () => {
           </div>
         </button>
       </div>
-
       {isLoading || isFetching ? (
         <Loader />
       ) : (
@@ -142,13 +136,26 @@ const give = () => {
               ×
             </button>
             {/* <ActivityPopUp activity={selectedActivity} closePopup={onClosePopUp} /> */}
-            <ActivityPopUp
+            <ActivityForm
               activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
               closePopup={onClosePopUp}
+              setIsSuccessMessage={setIsSuccessMessage}
               isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
             />
           </div>
         </div>
+      )}
+      {isSuccessMessage && isAddingActivity && (
+        <SuccessMessage
+        message_line1="איזה כיף! הפעילות שלך נוספה בהצלחה"
+        message_line2={"נעדכן אותך כשמישהו ירשם אליה"}
+        />      
+      )}
+      {isSuccessMessage && !isAddingActivity && (
+        <SuccessMessage
+        message_line1="פרטי הפעילות שלך עודכנו בהצלחה:)"
+        message_line2={"נעדכן אותך כשמישהו ירשם אליה"}
+        />      
       )}
     </div>
   );
