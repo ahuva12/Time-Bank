@@ -21,7 +21,7 @@ type LoginFormFileds = {
 }
 
 const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLoginOpen }) => {
-  const { login } = useAuthStore();
+  const { setLogin } = useAuthStore();
   const { setUser } = useUserStore();
   const [error, setError] = useState("");
   const [isLoader, setIsLoader] = useState(false); 
@@ -52,7 +52,7 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
 
   const handleOkClick = () => {
     setIsLoginOpen(false)
-    login(); 
+    setLogin(); 
   };
 
   const goRegister = () => {
@@ -70,7 +70,7 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
         <div className={styles.loader}>
           <MiniLoader/>
         </div>)}
-
+        
       <input className={styles.inputFields}
         type="email"
         placeholder="אמייל"
