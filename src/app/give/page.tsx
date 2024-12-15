@@ -12,7 +12,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities } from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from '@/store/authStore';
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Activity } from "@/types/activity";
 import { FaPlus } from "react-icons/fa";
 
@@ -23,7 +23,7 @@ const give = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-      setIsInitialized(true); 
+    setIsInitialized(true);
   }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
@@ -46,16 +46,10 @@ const give = () => {
     setIsPopUpOpen(true); // Open the pop-up
   };
 
-  // const onUpdate = () => {
-  //   setIsPopUpOpen(true); // Open the pop-up
-  // };
-
   const onClosePopUp = (): void => {
     setIsPopUpOpen(false); // Close the pop-up
     queryClient.invalidateQueries({ queryKey: ["myDonation"] }); // Refetch activities data
   };
-
-  // const queryClient = useQueryClient();
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonatiom"],
@@ -96,8 +90,6 @@ const give = () => {
 
   return (
     <div className={styles.savedActivities}>
-      {/* <MyDonation></MyDonation> */}
-      {/* <ActivityPopUp activity={selectedActivity}></ActivityPopUp> */}
       <div className={styles.headerCom}>
         <div className={styles.textContainer}>
           <h1 className={styles.title}>מה אני תורם</h1>
@@ -114,7 +106,6 @@ const give = () => {
           </div>
         </button>
       </div>
-
       {isLoading || isFetching ? (
         <Loader />
       ) : (
@@ -142,7 +133,6 @@ const give = () => {
             <button className={styles.closeButton} onClick={onClosePopUp}>
               ×
             </button>
-            {/* <ActivityPopUp activity={selectedActivity} closePopup={onClosePopUp} /> */}
             <ActivityPopUp
               activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
               closePopup={onClosePopUp}
