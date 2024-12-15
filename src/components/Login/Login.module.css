@@ -115,6 +115,7 @@
   margin: auto;
 }
 
+
 .socialAccountContainer .socialAccounts .socialButton:hover {
   transform: scale(1.2);
 }
@@ -135,6 +136,7 @@
   color: #0099ff;
   font-size: 9px;
 }
+
 
 .closeButton {
   position: absolute;
@@ -169,5 +171,28 @@
   display: flex;
   flex-direction: column;
   position: relative;
+
 }
+
+.button {
+    background-color: #048ebc;
+    color: white;
+    border-radius: 10px;
+    width: 100px;
+    height: 35px;
+    margin-right: 50px;
+}
+.registerText {
+    font-size: small;
+}
+
+.loader {
+    width: 0px;
+    height: 0px;
+    position: relative;
+    bottom: 235px;
+    right: 220px;
+    z-index: 9999;
+}
+
 

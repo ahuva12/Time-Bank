@@ -57,7 +57,36 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
     closePopup(); // Close the register popup
     router.push("home"); // Redirect to home page
   };
- 
+
+  const [addressSuggestions, setAddressSuggestions] = useState<string[]>([]);
+
+  const handleAddressInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const input = e.target.value;
+    if (input.length > 2) {
+      try {
+        const response = await fetch(
+          `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
+            input
+          )}&apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY}`
+        );
+        const data = await response.json();
+        setAddressSuggestions(
+          data.features.map((feature: any) => feature.properties.formatted)
+        );
+      } catch (err) {
+        console.error("Error fetching address suggestions:", err);
+      }
+    } else {
+      setAddressSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setAddressSuggestions([]);
+  };
+
   return (
     <>
       {successMessage && (
@@ -101,10 +130,31 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
               className={Styles.input}
               type="text"
               placeholder="כתובת"
-              {...register("address")}
+              {...register("address", {
+                onChange: (e) => {
+                  handleAddressInputChange(e);
+                },
+              })}
             />
             {errors.address && (
               <p className={Styles.errorMessage}>{errors.address.message}</p>
+            )}
+            {addressSuggestions.length > 0 && (
+              <ul className={Styles.suggestions}>
+                {addressSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    style={{
+                      cursor: "pointer",
+                      padding: "8px",
+                      borderBottom: "1px solid #ccc",
+                    }}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
           <div className={Styles.fieldContainer}>

@@ -27,6 +27,10 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
             setError("הסיסמאות החדשות לא תואמות");
             return;
         }
+        if (oldPassword === newPassword) {
+            setError("הסיסמא החדשה זהה לסיסמא הישנה");
+            return;
+        }
         const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
         onSubmit(hashedPassword);
         onClose();

@@ -8,10 +8,12 @@ export { default as ActivityModal } from './ActivityModal/ActivityModal';
 export { default as Loader } from './Loader/Loader';
 export { default as ErrorMessage } from './ErrorMessage/ErrorMessage';
 export { default as SuccessMessage } from './SuccessMessage/SuccessMessage';
-export { default as ActivityModalForDonation } from './ActivityModalForDonation/ActivityModalForDonation';
 export { default as Register } from './Register/Register';
 export { default as MyDonation} from './MyDonation/MyDonation';
-export { default as ActivityPopUp} from './ActivityPopUp/ActivityPopUp';
+export { default as ActivityForm} from './ActivityForm/ActivityForm';
+export { default as MiniLoader} from './MiniLoader/MiniLoader';
+export { default as WarningMessage} from './WarningMessage/WarningMessage';
+
 
 
 

@@ -5,10 +5,9 @@ import { Activity } from "@/types/activity";
 import { User } from "@/types/user";
 import { calculateAge } from "@/services/utils";
 import { CiUser } from "react-icons/ci";
-import { ErrorMessage, SuccessMessage } from '@/components';
+import { ErrorMessage, SuccessMessage, MiniLoader } from '@/components';
 import { useEffect, useState } from 'react';
 import { getUserById } from '@/services/users'
-import { ObjectId } from 'mongodb';
 
 interface ActivityModalProps {
     modeModel: string;
@@ -28,12 +27,11 @@ interface ActivityModalProps {
 const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, handlesMoreOptions }) => {
     if (modeModel === 'close') return null;
     const [userDetails, setUserDetails] = useState<User | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loadingUserDetails, setLoadingUserDetails] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                setLoading(true);
                 let userId = user?._id;
                 if (activity.giverId !== user?._id)
                     userId = activity.giverId; // Check recipient first, fallback to giver
@@ -53,12 +51,12 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                 console.error("Failed to fetch user details:", err);
                 // setError("Failed to fetch user details. Please try again.");
             } finally {
-                setLoading(false);
+                setLoadingUserDetails(false);
             }
         };
 
         fetchUserDetails();
-    }, [activity.giverId]);
+    }, []);
 
     const renderButtons = () => {
         const buttonConfig = [
@@ -100,7 +98,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                 <SuccessMessage
                     message_line1="שמחים שנהנית :)"
                     message_line2={`יתרת השעות שלך עומדת על: ${user?.remainingHours}`}
-                    message_line3={`תמיד נשמח לקבל משוב על הפעילות במייל TimeBank@gmail.com`}
+                    message_line3={`תמיד נשמח לקבל משוב על הפעילות במייל Timerepublic@gmail.com`}
                 />
             );
         }
@@ -109,8 +107,8 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="ביטול הפעילות התקבל בהצלחה"
-                    message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours}`}
-                />
+                    message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours !== undefined ? (user.remainingHours + activity.durationHours) : 'undefined'}`}
+                    />
             );
         }
 
@@ -118,7 +116,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="עדכון פרטי הפעילות התבצע בהצלחה"
-                    message_line2={`תמיד נשמח לקבל פרגונים במייל TimeBank@gmail.com`}
+                    message_line2={`תמיד נשמח לקבל פרגונים במייל Timerepublic@gmail.com`}
                 />
             );
         }
@@ -136,9 +134,14 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             if (user?.remainingHours && user.remainingHours >= activity.durationHours) {
                 return (
                     <SuccessMessage
-                        message_line1="תודה על התעניינותך"
-                        message_line2="הודענו על כך למבצע הפעילות" //i want the mail of giver
-                        message_line3={`תוכל ליצור איתו קשר במייל: ${user.email}`}
+                        message_line1="נרשמת לפעילות בהצלחה!"
+                        message_line2={`הודענו על כך ל${userDetails?.firstName} ${userDetails?.lastName}`}
+                        message_line3={
+                            userDetails?.gender === 'female'
+                                ? `תוכל ליצור איתה קשר בטלפון: ${userDetails?.phoneNumber}`
+                                : `תוכל ליצור איתו קשר בטלפון: ${userDetails?.phoneNumber}`
+                        }
+                        message_line4={`או במייל ${userDetails?.email}`}
                     />
                 );
             } else {
@@ -190,15 +193,20 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                                 <div className={styles.profileIcon}>
                                     <CiUser className={styles.icon} />
                                 </div>
-                                {userDetails ? (
+                                {loadingUserDetails ? (
+                                    <div className={styles.loader}>
+                                        <MiniLoader />
+                                        <div className={styles.loaderTest}>טוען פרטי משתמש...</div>
+                                    </div>
+                                ) : userDetails ? (
                                     <div className={styles.description}>
                                         <p className={styles.text}>{userDetails?.firstName} {userDetails?.lastName}</p>
                                         <p className={styles.text}>{userDetails?.address}</p>
                                         <p className={styles.text}>{userDetails?.email}</p>
                                     </div>
-                                ) : (<p>אף אחד עדיין לא בחר את הפעילות הזאת</p>)
-                                }
-
+                                ) : (
+                                    <p>אף אחד עדיין לא בחר את הפעילות הזאת</p>
+                                )}
                             </div>
                         </div>
                     </div>

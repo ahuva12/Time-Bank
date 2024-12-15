@@ -58,25 +58,22 @@ const SavedActivities = () => {
       receiverId,
       status,
     }: RegistrationActivityPayload) => {
-      await queryClient.cancelQueries({ queryKey: ['allActivities'] });
-  
-      const previousSavedActivities = queryClient.getQueryData<Activity[]>(['allActivities']);
-  
+      await queryClient.cancelQueries({ queryKey: ['savedActivities'] }); 
+      const previousSavedActivities = queryClient.getQueryData<Activity[]>(['savedActivities']);
       queryClient.setQueryData<Activity[]>(
-        ['allActivities'],
+        ['savedActivities'],
         (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
-      );
-  
+      );  
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
       if (context?.previousSavedActivities) {
-        queryClient.setQueryData(['allActivities'], context.previousSavedActivities);
+        queryClient.setQueryData(['savedActivities'], context.previousSavedActivities);
       }
       setModeActivityModel('error');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allActivities'] });
+      queryClient.invalidateQueries({ queryKey: ['savedActivities'] });
     },
   });
 
@@ -135,7 +132,7 @@ const SavedActivities = () => {
     <div className={styles.savedActivities}>
       <h1 className={styles.title}>הפעילויות השמורות שלי</h1>
       <h3 className={styles.explain}>
-      בעמוד זה תוכלו לראות את כל הפעילויות שאליהן נרשמתם אך עדיין לא השתתפתם בהן בפועל.      </h3>
+      כאן תוכלו לראות את כל הפעילויות שאליהן נרשמתם אך עדיין לא השתתפתם בהן בפועל.      </h3>
       {(isLoading || isFetching) ? (
         <Loader />
       ) : (
