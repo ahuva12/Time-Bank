@@ -75,7 +75,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
   const handleSuggestionClick = (suggestion: string) => {
     setAddressSuggestions([]);
   };
- 
+
   return (
     <>
       {successMessage && (

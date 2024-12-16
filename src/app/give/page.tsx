@@ -46,6 +46,12 @@ const give = () => {
   const onUpdate = () => {
     setIsAddingActivity(false); // Set to "update mode"
     setIsPopUpOpen(true); // Open the pop-up
+    const { data, isLoading, isFetching, isError } = useQuery({
+      queryKey: ["myDonatiom"],
+      queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
+      staleTime: 10000,
+      enabled: isLoggedIn,
+    });
   };
 
   const onClosePopUp = (): void => {
