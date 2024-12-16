@@ -4,6 +4,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  position: relative; 
 }
 
 .navigation {
@@ -56,6 +57,7 @@
   color: gray;
   font-size: 16px;
   align-content: center;
+  position: relative; 
 }
 
 .navItem:hover {
@@ -88,3 +90,13 @@
   z-index: 2;
 }
 
+.containerExplanationPage {
+  position: absolute;
+  top: 70%; 
+  right: 10%;
+  z-index: 200; 
+  background-color: white; 
+  border-radius: 10px; 
+  padding: 10px; 
+  box-shadow: 2px 4px 10px 4px rgba(0, 0, 0, 0.1); 
+}
