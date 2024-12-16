@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TagSelector from "../TagSelector/TagSelector";
 import { strict } from "assert";
 
-export default function ActivityForm({ activity, closePopup, setIsSuccessMessage, isNew = false }) {
+export default function ActivityForm({ activity, closePopup, setIsSuccessMessage, handleAddActivity, isNew = false }) {
   const [nameActivity, setNameActivity] = useState(activity.nameActivity || "");
   const [tags, setTags] = useState(activity.tags || []);
   const [numberOfHours, setNumberOfHours] = useState(activity.durationHours || "");

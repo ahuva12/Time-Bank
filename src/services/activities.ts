@@ -1,6 +1,5 @@
 import { http } from '@/services/http';
 import { Activity } from '@/types/activity';
-// import { updateRemainingHours } from './users';
 
 //get activities based on filtering 
 //(the filters are can be: 'caughted', 'history', 'proposed', 'caughtedGiver', 'proposedGiver')

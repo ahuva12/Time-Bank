@@ -9,8 +9,8 @@ import {
   MyDonation,
   ActivityForm,
 } from "@/components";
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getFilteringActivities } from "@/services/activities";
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { getFilteringActivities, updateActivity , updateStatusActivity, postActivity} from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from '@/store/authStore';
 import { useState, useEffect } from "react";
@@ -28,14 +28,92 @@ const give = () => {
   }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
-    null
-  );
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState<boolean>(false);
   const [isPopUpOpen, setIsPopUpOpen] = useState<boolean>(false);
   const [isAddingActivity, setIsAddingActivity] = useState<boolean>(false);
+
+  const { data, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["myDonation_Proposed"],
+    queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
+    staleTime: 10000,
+    enabled: isLoggedIn,
+  });
+
+  //Mutations
+  const updateActivityMutation = useMutation({
+    mutationFn: updateActivity,
+    onMutate: async (activity:Activity) => {
+      await queryClient.cancelQueries({ queryKey: ['myDonation_Proposed'] });
+      const previousActivities = queryClient.getQueryData<Activity[]>(['myDonation_Proposed']);
+      queryClient.setQueryData<Activity[]>(['savedActivities'], 
+        (old) => 
+          old ? old.map((act) => act._id === activity._id ? { ...act, ...activity } : act) : []);
+      setModeActivityModel('success');
+      return { previousActivities };
+    },
+    onError: (error, variables, context: any) => {
+      if (context?.previousActivities) {
+        queryClient.setQueryData(['myDonation_Proposed'], context.previousActivities);
+      }  
+      setModeActivityModel('error');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myDonation_Proposed'] });
+    },
+  });
+
+  const deleteActivityMutation = useMutation({
+    mutationFn: updateStatusActivity,
+    onMutate: async ({
+      activityId,
+      status,
+      receiverId,
+    }: {activityId:string, status: string, receiverId: string|null}) => {
+      await queryClient.cancelQueries({ queryKey: ['myDonation_Proposed'] }); 
+      const previousActivities = queryClient.getQueryData<Activity[]>(['myDonation_Proposed']);
+      queryClient.setQueryData<Activity[]>(
+        ['myDonation_Proposed'],
+        (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
+      ); 
+      setModeActivityModel('success'); 
+      return { previousActivities };
+    },
+    onError: (error, variables, context: any) => {
+      if (context?.previousActivities) {
+        queryClient.setQueryData(['myDonation_Proposed'], context.previousActivities);
+      }
+      setModeActivityModel('error');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myDonation_Proposed'] });
+    },
+  });
+
+  const addActivityMutation = useMutation({
+    mutationFn: postActivity,
+    onMutate: async (newActivity:Activity) => {
+      await queryClient.cancelQueries({ queryKey: ['myDonation_Proposed'] }); 
+      const previousActivities = queryClient.getQueryData<Activity[]>(['myDonation_Proposed']);
+      queryClient.setQueryData<Activity[]>(
+        ['myDonation_Proposed'],
+        (old) => (old ? [...old, newActivity] : [newActivity])
+      ); 
+      setModeActivityModel('success'); 
+      return { previousActivities };
+    },
+    onError: (error, variables, context: any) => {
+      if (context?.previousActivities) {
+        queryClient.setQueryData(['myDonation_Proposed'], context.previousActivities);
+      }
+      setModeActivityModel('error');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myDonation_Proposed'] });
+    },
+  });
 
   const onAddActivity = () => {
     setSelectedActivity(null); // Clear selected activity for a new activity
@@ -56,17 +134,27 @@ const give = () => {
 
   const onClosePopUp = (): void => {
     setIsPopUpOpen(false); // Close the pop-up
-    queryClient.invalidateQueries({ queryKey: ["myDonation"] }); // Refetch activities data
+    // queryClient.invalidateQueries({ queryKey: ["myDonation"] }); // Refetch activities data
   };
 
-  const { data, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["myDonatiom"],
-    queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
-    staleTime: 10000,
-    enabled: isLoggedIn,
-  });
-
   // Handlers
+  const handleUpdateActivity = () => {
+    if (!selectedActivity) return;
+    updateActivityMutation.mutate(selectedActivity);
+  };
+
+  const handleAddActivity = (newActivity:Activity) : void => {
+    addActivityMutation.mutate(newActivity);  
+  };
+
+  const handleDeleteActivity = (activityId:string) : void => {
+    deleteActivityMutation.mutate({
+      activityId,
+      status: 'cancelled',
+      receiverId: null,
+    });  
+  };
+
   const handleMoreDetails = (activity: Activity) => {
     setSelectedActivity(activity);
     setModeActivityModel("open");
@@ -121,7 +209,7 @@ const give = () => {
           activities={data}
           onMoreDetails={handleMoreDetails}
           flag={true}
-          handlesMoreOptions={{ onUpdate, setSelectedActivity }}
+          handlesMoreOptions={{ onUpdate, setSelectedActivity, handleUpdateActivity, handleDeleteActivity }}
         />
       )}
       {modeActivityModel !== "close" && selectedActivity && (
@@ -146,6 +234,7 @@ const give = () => {
               activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
               closePopup={onClosePopUp}
               setIsSuccessMessage={setIsSuccessMessage}
+              handleAddActivity={handleAddActivity}
               isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
             />
           </div>
@@ -154,13 +243,13 @@ const give = () => {
       {isSuccessMessage && isAddingActivity && (
         <SuccessMessage
         message_line1="איזה כיף! הפעילות שלך נוספה בהצלחה"
-        message_line2={"נעדכן אותך כשמישהו ירשם אליה"}
+        message_line2="נעדכן אותך כשמישהו ירשם אליה"
         />      
       )}
       {isSuccessMessage && !isAddingActivity && (
         <SuccessMessage
         message_line1="פרטי הפעילות שלך עודכנו בהצלחה:)"
-        message_line2={"נעדכן אותך כשמישהו ירשם אליה"}
+        message_line2="נעדכן אותך כשמישהו ירשם אליה"
         />      
       )}
     </div>
