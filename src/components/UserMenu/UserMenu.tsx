@@ -47,8 +47,16 @@ export default function UserMenu() {
   }, []);
 
   const handleLogOut = () => {
+    console.log('logout')
     clearUser();
     setShowSuccessMessage(true); 
+  }
+
+  
+  const handleOkClick = () => {
+    console.log('handleOkClick')
+    setLogout();
+    router.push('/home')
   }
 
   return (
@@ -128,7 +136,7 @@ export default function UserMenu() {
         <SuccessMessage
           message_line1="התנתקת בהצלחה!"
           message_line2="נשמח לראותך שוב בקרוב:)"
-          onOkClick={setLogout} 
+          onOkClick={handleOkClick} 
         />
       )}
     </div>
