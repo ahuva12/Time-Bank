@@ -10,7 +10,7 @@ import { Activity } from '@/types/activity';
 import { registrationForActivity, RegistrationActivityPayload } from '@/services/registrationForActivity';
 
 const SavedActivities = () => {
-  const { user } = useUserStore();
+  const { user, setUserField } = useUserStore();
   const { isLoggedIn } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -37,6 +37,7 @@ const SavedActivities = () => {
       const previousSavedActivities = queryClient.getQueryData<Activity[]>(['savedActivities']);
       queryClient.setQueryData<Activity[]>(['savedActivities'], 
       (old) => old ? old.filter((activity) => activity._id !== activityId) : []);
+      setModeActivityModel('success');
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
@@ -58,25 +59,29 @@ const SavedActivities = () => {
       receiverId,
       status,
     }: RegistrationActivityPayload) => {
-      await queryClient.cancelQueries({ queryKey: ['allActivities'] });
-  
-      const previousSavedActivities = queryClient.getQueryData<Activity[]>(['allActivities']);
-  
+      await queryClient.cancelQueries({ queryKey: ['savedActivities'] }); 
+      const previousSavedActivities = queryClient.getQueryData<Activity[]>(['savedActivities']);
       queryClient.setQueryData<Activity[]>(
-        ['allActivities'],
+        ['savedActivities'],
         (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
-      );
-  
+      ); 
+      setModeActivityModel('success'); 
+      if (user.remainingHours !== undefined && selectedActivity?.durationHours !== undefined) {
+        setUserField('remainingHours', user.remainingHours + selectedActivity.durationHours); 
+      } 
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
       if (context?.previousSavedActivities) {
-        queryClient.setQueryData(['allActivities'], context.previousSavedActivities);
+        queryClient.setQueryData(['savedActivities'], context.previousSavedActivities);
       }
       setModeActivityModel('error');
+      if (user.remainingHours !== undefined && selectedActivity?.durationHours !== undefined) {
+        setUserField('remainingHours', user.remainingHours - selectedActivity.durationHours); 
+      } 
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allActivities'] });
+      queryClient.invalidateQueries({ queryKey: ['savedActivities'] });
     },
   });
 
@@ -90,7 +95,6 @@ const SavedActivities = () => {
   const handleAcceptActivity = () => {
     if (!selectedActivity) return;
     setIsModeCancellig(false)
-    setModeActivityModel('success');
     acceptActivityMutation.mutate({
       activityId: selectedActivity._id as string,
       status: 'accepted',
@@ -101,7 +105,6 @@ const SavedActivities = () => {
   const handleCancellRequestActivity = () => {
     if (!selectedActivity) return;
     setIsModeCancellig(true)
-    setModeActivityModel('success');
     unregisterForActivityMutation.mutate({
       activityId: selectedActivity._id as string,
       giverId: selectedActivity.giverId as string,
