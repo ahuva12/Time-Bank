@@ -28,17 +28,6 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
     resolver: zodResolver(userSchema),
   });
 
-  // const onSubmit: SubmitHandler<User> = async (data: User) => {
-  //   try {
-  //   //   const response = await http.post("/register", data);
-  //     const response = await registerUser(data);
-  //     alert("Registration successful!");
-  //     closePopup();
-  //     router.push('home');
-  //   } catch (error: any) {
-  //     setError(error.response?.data?.message || "An error occurred");
-  //   }
-  // };
   const onSubmit: SubmitHandler<User> = async (data: User) => {
     try {
       const response = await registerUser(data);
@@ -54,8 +43,8 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
   };
 
   const handleOkClick = () => {
-    closePopup(); // Close the register popup
-    router.push("home"); // Redirect to home page
+    closePopup(); 
+    router.push("home"); 
   };
 
   const [addressSuggestions, setAddressSuggestions] = useState<string[]>([]);
@@ -246,3 +235,4 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
 };
 
 export default Register;
+

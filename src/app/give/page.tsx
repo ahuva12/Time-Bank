@@ -46,6 +46,12 @@ const give = () => {
   const onUpdate = () => {
     setIsAddingActivity(false); // Set to "update mode"
     setIsPopUpOpen(true); // Open the pop-up
+    const { data, isLoading, isFetching, isError } = useQuery({
+      queryKey: ["myDonatiom"],
+      queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
+      staleTime: 10000,
+      enabled: isLoggedIn,
+    });
   };
 
   const onClosePopUp = (): void => {
@@ -70,15 +76,15 @@ const give = () => {
     setModeActivityModel("close");
   };
 
-  if (!isLoggedIn && isInitialized) {
-    return (
-      <ErrorMessage
-        message_line1="אתה לא מחובר!"
-        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-        link='/home'
-      />
-    );
-  }
+  // if (!isLoggedIn && isInitialized) {
+  //   return (
+  //     <ErrorMessage
+  //       message_line1="אתה לא מחובר!"
+  //       message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+  //       link='/home'
+  //     />
+  //   );
+  // }
 
   // Render content based on the query's state
   if (isError) {

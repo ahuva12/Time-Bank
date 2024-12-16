@@ -17,7 +17,7 @@ export default function UserMenu() {
   const router = useRouter();
   const clearUser = useUserStore((state) => state.clearUser);
   const { user } = useUserStore();
-  const { logout, isLoggedIn } = useAuthStore();
+  const { setLogout } = useAuthStore();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
 
   const toggleDropdown = () => {
@@ -128,7 +128,7 @@ export default function UserMenu() {
         <SuccessMessage
           message_line1="התנתקת בהצלחה!"
           message_line2="נשמח לראותך שוב בקרוב:)"
-          onOkClick={logout} 
+          onOkClick={setLogout} 
         />
       )}
     </div>

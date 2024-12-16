@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TagSelector from "../TagSelector/TagSelector";
 import { strict } from "assert";
 
-export default function ActivityPopUp({ activity, closePopup, setIsSuccessMessage, isNew = false }) {
+export default function ActivityForm({ activity, closePopup, setIsSuccessMessage, isNew = false }) {
   const [nameActivity, setNameActivity] = useState(activity.nameActivity || "");
   const [tags, setTags] = useState(activity.tags || []);
   const [numberOfHours, setNumberOfHours] = useState(activity.durationHours || "");
@@ -66,7 +66,7 @@ export default function ActivityPopUp({ activity, closePopup, setIsSuccessMessag
       setIsSuccessMessage(true);
       activityMutation.mutate(
         {
-          ...(isNew ?{ giverId:  /*ObjectId(*/user._id } : activity), // Include existing data for updates
+          ...(isNew ?{ giverId: user._id } : activity), // Include existing data for updates
           nameActivity,
           tags: processedTags,
           durationHours: Number(numberOfHours),
