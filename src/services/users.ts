@@ -2,8 +2,8 @@ import { http } from '@/services/http';
 import { User } from '@/types/user';
 
 //send login request
-export const loginUser = async (email: string, password: string) => {
-    const body = { email, password };
+export const loginUser = async (email: string, password: string, encrypted: boolean) => {
+    const body = { email, password,encrypted };
     try {
         const response = await http.post("/login", body);
 
@@ -58,6 +58,20 @@ export const getUserById = async (userId: string) => {
         }
 
         return response.data.user;
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        throw error;
+    }
+}
+
+export const getUserByEmail= async (userEmail : string) => {
+    try{
+        const filter= { email: userEmail };
+        const response= await http.post(`/users/filterUsers`, filter);
+        if (response.status !== 200) {
+            throw new Error(`User not found. EMAIL: ${userEmail}`);
+        }
+        return response.data;
     } catch (error) {
         console.error("Error fetching user:", error);
         throw error;

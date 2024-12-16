@@ -4,48 +4,50 @@ import { loginSchema } from "@/validations/validationsServer/user";
 import { z } from "zod";
 import { NextResponse } from "next/server";
 
-export async function POST(req:Request)  {
-    
-    try {
-      const { email, password } = await req.json();
+export async function POST(req: Request) {
+  try {
+    const { email, password, encrypted } = await req.json();
 
-      loginSchema.parse({ email, password });
+    loginSchema.parse({ email, password, encrypted });
 
-      const client = await connectDatabase();
-    
-      // bring the user from the database
-      const user = await getDocument(client, 'users',{ 'email': email});
-    
-      if (!user) {
-        return NextResponse.json(
-          { error: "The user not found"},
-          { status: 400 }
-        );
-      }
+    const client = await connectDatabase();
 
-      // Compare password with stored hashed password
-      const isPasswordCorrect = await bcrypt.compare(password, user.password);
-      if (!isPasswordCorrect) {
-        return NextResponse.json(
-          { error: "The password is uncorrect"},
-          { status: 400 }
-        );
-      }
+    // bring the user from the database
+    const user = await getDocument(client, "users", { email: email });
 
+    if (!user) {
       return NextResponse.json(
-        { user },
-        { status: 200 }
+        { error: "The user not found" },
+        { status: 400 }
       );
-      
-    } catch (error) {
-        console.error("Error in POST /login:", error);
-        if (error instanceof z.ZodError) {
-          return NextResponse.json(
-              { error: "Validation failed", details: error.errors },
-              { status: 400 }
-          );
-      }
-      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-}
 
+    // Compare password with stored hashed password
+    let isPasswordCorrect=false;
+    if (!encrypted) {
+      isPasswordCorrect = await bcrypt.compare(password, user.password);
+    } else{
+      isPasswordCorrect = password === user.password;
+    }
+    if (!isPasswordCorrect) {
+      return NextResponse.json(
+        { error: "The password is uncorrect" },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({ user }, { status: 200 });
+  } catch (error) {
+    console.error("Error in POST /login:", error);
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: "Validation failed", details: error.errors },
+        { status: 400 }
+      );
+    }
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

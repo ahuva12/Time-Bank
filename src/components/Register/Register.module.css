@@ -94,7 +94,7 @@
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
   }
   
-  .socialAccountContainer {
+  /* .socialAccountContainer {
     margin-top: 25px;
   }
   
@@ -137,7 +137,7 @@
   
   .socialAccountContainer .socialAccounts .socialButton:active {
     transform: scale(0.9);
-  }
+  } */
   
   .agreement {
     display: block;
