@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/useUserStore";
 import { CiUser } from "react-icons/ci";
 import { useAuthStore } from "@/store/authStore";
-import SuccessMessage from "../SuccessMessage/SuccessMessage";
+import { ExplanationPage, SuccessMessage } from '@/components';
 import { CgProfile } from "react-icons/cg";
 import { FaRegStar } from "react-icons/fa";
 import { FaHistory } from "react-icons/fa";
@@ -19,15 +19,34 @@ export default function UserMenu() {
   const { user } = useUserStore();
   const { setLogout } = useAuthStore();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
+  const [isExplanationPage, setIsExplanationPage] = useState<boolean>(false);
+  const [explanationPageMeassge, setExplanationPageMeassge] = useState<null | string>(null);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
   const handleRedirect = (path: string) => {
-    router.push(path); // Redirect to the specified route
+    router.push(path);
     setIsOpen(false);
   };
+
+  const handleOnMouseEnter = (page:string) : void => {
+    let explanation = null;
+    switch (page) {
+      case 'profile':
+        explanation = 'לעריכת הפרופיל שלי ולמעקב אחר הארנק שלי';
+        break; 
+      case 'history':
+        explanation = 'לצפיה בפעילויות שקיבלתי ושנתתי בעבר';
+        break; 
+      case 'saved_activities':
+        explanation = 'למעקב אחר הפעילויות שנרשמתי עליהן';
+        break; 
+    }
+    setExplanationPageMeassge(explanation);
+    setIsExplanationPage(true);
+  }  
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -49,6 +68,12 @@ export default function UserMenu() {
   const handleLogOut = () => {
     clearUser();
     setShowSuccessMessage(true); 
+  }
+
+  
+  const handleOkClick = () => {
+    setLogout();
+    router.push('/home')
   }
 
   return (
@@ -87,6 +112,8 @@ export default function UserMenu() {
             <ul className={styles.list}>
               <li
                 className={styles.element}
+                onMouseEnter={() => handleOnMouseEnter('profile')}
+                onMouseLeave={() => setIsExplanationPage(false)}
                 onClick={() => handleRedirect("profile")}
               >
                 <CgProfile />
@@ -94,6 +121,8 @@ export default function UserMenu() {
               </li>
               <li
                 className={styles.element}
+                onMouseEnter={() => handleOnMouseEnter('history')}
+                onMouseLeave={() => setIsExplanationPage(false)}
                 onClick={() => handleRedirect("history")}
               >
                 <FaHistory />
@@ -101,6 +130,8 @@ export default function UserMenu() {
               </li>
               <li
                 className={styles.element}
+                onMouseEnter={() => handleOnMouseEnter('saved_activities')}
+                onMouseLeave={() => setIsExplanationPage(false)}
                 onClick={() => handleRedirect("saved_activities")}
               >
                 <FaRegStar />
@@ -123,12 +154,18 @@ export default function UserMenu() {
         </div>
       )}
 
+      {isExplanationPage && explanationPageMeassge && 
+       <div className={styles.containerExplanationPage}>
+        <ExplanationPage explanation={explanationPageMeassge}/>
+       </div>
+      }
+
       {/* Show Success Message with OK button */}
       {showSuccessMessage && (
         <SuccessMessage
           message_line1="התנתקת בהצלחה!"
           message_line2="נשמח לראותך שוב בקרוב:)"
-          onOkClick={setLogout} 
+          onOkClick={handleOkClick} 
         />
       )}
     </div>

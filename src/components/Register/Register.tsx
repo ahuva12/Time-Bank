@@ -29,6 +29,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
   });
 
   const onSubmit: SubmitHandler<User> = async (data: User) => {
+    console.log(data)
     try {
       const response = await registerUser(data);
       setSuccessMessage("ההרשמה בוצעה בהצלחה!"); // Set success message
