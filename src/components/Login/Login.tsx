@@ -71,7 +71,7 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
       {isLoader && (
         <div className={styles.loader}>
           <MiniLoader/>
-      </div>)}
+        </div>)}
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div className={styles.fieldContainer}>
           <input
