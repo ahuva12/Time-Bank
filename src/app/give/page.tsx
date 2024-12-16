@@ -1,14 +1,6 @@
 "use client";
 import styles from "./give.module.css";
-import {
-  Activities,
-  Loader,
-  ErrorMessage,
-  SuccessMessage,
-  ActivityModal,
-  MyDonation,
-  ActivityForm,
-} from "@/components";
+import { Activities, Loader, ErrorMessage, SuccessMessage, ActivityModal, MyDonation, ActivityForm } from "@/components";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getFilteringActivities } from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
@@ -18,7 +10,6 @@ import { Activity } from "@/types/activity";
 import { FaPlus } from "react-icons/fa";
 
 const give = () => {
-
   const { user } = useUserStore();
   const { isLoggedIn } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
@@ -46,17 +37,15 @@ const give = () => {
   const onUpdate = () => {
     setIsAddingActivity(false); // Set to "update mode"
     setIsPopUpOpen(true); // Open the pop-up
-    const { data, isLoading, isFetching, isError } = useQuery({
-      queryKey: ["myDonatiom"],
-      queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
-      staleTime: 10000,
-      enabled: isLoggedIn,
-    });
+    
   };
 
-  const onClosePopUp = (): void => {
+
+  const onClosePopUp =  () => {
     setIsPopUpOpen(false); // Close the pop-up
-    queryClient.invalidateQueries({ queryKey: ["myDonation"] }); // Refetch activities data
+    //await queryClient.invalidateQueries({ queryKey: ["myDonation"] });
+    // router.push('/give')
+    // redirect('/give')
   };
 
   const { data, isLoading, isFetching, isError } = useQuery({
@@ -75,16 +64,6 @@ const give = () => {
   const closeModal = () => {
     setModeActivityModel("close");
   };
-
-  // if (!isLoggedIn && isInitialized) {
-  //   return (
-  //     <ErrorMessage
-  //       message_line1="אתה לא מחובר!"
-  //       message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-  //       link='/home'
-  //     />
-  //   );
-  // }
 
   // Render content based on the query's state
   if (isError) {

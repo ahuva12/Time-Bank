@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import styles from "./ActivityCard.module.css";
 import { Activity } from "@/types/activity";
@@ -42,11 +41,6 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
 
   const deleteActivity = async (): Promise<void> => {
     try {
-      console.log({
-        activityId: activity._id as string,
-        status: 'cancelled',
-        receiverId: null,
-      })
       await updateStatusActivity({
         activityId: activity._id as string,
         status: 'cancelled',
@@ -107,6 +101,5 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
     </div>
   );
 };
-
 
 export default ActivityCard;
