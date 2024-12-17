@@ -97,11 +97,13 @@ export default function ActivityForm({ activity, closePopup, setIsSuccessMessage
         const newActivity = {
           ...activity,
           giverId: user._id,
+          receiverId: null,
           nameActivity,
           tags: processedTags,
           durationHours: Number(numberOfHours),
           description,
         }
+        console.log(newActivity);
         handleUpdateActivity(newActivity);
       }
       else {
