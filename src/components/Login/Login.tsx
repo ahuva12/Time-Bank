@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { loginSchema } from "@/validations/validationsClient/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser } from "@/services/users";
-import { SuccessMessage, MiniLoader } from '@/components';
-
+import { loginUser, getUserByEmail } from "@/services/users";
+import { SuccessMessage, MiniLoader } from "@/components";
+import { googleSignIn } from "@/services/auth";
 interface LoginProps {
   closePopup: () => void;
   setIsRegisterOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,13 +21,17 @@ type LoginFormFileds = {
   password: string;
 };
 
-const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLoginOpen }) => {
+const Login: React.FC<LoginProps> = ({
+  closePopup,
+  setIsRegisterOpen,
+  setIsLoginOpen,
+}) => {
   const { setLogin } = useAuthStore();
   const [error, setError] = useState("");
   const { setUser } = useUserStore();
   const router = useRouter();
-  const [isLoader, setIsLoader] = useState(false); 
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
+  const [isLoader, setIsLoader] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const {
     register,
@@ -37,13 +41,15 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit: SubmitHandler<LoginFormFileds> = async (data: LoginFormFileds, event?: React.BaseSyntheticEvent) => {
+  const onSubmit: SubmitHandler<LoginFormFileds> = async (
+    data: LoginFormFileds,
+    event?: React.BaseSyntheticEvent
+  ) => {
     setIsLoader(true);
-    try {  
-      const user = await loginUser(data.email, data.password);
-      console.log(user);
+    try {
+      const user = await loginUser(data.email, data.password, false);
       setUser(user);
-      setShowSuccessMessage(true); 
+      setShowSuccessMessage(true);
     } catch (error: any) {
       console.log(error);
       setError(error.data?.message || "An error occurred");
@@ -53,13 +59,28 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
   };
 
   const handleOkClick = () => {
-    setIsLoginOpen(false)
-    setLogin(); 
+    setIsLoginOpen(false);
+    setLogin();
   };
 
   const goRegister = () => {
     closePopup();
     setIsRegisterOpen(true);
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const data = await googleSignIn();
+      const user = await getUserByEmail(data.user.email);
+      console.error(user[0].email);
+      const newUser= await loginUser(user[0].email, user[0].password, true);
+
+      setUser(newUser);
+      setShowSuccessMessage(true);
+      // setLogin();
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (
@@ -70,8 +91,10 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
       <div className={styles.heading}>התחברות</div>
       {isLoader && (
         <div className={styles.loader}>
-          <MiniLoader/>
-      </div>)}
+          <MiniLoader />
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div className={styles.fieldContainer}>
           <input
@@ -106,7 +129,7 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
       <div className={styles.socialAccountContainer}>
         <span className={styles.title}>או התחבר עם</span>
         <div className={styles.socialAccounts}>
-          <button className={styles.socialButton}>
+          <button className={styles.socialButton} onClick={handleGoogleLogin}>
             <svg
               viewBox="0 0 488 512"
               height="1em"
@@ -122,11 +145,11 @@ const Login: React.FC<LoginProps> = ({ closePopup, setIsRegisterOpen, setIsLogin
         <a onClick={goRegister}>אין לך חשבון? הירשם</a>
       </span>
       {showSuccessMessage && (
-      <SuccessMessage
-        message_line1="התחברת בהצלחה!"
-        message_line2="כעת תוכל להתחיל לגלוש ולראות מה חדש:)"
-        onOkClick={handleOkClick}
-      />
+        <SuccessMessage
+          message_line1="התחברת בהצלחה!"
+          message_line2="כעת תוכל להתחיל לגלוש ולראות מה חדש:)"
+          onOkClick={handleOkClick}
+        />
       )}
     </div>
   );
