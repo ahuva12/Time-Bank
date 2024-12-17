@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./PasswordModal.module.css"; // Style file for the modal
 import bcrypt from 'bcryptjs';
 import { User } from "@/types/user";
+import { verifyPassword } from "@/services/utils";
 
 interface PasswordModalProps {
     onClose: () => void;
@@ -22,23 +23,22 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
     const [error, setError] = useState("");
 
     const handleSubmit = async () => {
-        verifyPassword();
+        if (!await verifyPassword(oldPassword, user.password)) {
+            setError("הסיסמא הנוכחית לא נכונה");
+            return;
+        }
         if (newPassword !== confirmPassword) {
             setError("הסיסמאות החדשות לא תואמות");
+            return;
+        }
+        if (oldPassword === newPassword) {
+            setError("הסיסמא החדשה זהה לסיסמא הישנה");
             return;
         }
         const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
         onSubmit(hashedPassword);
         onClose();
     };
-
-    const verifyPassword = async () => {
-        const isMatch = await bcrypt.compare(oldPassword, user.password);
-        if (!isMatch) {
-            throw new Error("Current password is incorrect");
-        }
-    }
-
 
     return (
         <div className={styles.modalOverlay}>

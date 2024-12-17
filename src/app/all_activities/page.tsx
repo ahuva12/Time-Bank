@@ -10,7 +10,7 @@ import { useAuthStore } from '@/store/authStore';
 import { registrationForActivity, RegistrationActivityPayload } from '@/services/registrationForActivity';
 
 const AllActivities = () => {
-  const { user } = useUserStore();
+  const { user, setUserField } = useUserStore();
   const { isLoggedIn } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -75,7 +75,10 @@ const AllActivities = () => {
         ['allActivities'],
         (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
       );
-
+      setModeActivityModel('success'); 
+      if (user.remainingHours !== undefined && selectedActivity?.durationHours !== undefined) {
+        setUserField('remainingHours', user.remainingHours - selectedActivity.durationHours); 
+      } 
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
@@ -83,6 +86,9 @@ const AllActivities = () => {
         queryClient.setQueryData(['allActivities'], context.previousSavedActivities);
       }
       setModeActivityModel('error');
+      if (user.remainingHours !== undefined && selectedActivity?.durationHours !== undefined) {
+        setUserField('remainingHours', user.remainingHours + selectedActivity.durationHours); 
+      } 
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allActivities'] });
@@ -98,7 +104,6 @@ const AllActivities = () => {
   const handleRegistrationActivity = () => {
     if (!selectedActivity) return;
     setIsModeCancellig(false);
-    setModeActivityModel('success');
     registerForActivityMutation.mutate({
       activityId: selectedActivity._id as string,
       giverId: selectedActivity.giverId as string,

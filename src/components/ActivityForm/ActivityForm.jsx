@@ -1,13 +1,13 @@
 'use client';
 import { useState } from "react";
 import { useUserStore } from "@/store/useUserStore";
-import Styles from './ActivityPopUp.module.css';
+import Styles from './ActivityForm.module.css';
 import { postActivity, updateActivity } from '@/services/activities'; // Add createActivity
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TagSelector from "../TagSelector/TagSelector";
 import { strict } from "assert";
 
-export default function ActivityPopUp({ activity, closePopup, isNew = false }) {
+export default function ActivityForm({ activity, closePopup, setIsSuccessMessage, isNew = false }) {
   const [nameActivity, setNameActivity] = useState(activity.nameActivity || "");
   const [tags, setTags] = useState(activity.tags || []);
   const [numberOfHours, setNumberOfHours] = useState(activity.durationHours || "");
@@ -63,9 +63,10 @@ export default function ActivityPopUp({ activity, closePopup, isNew = false }) {
         ? tags.split(",").map(tag => tag.trim())
         : tags;
 
+      setIsSuccessMessage(true);
       activityMutation.mutate(
         {
-          ...(isNew ?{ giverId:  /*ObjectId(*/user._id } : activity), // Include existing data for updates
+          ...(isNew ?{ giverId: user._id } : activity), // Include existing data for updates
           nameActivity,
           tags: processedTags,
           durationHours: Number(numberOfHours),

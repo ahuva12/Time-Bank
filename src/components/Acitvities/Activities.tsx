@@ -28,9 +28,9 @@ const Activities = ({ activities, onMoreDetails, flag, handlesMoreOptions, onTog
                 //     <a className={styles.link} href="#">לחץ כאן</a>
                 //     על מנת לחפש פעילות להרשם אליה:)
                 // </div>
-                <div className={styles.noActivities}>
+                <h1 className={styles.noActivities}>
                     אין מידע רלוונטי להציג
-                </div>
+                </h1>
             ) : (
                 activities.map((activity, index) => (
                     <ActivityCard

@@ -45,15 +45,11 @@ interface Wallet {
 
 const Profile: React.FC = () => {
   const { isLoggedIn } = useAuthStore();
-  if (!isLoggedIn) {
-    return (
-      <ErrorMessage
-        message_line1="אתה לא מחובר!"
-        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-        link="/home"
-      />
-    );
-  }
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    setIsInitialized(true); 
+  }, [isLoggedIn]);
 
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
@@ -100,9 +96,9 @@ const Profile: React.FC = () => {
       const updatedUser = { ...user, password: newPassword };
       const response = await updateUser(updatedUser);
       setUser(updatedUser);
-      alert("Password changed successfully!");
+      alert("הסיסמא שלך שונתה בהצלחה!");
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("שינוי הסיסמא שלך נכשנל... נסה שוב בעוד מספר דקות", error);
       alert("Failed to update profile.");
     }
   };
@@ -131,11 +127,11 @@ const Profile: React.FC = () => {
       const updatedUser = { ...user, ...data };
       const response = await updateUser(updatedUser);
       setUser(updatedUser);
-      alert("Profile updated successfully!");
+      alert("הפרופיל שלך עודכן בהצלחה!");
       setEditingField(null); // Close the input field after successful update
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
+      alert("עדכון הפרופיל שלך נכשל... נסה שוב שעוד משפר דקות");
     }
   };
 
@@ -145,6 +141,16 @@ const Profile: React.FC = () => {
   };
 
   const Form = () => {
+    // if (!isLoggedIn && isInitialized) {
+    //   return (
+    //     <ErrorMessage
+    //       message_line1="אתה לא מחובר!"
+    //       message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+    //       link="/home"
+    //     />
+    //   );
+    // }
+
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
         {Object.keys(editableFieldsSchema.shape).map((field) => (
