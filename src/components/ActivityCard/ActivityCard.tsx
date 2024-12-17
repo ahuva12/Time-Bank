@@ -41,26 +41,6 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
     handlesMoreOptions?.onUpdate();
   };
 
-  // const deleteActivity = async (): Promise<void> => {
-  //   try {
-  //     console.log({
-  //       activityId: activity._id as string,
-  //       status: 'cancelled',
-  //       receiverId: null,
-  //     })
-  //     await updateStatusActivity({
-  //       activityId: activity._id as string,
-  //       status: 'cancelled',
-  //       receiverId: null,
-  //     });
-  //     console.log("Activity deleted successfully!");
-  //     setIsWarningMessage(false)
-
-  //   } catch (error) {
-  //     console.error("Error deleting activity:", error);
-  //   }
-  // };
-
   const deleteActivity = async (): Promise<void> => {
     try {
       if (handlesMoreOptions?.handleDeleteActivity) {
@@ -76,8 +56,6 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
     }
   };
   
-
-
   return (
     <div className={styles.card}>
       <div className={styles.content}>
