@@ -15,8 +15,8 @@ const AllActivities = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    setIsInitialized(true); 
-}, [isLoggedIn]);
+    setIsInitialized(true);
+  }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -25,6 +25,8 @@ const AllActivities = () => {
   const [activeTab, setActiveTab] = useState('all'); // Default active tab
   const [favorites, setFavorites] = useState<string[]>([]);
   const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   const tabs = [
     { id: 'all', label: 'כל הפעילויות' },
@@ -56,6 +58,7 @@ const AllActivities = () => {
     }
   }, [activeTab, data, favorites]);
 
+
   const registerForActivityMutation = useMutation({
     mutationFn: registrationForActivity,
     onMutate: async ({
@@ -65,14 +68,14 @@ const AllActivities = () => {
       status,
     }: RegistrationActivityPayload) => {
       await queryClient.cancelQueries({ queryKey: ['allActivities'] });
-  
+
       const previousSavedActivities = queryClient.getQueryData<Activity[]>(['allActivities']);
-  
+
       queryClient.setQueryData<Activity[]>(
         ['allActivities'],
         (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
       );
-  
+
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
@@ -101,7 +104,7 @@ const AllActivities = () => {
       giverId: selectedActivity.giverId as string,
       receiverId: user._id as string,
       status: 'caughted',
-    });  
+    });
   };
 
   const handleToggleFavorite = (activityId: string, isFavorite: boolean) => {
@@ -118,6 +121,38 @@ const AllActivities = () => {
       setFilteredActivities((prevActivities) =>
         prevActivities.filter((activity) => activity._id !== activityId)
       );
+    }
+  };
+
+  const handleTitleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    console.log(value);
+    if (value.trim() === "") {
+      // If the search query is empty, show all data
+      setFilteredActivities(data);
+    } else {
+      // Filter the data based on the search query
+      const filtered = data.filter((item: Activity) =>
+        item.nameActivity.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredActivities(filtered);
+    }
+  };
+
+  const handleTagSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    console.log(value);
+    if (value.trim() === "") {
+      // If the search query is empty, show all data
+      setFilteredActivities(data);
+    } else {
+      // Filter the data based on the search query
+      const filtered = data.filter((item: Activity) =>
+        item.nameActivity.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredActivities(filtered);
     }
   };
 
@@ -142,14 +177,14 @@ const AllActivities = () => {
     </div>
   );
 
-    if (!isLoggedIn && isInitialized) {
-      return (
-          <ErrorMessage
-          message_line1="אתה לא מחובר!"
-          message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-          link='/home'
-          />
-      );
+  if (!isLoggedIn && isInitialized) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
+      />
+    );
   }
 
   // Render content based on the query's state
@@ -164,9 +199,23 @@ const AllActivities = () => {
 
   return (
     <div className={styles.savedActivities}>
-      <h1 className={styles.title}>
+      <div className={styles.title}>
+        <input
+          className={`${styles.input} ${styles.tab}`}
+          type="text"
+          placeholder="חיפוש חופשי"
+          value={searchQuery}
+          onChange={handleTitleSearch}
+        />
+        <input
+          className={`${styles.input} ${styles.tab}`}
+          type="text"
+          placeholder="חיפוש"
+          value={searchQuery}
+          onChange={handleTagSearch}
+        />
         איזו פעילות אתה בוחר היום? יתרת השעות שלך היא: {user.remainingHours}
-      </h1>
+      </div>
       {isLoading || isFetching ? (
         <Loader />
       ) : (
