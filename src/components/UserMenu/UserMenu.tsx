@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/useUserStore";
 import { CiUser } from "react-icons/ci";
 import { useAuthStore } from "@/store/authStore";
-import SuccessMessage from "../SuccessMessage/SuccessMessage";
+import { SuccessMessage } from '@/components';
 import { CgProfile } from "react-icons/cg";
 import { FaRegStar } from "react-icons/fa";
 import { FaHistory } from "react-icons/fa";
@@ -25,9 +25,10 @@ export default function UserMenu() {
   };
 
   const handleRedirect = (path: string) => {
-    router.push(path); // Redirect to the specified route
+    router.push(path);
     setIsOpen(false);
   };
+
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -49,6 +50,12 @@ export default function UserMenu() {
   const handleLogOut = () => {
     clearUser();
     setShowSuccessMessage(true); 
+  }
+
+  
+  const handleOkClick = () => {
+    setLogout();
+    router.push('/home')
   }
 
   return (
@@ -128,7 +135,7 @@ export default function UserMenu() {
         <SuccessMessage
           message_line1="התנתקת בהצלחה!"
           message_line2="נשמח לראותך שוב בקרוב:)"
-          onOkClick={setLogout} 
+          onOkClick={handleOkClick} 
         />
       )}
     </div>

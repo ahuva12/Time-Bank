@@ -6,16 +6,14 @@
   margin-left: 2rem;
 }
 
-
 .noActivities {
   margin-top: 2.7rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
   align-items: center;
+  text-align: center;
   height: 100vh; 
   font-size: 1.4rem;
   color: #555;
+  width: 100%;
 }
 
 .link {
