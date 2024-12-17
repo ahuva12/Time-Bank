@@ -124,12 +124,12 @@ const give = () => {
   const onUpdate = () => {
     setIsAddingActivity(false); // Set to "update mode"
     setIsPopUpOpen(true); // Open the pop-up
-    const { data, isLoading, isFetching, isError } = useQuery({
-      queryKey: ["myDonatiom"],
-      queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
-      staleTime: 10000,
-      enabled: isLoggedIn,
-    });
+    // const { data, isLoading, isFetching, isError } = useQuery({
+    //   queryKey: ["myDonatiom"],
+    //   queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
+    //   staleTime: 10000,
+    //   enabled: isLoggedIn,
+    // });
   };
 
   const onClosePopUp = (): void => {
@@ -138,9 +138,10 @@ const give = () => {
   };
 
   // Handlers
-  const handleUpdateActivity = () => {
-    if (!selectedActivity) return;
-    updateActivityMutation.mutate(selectedActivity);
+  const handleUpdateActivity = (updatedActivity:Activity) : void => {
+    // if (!selectedActivity) return;
+    // updateActivityMutation.mutate(selectedActivity);
+    updateActivityMutation.mutate(updatedActivity);
   };
 
   const handleAddActivity = (newActivity:Activity) : void => {
@@ -209,7 +210,7 @@ const give = () => {
           activities={data}
           onMoreDetails={handleMoreDetails}
           flag={true}
-          handlesMoreOptions={{ onUpdate, setSelectedActivity, handleUpdateActivity, handleDeleteActivity }}
+          handlesMoreOptions={{ onUpdate, setSelectedActivity, handleDeleteActivity }}
         />
       )}
       {modeActivityModel !== "close" && selectedActivity && (
@@ -235,6 +236,7 @@ const give = () => {
               closePopup={onClosePopUp}
               setIsSuccessMessage={setIsSuccessMessage}
               handleAddActivity={handleAddActivity}
+              handleUpdateActivity={handleUpdateActivity}
               isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
             />
           </div>

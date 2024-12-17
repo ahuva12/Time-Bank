@@ -10,8 +10,7 @@ interface ActivitiesProps {
     isGeneral?: boolean;
     flag: boolean;
     handlesMoreOptions:  {
-        handleUpdateActivity: () => void;
-        handleDeleteActivity: (activityId:string) => void;
+        handleDeleteActivity?: (activityId:string) => void;
         onUpdate: () => void; 
         setSelectedActivity: any;
     } | null;

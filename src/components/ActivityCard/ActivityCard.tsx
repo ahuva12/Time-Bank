@@ -14,6 +14,7 @@ interface ActivityCardProps {
   isGeneral?: boolean;
   flag: boolean;
   handlesMoreOptions: null | {
+    handleDeleteActivity?: (activityId:string) => void;
     onUpdate: () => void;
     setSelectedActivity: any
   };
@@ -40,25 +41,42 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
     handlesMoreOptions?.onUpdate();
   };
 
+  // const deleteActivity = async (): Promise<void> => {
+  //   try {
+  //     console.log({
+  //       activityId: activity._id as string,
+  //       status: 'cancelled',
+  //       receiverId: null,
+  //     })
+  //     await updateStatusActivity({
+  //       activityId: activity._id as string,
+  //       status: 'cancelled',
+  //       receiverId: null,
+  //     });
+  //     console.log("Activity deleted successfully!");
+  //     setIsWarningMessage(false)
+
+  //   } catch (error) {
+  //     console.error("Error deleting activity:", error);
+  //   }
+  // };
+
   const deleteActivity = async (): Promise<void> => {
     try {
-      console.log({
-        activityId: activity._id as string,
-        status: 'cancelled',
-        receiverId: null,
-      })
-      await updateStatusActivity({
-        activityId: activity._id as string,
-        status: 'cancelled',
-        receiverId: null,
-      });
-      console.log("Activity deleted successfully!");
-      setIsWarningMessage(false)
-
+      if (handlesMoreOptions?.handleDeleteActivity) {
+        handlesMoreOptions.handleDeleteActivity(activity?._id as string);
+        console.log("Activity deleted successfully!");
+      } else {
+        console.error("Delete handler is not provided.");
+      }
     } catch (error) {
       console.error("Error deleting activity:", error);
+    } finally {
+      setIsWarningMessage(false);
     }
   };
+  
+
 
   return (
     <div className={styles.card}>
