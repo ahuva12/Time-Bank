@@ -31,7 +31,9 @@ const give = () => {
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
-  const [isSuccessMessage, setIsSuccessMessage] = useState<boolean>(false);
+  const [isSuccessMessageAdding, setIsSuccessMessageAdding] = useState<boolean>(false);
+  const [isSuccessMessageUpdating, setIsSuccessMessageUpdating] = useState<boolean>(false);
+  const [isErrorMessage, setIsErrorMessage] = useState<boolean>(false);
   const [isPopUpOpen, setIsPopUpOpen] = useState<boolean>(false);
   const [isAddingActivity, setIsAddingActivity] = useState<boolean>(false);
 
@@ -51,14 +53,15 @@ const give = () => {
       queryClient.setQueryData<Activity[]>(['savedActivities'], 
         (old) => 
           old ? old.map((act) => act._id === activity._id ? { ...act, ...activity } : act) : []);
-      setModeActivityModel('success');
-      return { previousActivities };
+        setIsSuccessMessageUpdating(true); 
+        return { previousActivities };
     },
     onError: (error, variables, context: any) => {
       if (context?.previousActivities) {
         queryClient.setQueryData(['myDonation_Proposed'], context.previousActivities);
       }  
-      setModeActivityModel('error');
+      setIsSuccessMessageUpdating(false); 
+      setIsErrorMessage(true);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myDonation_Proposed'] });
@@ -78,14 +81,13 @@ const give = () => {
         ['myDonation_Proposed'],
         (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
       ); 
-      setModeActivityModel('success'); 
       return { previousActivities };
     },
     onError: (error, variables, context: any) => {
       if (context?.previousActivities) {
         queryClient.setQueryData(['myDonation_Proposed'], context.previousActivities);
       }
-      setModeActivityModel('error');
+      setIsErrorMessage(true);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myDonation_Proposed'] });
@@ -100,15 +102,16 @@ const give = () => {
       queryClient.setQueryData<Activity[]>(
         ['myDonation_Proposed'],
         (old) => (old ? [...old, newActivity] : [newActivity])
-      ); 
-      setModeActivityModel('success'); 
+      );
+      setIsSuccessMessageAdding(true); 
       return { previousActivities };
     },
     onError: (error, variables, context: any) => {
       if (context?.previousActivities) {
         queryClient.setQueryData(['myDonation_Proposed'], context.previousActivities);
       }
-      setModeActivityModel('error');
+      setIsSuccessMessageAdding(false); 
+      setIsErrorMessage(true);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myDonation_Proposed'] });
@@ -116,36 +119,31 @@ const give = () => {
   });
 
   const onAddActivity = () => {
-    setSelectedActivity(null); // Clear selected activity for a new activity
-    setIsAddingActivity(true); // Set to "add mode"
-    setIsPopUpOpen(true); // Open the pop-up
+    setSelectedActivity(null);
+    setIsAddingActivity(true);
+    setIsPopUpOpen(true);
   };
 
   const onUpdate = () => {
-    setIsAddingActivity(false); // Set to "update mode"
-    setIsPopUpOpen(true); // Open the pop-up
-    // const { data, isLoading, isFetching, isError } = useQuery({
-    //   queryKey: ["myDonatiom"],
-    //   queryFn: () => getFilteringActivities("proposedGiver", user._id as string),
-    //   staleTime: 10000,
-    //   enabled: isLoggedIn,
-    // });
+    setIsAddingActivity(false); 
+    setIsPopUpOpen(true); 
   };
 
   const onClosePopUp = (): void => {
-    setIsPopUpOpen(false); // Close the pop-up
-    // queryClient.invalidateQueries({ queryKey: ["myDonation"] }); // Refetch activities data
+    setIsPopUpOpen(false); 
   };
 
   // Handlers
   const handleUpdateActivity = (updatedActivity:Activity) : void => {
-    // if (!selectedActivity) return;
-    // updateActivityMutation.mutate(selectedActivity);
-    updateActivityMutation.mutate(updatedActivity);
+    updateActivityMutation.mutate(updatedActivity) 
+    setIsSuccessMessageUpdating(false); 
+    setIsErrorMessage(false);
   };
 
   const handleAddActivity = (newActivity:Activity) : void => {
     addActivityMutation.mutate(newActivity);  
+    setIsSuccessMessageAdding(false); 
+    setIsErrorMessage(false);
   };
 
   const handleDeleteActivity = (activityId:string) : void => {
@@ -154,6 +152,7 @@ const give = () => {
       status: 'cancelled',
       receiverId: null,
     });  
+    setIsErrorMessage(false);
   };
 
   const handleMoreDetails = (activity: Activity) => {
@@ -234,7 +233,6 @@ const give = () => {
             <ActivityForm
               activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
               closePopup={onClosePopUp}
-              setIsSuccessMessage={setIsSuccessMessage}
               handleAddActivity={handleAddActivity}
               handleUpdateActivity={handleUpdateActivity}
               isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
@@ -242,17 +240,23 @@ const give = () => {
           </div>
         </div>
       )}
-      {isSuccessMessage && isAddingActivity && (
+      {isSuccessMessageAdding && (
         <SuccessMessage
         message_line1="איזה כיף! הפעילות שלך נוספה בהצלחה"
         message_line2="נעדכן אותך כשמישהו ירשם אליה"
         />      
       )}
-      {isSuccessMessage && !isAddingActivity && (
+      {isSuccessMessageUpdating && (
         <SuccessMessage
         message_line1="פרטי הפעילות שלך עודכנו בהצלחה:)"
         message_line2="נעדכן אותך כשמישהו ירשם אליה"
         />      
+      )}
+      {isErrorMessage && (
+       <ErrorMessage
+               message_line1="אופס... משהו השתבש"
+               message_line2="תוכל לנסות שוב במועד מאוחר יותר"
+        />   
       )}
     </div>
   );

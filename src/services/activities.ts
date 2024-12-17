@@ -39,8 +39,6 @@ export const postActivity = async (newActivity: Activity) => {
 //update activitiy
 export const updateActivity = async (updatedActivity:Activity) => {
     try {
-      console.log(`Request URL: /activities/${updatedActivity._id}`);
-
         const response = await http.patch(`/activities/${updatedActivity._id}`, updatedActivity);
 
         if (response.status !== 200)

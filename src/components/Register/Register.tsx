@@ -82,7 +82,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
       {successMessage && (
         <SuccessMessage
           message_line1={successMessage}
-          message_line2=""
+          message_line2="כעת תוכל להתחבר ולהתחיל לגלוש:)"
           onOkClick={handleOkClick}
         />
       )}

@@ -12,7 +12,6 @@ interface SuccessMessageProps {
 }
 
 const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_line2, message_line3, message_line4, onOkClick }) => {
-
     const [isShow, setIsShow] = useState<boolean>(true);
 
     const handleOkClick = () => {

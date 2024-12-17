@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TagSelector from "../TagSelector/TagSelector";
 import { strict } from "assert";
 
-export default function ActivityForm({ activity, closePopup, setIsSuccessMessage, handleAddActivity, handleUpdateActivity, isNew = false }) {
+export default function ActivityForm({ activity, closePopup, handleAddActivity, handleUpdateActivity, isNew = false }) {
   const [nameActivity, setNameActivity] = useState(activity.nameActivity || "");
   const [tags, setTags] = useState(activity.tags || []);
   const [numberOfHours, setNumberOfHours] = useState(activity.durationHours || "");
@@ -56,37 +56,6 @@ export default function ActivityForm({ activity, closePopup, setIsSuccessMessage
     console.log(newTags, tags);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const processedTags = typeof tags === "string"
-  //       ? tags.split(",").map(tag => tag.trim())
-  //       : tags;
-
-  //     setIsSuccessMessage(true);
-  //     activityMutation.mutate(
-  //       {
-  //         ...(isNew ?{ giverId: user._id } : activity), // Include existing data for updates
-  //         nameActivity,
-  //         tags: processedTags,
-  //         durationHours: Number(numberOfHours),
-  //         description,
-  //       },
-  //       {
-  //         onSuccess: () => {
-  //           console.log(`${isNew ? 'Activity added' : 'Activity updated'} successfully!`);
-  //         },
-  //         onError: (error) => {
-  //           console.error(`Failed to ${isNew ? 'add' : 'update'} activity:`, error);
-  //         },
-  //       }
-  //     );
-  //     closePopup();
-  //   } catch (error) {
-  //     setError(error.response?.data?.message || "An error occurred");
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -95,24 +64,23 @@ export default function ActivityForm({ activity, closePopup, setIsSuccessMessage
         : tags;
       if (isNew) {
         const newActivity = {
-          ...activity,
           giverId: user._id,
-          receiverId: null,
           nameActivity,
           tags: processedTags,
           durationHours: Number(numberOfHours),
           description,
         }
-        console.log(newActivity);
-        handleUpdateActivity(newActivity);
+        handleAddActivity(newActivity);
       }
       else {
         const updatedActivity = {
+          ...activity,
           nameActivity,
           tags: processedTags,
           durationHours: Number(numberOfHours),
           description,
         }
+        console.log(updatedActivity)
         handleUpdateActivity(updatedActivity)
       }
     } catch (error) {
