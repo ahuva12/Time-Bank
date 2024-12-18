@@ -238,6 +238,7 @@ const AllActivities = () => {
           activity={selectedActivity}
           user={user}
           giver_receiver_details={giverDetails as User}
+          isNeedUserDetails={true}
           handlesMoreOptions={{
             handleRegistrationActivity,
           }}

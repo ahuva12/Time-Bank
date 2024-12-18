@@ -218,6 +218,7 @@ const give = () => {
           modeModel={modeActivityModel}
           onClose={closeModal}
           activity={selectedActivity}
+          isNeedUserDetails={false}
           user={user}
           handlesMoreOptions={{}}
         />

@@ -179,3 +179,4 @@ export default function History() {
     </div>
   );
 }
+//duplicate ActivityModal

@@ -190,6 +190,8 @@ const SavedActivities = () => {
           onClose={closeModal}
           activity={selectedActivity}
           user={user}
+          giver_receiver_details={giverDetails as User}
+          isNeedUserDetails={true}
           handlesMoreOptions={{
             handleAcceptActivity,
             handleCancellRequestActivity,
