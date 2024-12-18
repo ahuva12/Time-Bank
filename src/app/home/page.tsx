@@ -130,31 +130,31 @@ export default function Home() {
       {/* Pop-up for Login */}
       {isLoginOpen && (
         <div className={styles.popup}>
-          <div className={styles.popupContent}>
-            <button className={styles.closeButton} onClick={toggleLogin}>
+          {/* <div className={styles.popupContent}> */}
+            {/* <button className={styles.closeButton} onClick={toggleLogin}>
               ×
-            </button>
+            </button> */}
             <Login
               closePopup={toggleLogin}
               setIsRegisterOpen={setIsRegisterOpen}
               setIsLoginOpen={setIsLoginOpen}
             />
-          </div>
+          {/* </div> */}
         </div>
       )}
 
       {/* Pop-up for Signup */}
       {isRegisterOpen && (
         <div className={styles.popup}>
-          <div className={styles.popupContent}>
-            <button className={styles.closeButton} onClick={toggleRegister}>
+          {/* <div className={styles.popupContent}> */}
+            {/* <button className={styles.closeButton} onClick={toggleRegister}>
               ×
-            </button>
+            </button> */}
             <Register
               closePopup={toggleRegister}
               setIsLoginOpen={setIsLoginOpen}
             />
-          </div>
+          {/* </div> */}
         </div>
       )}
     </div>

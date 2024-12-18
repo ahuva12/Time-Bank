@@ -8,7 +8,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { loginSchema } from "@/validations/validationsClient/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUser, getUserByEmail } from "@/services/users";
-import { SuccessMessage, MiniLoader } from "@/components";
+import { SuccessMessage, MiniLoader , ErrorMessage } from "@/components";
 import { googleSignIn } from "@/services/auth";
 interface LoginProps {
   closePopup: () => void;
@@ -27,7 +27,7 @@ const Login: React.FC<LoginProps> = ({
   setIsLoginOpen,
 }) => {
   const { setLogin } = useAuthStore();
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
   const { setUser } = useUserStore();
   const router = useRouter();
   const [isLoader, setIsLoader] = useState(false);
@@ -72,13 +72,15 @@ const Login: React.FC<LoginProps> = ({
     try {
       const data = await googleSignIn();
       const user = await getUserByEmail(data.user.email);
-      console.error(user[0].email);
+      if(!user){
+        setError(true);
+      }
       const newUser= await loginUser(user[0].email, user[0].password, true);
-
       setUser(newUser);
       setShowSuccessMessage(true);
       // setLogin();
     } catch (error) {
+      setError(true);
       console.error("Login failed:", error);
     }
   };
@@ -149,6 +151,12 @@ const Login: React.FC<LoginProps> = ({
           message_line1="התחברת בהצלחה!"
           message_line2="כעת תוכל להתחיל לגלוש ולראות מה חדש:)"
           onOkClick={handleOkClick}
+        />
+      )}
+      {error && (
+        <ErrorMessage
+          message_line1="שגיאה בהתחברות"
+          message_line2="נסה להתחבר עם אמייל אחר"
         />
       )}
     </div>
