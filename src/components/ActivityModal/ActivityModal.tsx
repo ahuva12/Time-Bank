@@ -16,6 +16,7 @@ interface ActivityModalProps {
     activity: Activity;
     user: User | null;
     giver_receiver_details? : User
+    isNeedUserDetails: boolean
     handlesMoreOptions: {
         handleAcceptActivity?: () => void;
         handleCancellRequestActivity?: () => void;
@@ -25,7 +26,7 @@ interface ActivityModalProps {
     };
 }
 
-const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, giver_receiver_details, handlesMoreOptions }) => {
+const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, giver_receiver_details, isNeedUserDetails, handlesMoreOptions }) => {
     console.log(giver_receiver_details)
     if (modeModel === 'close') return null;
     const [userDetails, setUserDetails] = useState<User | null>(null);
@@ -201,7 +202,21 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                                 <div className={styles.profileIcon}>
                                     <CiUser className={styles.icon} />
                                 </div>
-                                {loadingUserDetails ? (
+                                {!isNeedUserDetails ? (
+                                    <p>אף אחד עדיין לא בחר את הפעילות הזאת</p>
+                                ) : giver_receiver_details ? (
+                                    <div className={styles.description}>
+                                        <p className={styles.text}>{giver_receiver_details?.firstName} {giver_receiver_details?.lastName}</p>
+                                        <p className={styles.text}>{giver_receiver_details?.address}</p>
+                                        <p className={styles.text}>{giver_receiver_details?.email}</p>
+                                    </div>
+                                ) : (
+                                    <div className={styles.loader}>
+                                        <MiniLoader />
+                                        <div className={styles.loaderTest}>טוען פרטי משתמש...</div>
+                                    </div>                                
+                                )}
+                                {/* {loadingUserDetails ? (
                                     <div className={styles.loader}>
                                         <MiniLoader />
                                         <div className={styles.loaderTest}>טוען פרטי משתמש...</div>
@@ -214,7 +229,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                                     </div>
                                 ) : (
                                     <p>אף אחד עדיין לא בחר את הפעילות הזאת</p>
-                                )}
+                                )} */}
                             </div>
                         </div>
                     </div>
