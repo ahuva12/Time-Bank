@@ -10,8 +10,10 @@ import { Activity } from "@/types/activity";
 
 const myDonation = () => {
   const { user } = useUserStore();
-  
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
+    null
+  );
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
 
@@ -20,7 +22,6 @@ const myDonation = () => {
     queryFn: () => getFilteringActivities("caughtedGiver", user._id as string),
     staleTime: 10000,
   });
-
 
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
@@ -52,18 +53,24 @@ const myDonation = () => {
       {isLoading || isFetching ? (
         <Loader />
       ) : (
-        <Activities activities={data} onMoreDetails={handleMoreDetails} flag={false} handlesMoreOptions={null}/>
+        <Activities
+          activities={data}
+          onMoreDetails={handleMoreDetails}
+          flag={false}
+          handlesMoreOptions={null}
+        />
       )}
       {modeActivityModel !== "close" && selectedActivity && (
-        <ActivityModal
-        isModeCancellig={isModeCancellig}
-          modeModel={modeActivityModel}
-          onClose={closeModal}
-          activity={selectedActivity}
-          user={user}
-          handlesMoreOptions={{
-          }}
+        <div className={styles.popUpOverlay}>
+          <ActivityModal
+            isModeCancellig={isModeCancellig}
+            modeModel={modeActivityModel}
+            onClose={closeModal}
+            activity={selectedActivity}
+            user={user}
+            handlesMoreOptions={{}}
           />
+        </div>
       )}
     </div>
   );

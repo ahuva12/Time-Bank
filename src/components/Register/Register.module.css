@@ -175,3 +175,25 @@
     transform: scale(0.9);
   }
   
+
+
+  .suggestions {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* עדיפות גבוהה על אלמנטים אחרים */
+    max-height: 150px; /* גובה מקסימלי */
+    overflow-y: auto; /* גלילה אנכית */
+    width: 100%; /* התאמה לרוחב האינפוט */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .suggestions li {
+    padding: 8px;
+    cursor: pointer;
+  }
+  .suggestions li:hover {
+    background-color: #f0f0f0;
+  }

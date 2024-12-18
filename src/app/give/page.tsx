@@ -214,10 +214,10 @@ const give = () => {
       <MyDonation></MyDonation>
       {isPopUpOpen && (
         <div className={styles.popUpOverlay}>
-          <div className={styles.popUpContent}>
-            <button className={styles.closeButton} onClick={onClosePopUp}>
+          {/* <div className={styles.popUpContent}> */}
+            {/* <button className={styles.closeButton} onClick={onClosePopUp}>
               ×
-            </button>
+            </button> */}
             {/* <ActivityPopUp activity={selectedActivity} closePopup={onClosePopUp} /> */}
             <ActivityForm
               activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
@@ -226,7 +226,7 @@ const give = () => {
               handleUpdateActivity={handleUpdateActivity}
               isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
             />
-          </div>
+          {/* </div> */}
         </div>
       )}
       {isSuccessMessageAdding && (
