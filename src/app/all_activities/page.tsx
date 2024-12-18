@@ -8,6 +8,9 @@ import { useUserStore } from '@/store/useUserStore';
 import { Activity } from '@/types/activity';
 import { useAuthStore } from '@/store/authStore';
 import { registrationForActivity, RegistrationActivityPayload } from '@/services/registrationForActivity';
+import { sendEmail } from '@/services/email/sendEmailClient';
+import { User } from '@/types/user';
+import { getUserById } from '@/services/users';
 
 const AllActivities = () => {
   const { user, setUserField } = useUserStore();
@@ -25,6 +28,7 @@ const AllActivities = () => {
   const [activeTab, setActiveTab] = useState('all'); // Default active tab
   const [favorites, setFavorites] = useState<string[]>([]);
   const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
+  const [giverDetails, setGiverDetails] = useState<User | null>(null);
 
   const tabs = [
     { id: 'all', label: 'כל הפעילויות' },
@@ -89,11 +93,48 @@ const AllActivities = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allActivities'] });
+      sendEmailToGiverActivity();
     },
   });
 
+  useEffect(() => {
+    const fetchGievrActivityDetails = async () => {
+      if(!selectedActivity) return;
+      try {
+          const giver = await getUserById(selectedActivity.giverId as string);
+          setGiverDetails(giver);
+  
+      } catch (err) {
+          console.error("Failed to fetch user details:", err);
+      }
+    };
+
+    fetchGievrActivityDetails();
+}, [selectedActivity]);
+
+  const sendEmailToGiverActivity = async () => {
+    if (!selectedActivity || !giverDetails) return;
+    try {
+      const bodySendEmail = {
+        toEmail: giverDetails?.email as string,
+        subjectEmail: `${user.firstName} ${user.lastName} נרשם לפעילות שלך!`,
+        textEmail: `
+        <div style="direction: rtl; text-align: right;">
+          היי <strong>${giverDetails?.firstName}</strong>,<br /><br />
+          אנחנו שמחים לעדכן אותך שהמשתמש <strong>${user.firstName} ${user.lastName}</strong> נרשם לפעילות שהצעת - <strong>${selectedActivity?.nameActivity}</strong>.<br /><br />
+          העברנו לו את פרטי הקשר שלך והוא יצור איתך קשר בהקדם.<br /><br />
+          יתרת השעות שלך עומדת על: <strong>${giverDetails?.remainingHours as number + selectedActivity?.durationHours}</strong><br />
+        </div>
+      `,
+      };    
+      await sendEmail(bodySendEmail); 
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
   // Handlers
-  const handleMoreDetails = (activity: Activity) => {
+  const handleMoreDetails = async (activity: Activity) => {
     setSelectedActivity(activity);
     setModeActivityModel('open');
   };
@@ -196,6 +237,7 @@ const AllActivities = () => {
           onClose={closeModal}
           activity={selectedActivity}
           user={user}
+          giver_receiver_details={giverDetails as User}
           handlesMoreOptions={{
             handleRegistrationActivity,
           }}

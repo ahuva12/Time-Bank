@@ -1,22 +1,25 @@
+import { http } from "../http";
+
+type bodySendEmail = {
+    toEmail:string;
+    subjectEmail:string;
+    textEmail:string;
+}
+
 //send email
-// export const postActivity = async (newActivity) => {
-//     try {
-//       // console.log(newActivity)
-//       const response = await http.post('/activities', {...newActivity, status: 'proposed', receiverId: null});
+export const sendEmail = async (bodySendEmail:bodySendEmail) => {
+    try {
+      console.log(bodySendEmail)
+      const response = await http.post('/sendEmail', bodySendEmail);
 
-//       if (response.status !== 201)
-//         throw new Error(`${response.status}: error posting activitiy`);
+      if (response.status !== 200)
+        throw new Error(`${response.status}: Failed to send Email`);
 
-//       return response.data;
-//     } catch (error: any) {
-//       console.error('Error posting activitiy:', error);
-//       throw new Error(`'Error posting activitiy: ${error.message}`);
-//     }
-// };
+      return response.data;
+    } catch (error: any) {
+      console.error('Error sending Email:', error);
+      throw new Error(`'Error sending Email: ${error.message}`);
+    }
+};
 
-// const mailOptions = {
-//     from: fromEmail, 
-//     to: toEmail, 
-//     subject: subjectEmail, 
-//     text: textEmail,
-//   };
+

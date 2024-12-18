@@ -8,6 +8,9 @@ import { useAuthStore } from '@/store/authStore';
 import { useState, useEffect } from 'react';
 import { Activity } from '@/types/activity';
 import { registrationForActivity, RegistrationActivityPayload } from '@/services/registrationForActivity';
+import { User } from '@/types/user';
+import { getUserById } from '@/services/users';
+import { sendEmail } from '@/services/email/sendEmailClient';
 
 const SavedActivities = () => {
   const { user, setUserField } = useUserStore();
@@ -22,6 +25,7 @@ const SavedActivities = () => {
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>('close');
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
+  const [giverDetails, setGiverDetails] = useState<User | null>(null);
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['savedActivities'],
@@ -82,9 +86,44 @@ const SavedActivities = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['savedActivities'] });
+      sendEmailToGiverActivity();
     },
   });
 
+  useEffect(() => {
+      const fetchGievrActivityDetails = async () => {
+        if(!selectedActivity) return;
+        try {
+            const giver = await getUserById(selectedActivity.giverId as string);
+            setGiverDetails(giver);
+    
+        } catch (err) {
+            console.error("Failed to fetch user details:", err);
+        }
+      };
+  
+      fetchGievrActivityDetails();
+  }, [selectedActivity]);
+  
+    const sendEmailToGiverActivity = async () => {
+      if (!selectedActivity || !giverDetails) return;
+      try {
+        const bodySendEmail = {
+          toEmail: giverDetails?.email as string,
+          subjectEmail: `${user.firstName} ${user.lastName} ביטל את ההרשמה לפעילות שלך...`,
+          textEmail: `
+          <div style="direction: rtl; text-align: right;">
+            היי <strong>${giverDetails?.firstName}</strong>,<br /><br />
+            לצערנו המשתמש <strong>${user.firstName} ${user.lastName}</strong> ביטל את הרשמתו לפעילות שהצעת - <strong>${selectedActivity?.nameActivity}</strong>.<br /><br />
+            יתרת השעות שלך עודכנה בהתאם ועומדת על: <strong>${giverDetails?.remainingHours as number - selectedActivity?.durationHours}</strong><br />
+          </div>
+        `,
+        };    
+        await sendEmail(bodySendEmail); 
+      } catch(error) {
+        console.error(error)
+      }
+    }
   
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
