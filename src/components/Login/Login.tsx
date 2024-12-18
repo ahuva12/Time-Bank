@@ -70,6 +70,7 @@ const Login: React.FC<LoginProps> = ({
 
   const handleGoogleLogin = async () => {
     try {
+      setIsLoader(true);
       const data = await googleSignIn();
       const user = await getUserByEmail(data.user.email);
       if(!user){
@@ -82,6 +83,8 @@ const Login: React.FC<LoginProps> = ({
     } catch (error) {
       setError(true);
       console.error("Login failed:", error);
+    } finally {
+      setIsLoader(false);
     }
   };
 

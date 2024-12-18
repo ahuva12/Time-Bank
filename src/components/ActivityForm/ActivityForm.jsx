@@ -7,12 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import TagSelector from "../TagSelector/TagSelector";
 import { strict } from "assert";
 
-export default function ActivityForm({
-  activity,
-  closePopup,
-  setIsSuccessMessage,
-  isNew = false,
-}) {
+export default function ActivityForm({ activity, closePopup, handleAddActivity, handleUpdateActivity, isNew = false }) {
   const [nameActivity, setNameActivity] = useState(activity.nameActivity || "");
   const [tags, setTags] = useState(activity.tags || []);
   const [numberOfHours, setNumberOfHours] = useState(
@@ -68,39 +63,37 @@ export default function ActivityForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const processedTags =
-        typeof tags === "string"
-          ? tags.split(",").map((tag) => tag.trim())
-          : tags;
-
-      setIsSuccessMessage(true);
-      activityMutation.mutate(
-        {
-          ...(isNew ? { giverId: user._id } : activity), // Include existing data for updates
+      const processedTags = typeof tags === "string"
+        ? tags.split(",").map(tag => tag.trim())
+        : tags;
+      if (isNew) {
+        const newActivity = {
+          giverId: user._id,
           nameActivity,
           tags: processedTags,
           durationHours: Number(numberOfHours),
           description,
-        },
-        {
-          onSuccess: () => {
-            console.log(
-              `${isNew ? "Activity added" : "Activity updated"} successfully!`
-            );
-          },
-          onError: (error) => {
-            console.error(
-              `Failed to ${isNew ? "add" : "update"} activity:`,
-              error
-            );
-          },
         }
-      );
-      closePopup();
+        handleAddActivity(newActivity);
+      }
+      else {
+        const updatedActivity = {
+          ...activity,
+          nameActivity,
+          tags: processedTags,
+          durationHours: Number(numberOfHours),
+          description,
+        }
+        console.log(updatedActivity)
+        handleUpdateActivity(updatedActivity)
+      }
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
+    } finally {
+      closePopup();
     }
   };
+
 
   return (
     <div className={Styles.container}>

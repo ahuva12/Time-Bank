@@ -11,9 +11,7 @@ import { Activity } from "@/types/activity";
 const myDonation = () => {
   const { user } = useUserStore();
   
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
-    null
-  );
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
 
