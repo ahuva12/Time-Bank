@@ -210,7 +210,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
               ) : (
                 <div className={styles.loader}>
                   <MiniLoader />
-                  <div className={styles.loaderTest}>טוען פרטי משתמש...</div>
+                  <div className={styles.loaderText}>טוען פרטי משתמש...</div>
                 </div>
               )}
             </div>            
