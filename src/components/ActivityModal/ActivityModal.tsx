@@ -28,34 +28,6 @@ interface ActivityModalProps {
 const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, giver_receiver_details, isNeedUserDetails, handlesMoreOptions }) => {
     if (modeModel === 'close') return null;
 
-    const renderButtons = () => {
-        const buttonConfig = [
-            { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי', block: false },
-            { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול', block: false },
-            { handler: handlesMoreOptions.handleRegistrationActivity, label: 'אני מעוניין בפעילות זו', block: !user?.remainingHours || user.remainingHours < activity.durationHours },
-            { handler: handlesMoreOptions.handleUpdateActivity, label: 'עדכון', block: false },
-            { handler: handlesMoreOptions.handleCancellProposalActivity, label: 'מחיקה', block: false },
-        ];
-
-        return (
-            <div className={styles.buttonsContainer}>
-                {buttonConfig.map((button, index) => (
-                    button.handler && (
-                        <button
-                            key={index}
-                            className={`${styles.moreOptionButton} ${button.block ? styles.disabledButton : ''
-                                }`}
-                            onClick={button.handler}
-                            disabled={button.block} 
-                        >
-                            {button.label}
-                        </button>
-                    )
-                ))}
-            </div>
-        );
-    };
-
   const renderButtons = () => {
     const buttonConfig = [
       {
