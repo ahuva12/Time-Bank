@@ -32,34 +32,6 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
     const [userDetails, setUserDetails] = useState<User | null>(null);
     const [loadingUserDetails, setLoadingUserDetails] = useState<boolean>(true);
 
-    // useEffect(() => {
-    //     const fetchUserDetails = async () => {
-    //         try {
-    //             let userId = user?._id;
-    //             if (activity.giverId !== user?._id)
-    //                 userId = activity.giverId; // Check recipient first, fallback to giver
-    //             else if (activity.receiverId)
-    //                 userId = activity.receiverId;
-    //             else {
-    //                 setUserDetails(null);
-    //                 return;
-    //             }
-    //             if (userId) {
-    //                 const user = await getUserById(userId as string); // Fetch user details
-    //                 setUserDetails(user);
-    //             } else {
-    //                 setUserDetails(null);
-    //             }
-    //         } catch (err) {
-    //             console.error("Failed to fetch user details:", err);
-    //             // setError("Failed to fetch user details. Please try again.");
-    //         } finally {
-    //             setLoadingUserDetails(false);
-    //         }
-    //     };
-
-    //     fetchUserDetails();
-    // }, []);
     useEffect(()=> {
         setLoadingUserDetails(false)
     }, [giver_receiver_details])
@@ -82,7 +54,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                             className={`${styles.moreOptionButton} ${button.block ? styles.disabledButton : ''
                                 }`}
                             onClick={button.handler}
-                            disabled={button.block} // Disable the button if the condition is true
+                            disabled={button.block} 
                         >
                             {button.label}
                         </button>
@@ -137,18 +109,6 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
         }
 
         if (handlesMoreOptions.handleRegistrationActivity) {
-            // return (
-            //     <SuccessMessage
-            //         message_line1="נרשמת לפעילות בהצלחה!"
-            //         message_line2={`הודענו על כך ל${userDetails?.firstName} ${userDetails?.lastName}`}
-            //         message_line3={
-            //             userDetails?.gender === 'female'
-            //                 ? `תוכל ליצור איתה קשר בטלפון: ${userDetails?.phoneNumber}`
-            //                 : `תוכל ליצור איתו קשר בטלפון: ${userDetails?.phoneNumber}`
-            //         }
-            //         message_line4={`או במייל ${userDetails?.email}`}
-            //     />
-            // );
             return (
                 <SuccessMessage
                     message_line1="נרשמת לפעילות בהצלחה!"
@@ -216,20 +176,6 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                                         <div className={styles.loaderTest}>טוען פרטי משתמש...</div>
                                     </div>                                
                                 )}
-                                {/* {loadingUserDetails ? (
-                                    <div className={styles.loader}>
-                                        <MiniLoader />
-                                        <div className={styles.loaderTest}>טוען פרטי משתמש...</div>
-                                    </div>
-                                ) : giver_receiver_details ? (
-                                    <div className={styles.description}>
-                                        <p className={styles.text}>{giver_receiver_details?.firstName} {giver_receiver_details?.lastName}</p>
-                                        <p className={styles.text}>{giver_receiver_details?.address}</p>
-                                        <p className={styles.text}>{giver_receiver_details?.email}</p>
-                                    </div>
-                                ) : (
-                                    <p>אף אחד עדיין לא בחר את הפעילות הזאת</p>
-                                )} */}
                             </div>
                         </div>
                     </div>

@@ -11,7 +11,7 @@ import { User } from '@/types/user';
 import { getUserById } from '@/services/users';
 import { sendEmail } from '@/services/email/sendEmailClient';
 
-const myDonation = () => {
+const MyDonation = () => {
   const { user } = useUserStore();
   
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -89,4 +89,4 @@ const myDonation = () => {
   );
 };
 
-export default myDonation;
+export default MyDonation;

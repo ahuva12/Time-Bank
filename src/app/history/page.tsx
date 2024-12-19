@@ -6,6 +6,8 @@ import { Activity } from "@/types/activity";
 import { getFilteringActivities } from "@/services/activities";
 import styles from "./history.module.css";
 import { ActivityCard, Loader, ActivityModal } from "@/components";
+import { User } from "@/types/user";
+import { getUserById } from '@/services/users';
 
 export default function History() {
   const { user } = useUserStore();
@@ -20,6 +22,7 @@ export default function History() {
     null
   );
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
+  const [giver_receiver_details, setGiver_receiver_details] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -56,6 +59,21 @@ export default function History() {
 
     fetchHistory();
   }, [user]);
+
+  useEffect(() => {
+    const fetchGievrActivityDetails = async () => {
+      if(!selectedActivity) return;
+      try {
+          const giver = await getUserById(selectedActivity.giverId as string);
+          setGiver_receiver_details(giver);
+  
+      } catch (err) {
+          console.error("Failed to fetch user details:", err);
+      }
+    };
+
+    fetchGievrActivityDetails();
+}, [selectedActivity]);
 
   const paginate = (activities: Activity[], page: number) =>
     activities.slice((page - 1) * itemsPerPage, page * itemsPerPage);
@@ -172,6 +190,8 @@ export default function History() {
           isModeCancellig={false}
           onClose={closeModal}
           activity={selectedActivity}
+          giver_receiver_details={giver_receiver_details as User}
+          isNeedUserDetails={true}
           user={user}
           handlesMoreOptions={{}}
         />
@@ -179,4 +199,3 @@ export default function History() {
     </div>
   );
 }
-//duplicate ActivityModal

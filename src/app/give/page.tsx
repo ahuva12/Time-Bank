@@ -230,13 +230,12 @@ const give = () => {
             <button className={styles.closeButton} onClick={onClosePopUp}>
               ×
             </button>
-            {/* <ActivityPopUp activity={selectedActivity} closePopup={onClosePopUp} /> */}
             <ActivityForm
-              activity={isAddingActivity ? {} : selectedActivity} // Pass empty object for new activity
+              activity={isAddingActivity ? {} : selectedActivity} 
               closePopup={onClosePopUp}
               handleAddActivity={handleAddActivity}
               handleUpdateActivity={handleUpdateActivity}
-              isNew={isAddingActivity} // Pass "isNew" prop to indicate mode
+              isNew={isAddingActivity} 
             />
           </div>
         </div>
