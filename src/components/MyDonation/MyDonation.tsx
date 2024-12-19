@@ -5,23 +5,39 @@ import { Activities, Loader, ErrorMessage, ActivityModal } from "@/components";
 import { useQuery } from "@tanstack/react-query";
 import { getFilteringActivities } from "@/services/activities";
 import { useUserStore } from "@/store/useUserStore";
-import { useState /*, useEffect*/ } from "react";
+import { useState, useEffect } from "react";
 import { Activity } from "@/types/activity";
+import { User } from '@/types/user';
+import { getUserById } from '@/services/users';
 
-const myDonation = () => {
+const MyDonation = () => {
   const { user } = useUserStore();
 
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
-    null
-  );
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
+  const [receiverDetails, setReceiverDetails] = useState<User | null>(null);
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["myDonation"],
     queryFn: () => getFilteringActivities("caughtedGiver", user._id as string),
     staleTime: 10000,
   });
+
+  useEffect(() => {
+      const fetchGievrActivityDetails = async () => {
+        if(!selectedActivity) return;
+        try {
+            const giver = await getUserById(selectedActivity.giverId as string);
+            setReceiverDetails(giver);
+    
+        } catch (err) {
+            console.error("Failed to fetch user details:", err);
+        }
+      };
+  
+      fetchGievrActivityDetails();
+  }, [selectedActivity]);
 
   // Handlers
   const handleMoreDetails = (activity: Activity) => {
@@ -67,6 +83,8 @@ const myDonation = () => {
             modeModel={modeActivityModel}
             onClose={closeModal}
             activity={selectedActivity}
+            giver_receiver_details={receiverDetails as User}
+             isNeedUserDetails={true}
             user={user}
             handlesMoreOptions={{}}
           />
@@ -76,4 +94,4 @@ const myDonation = () => {
   );
 };
 
-export default myDonation;
+export default MyDonation;
