@@ -23,7 +23,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
     const [error, setError] = useState("");
 
     const handleSubmit = async () => {
-        if (!await verifyPassword(oldPassword, user.password)) {
+        if (!await verifyPassword(oldPassword, user.password as string)) {
             setError("הסיסמא הנוכחית לא נכונה");
             return;
         }
