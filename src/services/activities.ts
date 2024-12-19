@@ -34,7 +34,7 @@ export const postActivity = async (newActivity: Activity) => {
       console.error('Error posting activitiy:', error);
       throw new Error(`'Error posting activitiy: ${error.message}`);
     }
-  };
+};
 
 //update activitiy
 export const updateActivity = async (updatedActivity:Activity) => {
