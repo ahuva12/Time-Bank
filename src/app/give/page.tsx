@@ -18,7 +18,6 @@ import { Activity } from "@/types/activity";
 import { FaPlus } from "react-icons/fa";
 
 const give = () => {
-
   const { user } = useUserStore();
   const { isLoggedIn } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
@@ -164,16 +163,6 @@ const give = () => {
     setModeActivityModel("close");
   };
 
-  // if (!isLoggedIn && isInitialized) {
-  //   return (
-  //     <ErrorMessage
-  //       message_line1="אתה לא מחובר!"
-  //       message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-  //       link='/home'
-  //     />
-  //   );
-  // }
-
   // Render content based on the query's state
   if (isError) {
     return (
@@ -226,8 +215,8 @@ const give = () => {
       <MyDonation></MyDonation>
       {isPopUpOpen && (
         <div className={styles.popUpOverlay}>
-          <div className={styles.popUpContent}>
-            <button className={styles.closeButton} onClick={onClosePopUp}>
+          {/* <div className={styles.popUpContent}> */}
+            {/* <button className={styles.closeButton} onClick={onClosePopUp}>
               ×
             </button>
             <ActivityForm
@@ -237,7 +226,7 @@ const give = () => {
               handleUpdateActivity={handleUpdateActivity}
               isNew={isAddingActivity} 
             />
-          </div>
+          {/* </div> */}
         </div>
       )}
       {isSuccessMessageAdding && (

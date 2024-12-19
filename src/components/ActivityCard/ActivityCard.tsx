@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import styles from "./ActivityCard.module.css";
 import { Activity } from "@/types/activity";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { updateStatusActivity } from '@/services/activities';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import { WarningMessage } from '@/components';
+import { updateStatusActivity } from "@/services/activities";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { WarningMessage } from "@/components";
 
 interface ActivityCardProps {
   activity: Activity;
@@ -14,13 +13,20 @@ interface ActivityCardProps {
   isGeneral?: boolean;
   flag: boolean;
   handlesMoreOptions: null | {
-    handleDeleteActivity?: (activityId:string) => void;
+    handleDeleteActivity?: (activityId: string) => void;
     onUpdate: () => void;
-    setSelectedActivity: any
+    setSelectedActivity: any;
   };
 }
 
-const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onToggleFavorite, isGeneral }: ActivityCardProps) => {
+const ActivityCard = ({
+  activity,
+  onMoreDetails,
+  flag,
+  handlesMoreOptions,
+  onToggleFavorite,
+  isGeneral,
+}: ActivityCardProps) => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [isWarningMessage, setIsWarningMessage] = useState<boolean>(false);
 
@@ -34,7 +40,7 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
     setIsFavorite((prev) => !prev);
     if (onToggleFavorite !== undefined)
       onToggleFavorite(activityId, isFavorite); // Notify the parent
-  }
+  };
 
   const onUpdate = (): void => {
     handlesMoreOptions?.setSelectedActivity(activity);
@@ -55,7 +61,7 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
       setIsWarningMessage(false);
     }
   };
-  
+
   return (
     <div className={styles.card}>
       <div className={styles.content}>
@@ -68,17 +74,19 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
               {activity.durationHours} {"שעות"}
             </p>
           </div>
-          {isGeneral && (
-            isFavorite ? (
+          {isGeneral &&
+            (isFavorite ? (
               <FaStar className={styles.icon} onClick={toggleFavorite} />
             ) : (
               <FaRegStar className={styles.icon} onClick={toggleFavorite} />
-            )
-          )}
+            ))}
           {flag && (
             <div className={styles.icons}>
               <FaEdit className={styles.editIcon} onClick={onUpdate} />
-              <FaTrash className={styles.editIcon} onClick={() => setIsWarningMessage(true)} />
+              <FaTrash
+                className={styles.editIcon}
+                onClick={() => setIsWarningMessage(true)}
+              />
             </div>
           )}
         </div>
@@ -95,14 +103,14 @@ const ActivityCard = ({ activity, onMoreDetails, flag, handlesMoreOptions, onTog
         פרטים נוספים
       </button>
       {flag && isWarningMessage && (
-        <WarningMessage message="אתה בטוח שברצונך למחוק את הפעילות?" 
-                        okfunction={deleteActivity} 
-                        setIsWarningMessage={setIsWarningMessage}/> 
+        <WarningMessage
+          message="אתה בטוח שברצונך למחוק את הפעילות?"
+          okfunction={deleteActivity}
+          setIsWarningMessage={setIsWarningMessage}
+        />
       )}
-
     </div>
   );
 };
-
 
 export default ActivityCard;

@@ -26,7 +26,6 @@ Before getting started, ensure you have the following software installed:
      ```
 
 
-
 ## Installing Dependencies
 
 Once you have the prerequisites installed, follow these steps to set up the project:
