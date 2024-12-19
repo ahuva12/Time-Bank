@@ -4,7 +4,6 @@ import { Activity } from '@/types/activity';
 //get activities based on filtering 
 //(the filters are can be: 'caughted', 'history', 'proposed', 'caughtedGiver', 'proposedGiver')
 export const getFilteringActivities = async (filterType:string, userId:string) => {
-  console.log('getFilteringActivities');
   const body = { filterType };
 
   try {
@@ -23,7 +22,6 @@ export const getFilteringActivities = async (filterType:string, userId:string) =
 // Post activitiy
 export const postActivity = async (newActivity: Activity) => {
     try {
-      // console.log(newActivity)
       const response = await http.post('/activities', {...newActivity, status: 'proposed', receiverId: null});
 
       if (response.status !== 201)
