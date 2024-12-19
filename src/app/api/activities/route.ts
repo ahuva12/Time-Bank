@@ -8,8 +8,6 @@ import { ObjectId } from "mongodb";
 export async function POST(req: Request) {
     try {
         const body: Activity = await req.json();
-        console.log("Adding activity")
-        console.log(body)
         const validatedActivity = activitySchema.parse(body);
         body.giverId = new ObjectId(body.giverId);
         const client = await connectDatabase();

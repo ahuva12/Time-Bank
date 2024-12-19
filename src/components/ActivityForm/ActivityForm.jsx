@@ -1,67 +1,29 @@
 "use client";
-import { useState } from "react";
 import { useUserStore } from "@/store/useUserStore";
 import Styles from "./ActivityForm.module.css";
-import { postActivity, updateActivity } from "@/services/activities"; // Add createActivity
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import TagSelector from "../TagSelector/TagSelector";
-import { strict } from "assert";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { addActivityForm } from "@/validations/validationsClient/activity";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 export default function ActivityForm({ activity, closePopup, handleAddActivity, handleUpdateActivity, isNew = false }) {
-  const [nameActivity, setNameActivity] = useState(activity.nameActivity || "");
-  const [tags, setTags] = useState(activity.tags || []);
-  const [numberOfHours, setNumberOfHours] = useState(
-    activity.durationHours || ""
-  );
-  const [description, setDescription] = useState(activity.description || "");
-  const [error, setError] = useState("");
-
-  const queryClient = useQueryClient();
-  const { user } = useUserStore();
-
-  const mutationFunc = isNew ? postActivity : updateActivity; // Use create or update function
-
-  const activityMutation = useMutation({
-    mutationFn: mutationFunc,
-    onMutate: async (activityData) => {
-      await queryClient.cancelQueries({ queryKey: ["activities"] });
-      const previousActivities = queryClient.getQueryData(["activities"]);
-      if (!isNew) {
-        queryClient.setQueryData(["activities"], (old) =>
-          old
-            ? old.map((activity) =>
-                activity._id === activityData._id
-                  ? { ...activity, ...activityData }
-                  : activity
-              )
-            : []
-        );
-      } else {
-        queryClient.setQueryData(["activities"], (old) => [
-          ...(old || []),
-          activityData,
-        ]);
+  const { register, handleSubmit, formState: { errors }, } = useForm({
+      resolver: zodResolver(addActivityForm),
+      defaultValues: {
+        nameActivity: activity.nameActivity,
+        durationHours: String(activity.durationHours),
+        description: activity.description,
       }
-      return { previousActivities };
-    },
-    onError: (error, variables, context) => {
-      if (context?.previousActivities) {
-        queryClient.setQueryData(["activities"], context.previousActivities);
-      }
-      console.error(`${isNew ? "Adding" : "Updating"} activity failed:`, error);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["activities"] });
-    },
-  });
+    });
 
-  const handleTagChange = (newTags) => {
-    setTags(newTags.join(", "));
-    console.log(newTags, tags);
-  };
+    const [tags, setTags] = useState(activity.tags || []);
+    const { user } = useUserStore();
+    const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    // e.preventDefault();
+    console.log(data)
     try {
       const processedTags = typeof tags === "string"
         ? tags.split(",").map(tag => tag.trim())
@@ -69,22 +31,19 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
       if (isNew) {
         const newActivity = {
           giverId: user._id,
-          nameActivity,
+          ...data,
           tags: processedTags,
-          durationHours: Number(numberOfHours),
-          description,
         }
+        newActivity.durationHours = Number(newActivity.durationHours);
         handleAddActivity(newActivity);
       }
       else {
         const updatedActivity = {
           ...activity,
-          nameActivity,
-          tags: processedTags,
-          durationHours: Number(numberOfHours),
-          description,
+          ...data,
+          tags: processedTags, 
         }
-        console.log(updatedActivity)
+        updatedActivity.durationHours = Number(updatedActivity.durationHours);
         handleUpdateActivity(updatedActivity)
       }
     } catch (error) {
@@ -92,6 +51,11 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
     } finally {
       closePopup();
     }
+  }
+
+  const handleTagChange = (newTags) => {
+    setTags(newTags.join(", "));
+    console.log(newTags, tags);
   };
 
 
@@ -103,16 +67,20 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
       <div className={Styles.heading}>
         {isNew ? "הוסף פעילות חדשה" : "פרטי הפעילות"}
       </div>
-      <form onSubmit={handleSubmit} className={Styles.form}>
+      <form onSubmit={handleSubmit(onSubmit)} className={Styles.form}>
         <div className={Styles.fieldContainer}>
           <input
             className={Styles.input}
             type="text"
-            placeholder="שם הפעילות"
-            value={nameActivity}
-            onChange={(e) => setNameActivity(e.target.value)}
-            required
+            placeholder="שם הפעילות"   
+            { ...register("nameActivity") }         
+            // required 
           />
+          {errors.nameActivity && (
+            <p className={Styles.errorMessage}>
+              {String(errors.nameActivity.message)}
+            </p>
+          )}
         </div>
         <div className={Styles.fieldContainer}>
           <TagSelector
@@ -129,10 +97,14 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
             className={Styles.input}
             type="number"
             placeholder="מספר שעות"
-            value={numberOfHours}
-            onChange={(e) => setNumberOfHours(e.target.value)}
-            required
+            { ...register("durationHours") }
+            // required
           />
+          {errors.durationHours && (
+            <p className={Styles.errorMessage}>
+              {String(errors.durationHours.message)}
+            </p>
+          )}
         </div>
 
         <div className={Styles.fieldContainer}>
@@ -140,10 +112,14 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
             className={Styles.input}
             type="text"
             placeholder="תיאור"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
+            { ...register("description") }
+            // required
           />
+          {errors.description && (
+            <p className={Styles.errorMessage}>
+              {String(errors.description.message)}
+            </p>
+          )}
         </div>
         <input
           className={Styles.loginButton}
