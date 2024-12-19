@@ -37,6 +37,7 @@ export const registerUser = async (newUser: User) => {
 };
 
 export const updateUser = async (updatedUser: User) => {
+    console.log(updatedUser)
     try {
         const response = await http.patch(`/users/${updatedUser._id}`, updatedUser);
 
