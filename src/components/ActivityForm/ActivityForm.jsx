@@ -11,9 +11,9 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
   const { register, handleSubmit, formState: { errors }, } = useForm({
       resolver: zodResolver(addActivityForm),
       defaultValues: {
-        nameActivity: activity.nameActivity,
-        durationHours: String(activity.durationHours),
-        description: activity.description,
+        nameActivity: activity?.nameActivity,
+        durationHours: String(activity?.durationHours),
+        description: activity?.description,
       }
     });
 
@@ -22,8 +22,6 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
     const [error, setError] = useState("");
 
   const onSubmit = async (data) => {
-    // e.preventDefault();
-    console.log(data)
     try {
       const processedTags = typeof tags === "string"
         ? tags.split(",").map(tag => tag.trim())
@@ -55,9 +53,7 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
 
   const handleTagChange = (newTags) => {
     setTags(newTags.join(", "));
-    console.log(newTags, tags);
   };
-
 
   return (
     <div className={Styles.container}>

@@ -215,8 +215,8 @@ const give = () => {
       <MyDonation></MyDonation>
       {isPopUpOpen && (
         <div className={styles.popUpOverlay}>
-          {/* <div className={styles.popUpContent}> */}
-            {/* <button className={styles.closeButton} onClick={onClosePopUp}>
+           <div className={styles.popUpContent}> 
+            <button className={styles.closeButton} onClick={onClosePopUp}>
               ×
             </button>
             <ActivityForm
@@ -226,7 +226,7 @@ const give = () => {
               handleUpdateActivity={handleUpdateActivity}
               isNew={isAddingActivity} 
             />
-          {/* </div> */}
+           </div> 
         </div>
       )}
       {isSuccessMessageAdding && (
