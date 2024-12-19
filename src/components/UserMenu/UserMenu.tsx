@@ -58,12 +58,16 @@ export default function UserMenu() {
     router.push('/home')
   }
 
-  return (
-    <div className={styles.profileContainer} ref={dropdownRef}>
+  return (    
+  <div className={styles.profileContainer} ref={dropdownRef}>
       {/* Profile Icon */}
       <div className={styles.userMenu} onClick={toggleDropdown}>
         <div className={styles.profileIcon}>
-          <CiUser className={styles.icon} />
+          {user.photoURL ? (
+            <img className={styles.imgIcon} src={user.photoURL} />
+          ) : (
+            <CiUser className={styles.icon} />
+          )}
         </div>
       </div>
 

@@ -42,6 +42,9 @@
   height: auto;
 }
 
+.imgPhoto {
+  border-radius: 50%;
+}
 /* .profileIcon {
   width: 30vw;
   height: 30vh;
