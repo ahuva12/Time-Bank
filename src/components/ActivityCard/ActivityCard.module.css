@@ -30,17 +30,22 @@
 .tags {
   margin-top: 1px;
   display: flex;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .tag {
   background-color: #effdff;
   color: #048ebc;
-  border-radius: 5px;
-  padding: 2px 4px;
-  margin-left: 5px;
-  font-size: 15px;
-  margin-top: 5px;
+  border-radius: 10px;
+  padding: 4px 9px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  /* box-shadow: 0px 8px 8px -7px #cff0ff; */
+  border: 2px solid transparent;
 }
 
 .description {
@@ -68,8 +73,7 @@
 }
 
 .hour {
-  color: #B0B0B0;
-
+  color: #b0b0b0;
 }
 
 .wrapper {
@@ -78,15 +82,12 @@
   align-items: center;
 }
 
-
 .icon {
   font-size: x-large;
   cursor: pointer;
   color: rgb(255, 222, 38);
   align-self: start;
 }
-
-
 
 .wrapper {
   display: flex;
