@@ -1,10 +1,7 @@
 "use client";
-import { FaCheckCircle } from "react-icons/fa";
 import styles from "./ActivityModal.module.css";
 import { Activity } from "@/types/activity";
 import { User } from "@/types/user";
-import { calculateAge } from "@/services/utils";
-import { CiUser } from "react-icons/ci";
 import { ErrorMessage, SuccessMessage, MiniLoader } from "@/components";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
