@@ -27,14 +27,7 @@ interface ActivityModalProps {
 }
 
 const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, giver_receiver_details, isNeedUserDetails, handlesMoreOptions }) => {
-    console.log(giver_receiver_details)
     if (modeModel === 'close') return null;
-    const [userDetails, setUserDetails] = useState<User | null>(null);
-    const [loadingUserDetails, setLoadingUserDetails] = useState<boolean>(true);
-
-    useEffect(()=> {
-        setLoadingUserDetails(false)
-    }, [giver_receiver_details])
 
     const renderButtons = () => {
         const buttonConfig = [
