@@ -6,24 +6,33 @@ import { ErrorMessage, SuccessMessage, MiniLoader } from "@/components";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 interface ActivityModalProps {
-    modeModel: string;
-    isModeCancellig: boolean;
-    onClose: () => void;
-    activity: Activity;
-    user: User | null;
-    giver_receiver_details? : User
-    isNeedUserDetails: boolean
-    handlesMoreOptions: {
-        handleAcceptActivity?: () => void;
-        handleCancellRequestActivity?: () => void;
-        handleRegistrationActivity?: () => void;
-        handleUpdateActivity?: () => void;
-        handleCancellProposalActivity?: () => void;
-    };
+  modeModel: string;
+  isModeCancellig: boolean;
+  onClose: () => void;
+  activity: Activity;
+  user: User | null;
+  giver_receiver_details?: User;
+  isNeedUserDetails: boolean;
+  handlesMoreOptions: {
+    handleAcceptActivity?: () => void;
+    handleCancellRequestActivity?: () => void;
+    handleRegistrationActivity?: () => void;
+    handleUpdateActivity?: () => void;
+    handleCancellProposalActivity?: () => void;
+  };
 }
 
-const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, giver_receiver_details, isNeedUserDetails, handlesMoreOptions }) => {
-    if (modeModel === 'close') return null;
+const ActivityModal: React.FC<ActivityModalProps> = ({
+  modeModel,
+  isModeCancellig,
+  onClose,
+  activity,
+  user,
+  giver_receiver_details,
+  isNeedUserDetails,
+  handlesMoreOptions,
+}) => {
+  if (modeModel === "close") return null;
 
   const renderButtons = () => {
     const buttonConfig = [
@@ -85,62 +94,62 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
       />
     );
   };
-  
+
   const successModal = () => {
-        if (handlesMoreOptions.handleAcceptActivity && !isModeCancellig) {
-            return (
-                <SuccessMessage
-                    message_line1="שמחים שנהנית :)"
-                    message_line2={`יתרת השעות שלך עומדת על: ${user?.remainingHours}`}
-                    message_line3={`תמיד נשמח לקבל משוב על הפעילות במייל Timerepublic@gmail.com`}
-                />
-            );
-        }
+    if (handlesMoreOptions.handleAcceptActivity && !isModeCancellig) {
+      return (
+        <SuccessMessage
+          message_line1="שמחים שנהנית :)"
+          message_line2={`יתרת השעות שלך עומדת על: ${user?.remainingHours}`}
+          message_line3={`תמיד נשמח לקבל משוב על הפעילות במייל Timerepublic@gmail.com`}
+        />
+      );
+    }
 
-        if (handlesMoreOptions.handleCancellRequestActivity && isModeCancellig) {
-            return (
-                <SuccessMessage
-                    message_line1="ביטול הפעילות התקבל בהצלחה"
-                    message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours}`}
-                    />
-            );
-        }
+    if (handlesMoreOptions.handleCancellRequestActivity && isModeCancellig) {
+      return (
+        <SuccessMessage
+          message_line1="ביטול הפעילות התקבל בהצלחה"
+          message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours}`}
+        />
+      );
+    }
 
-        if (handlesMoreOptions.handleUpdateActivity && isModeCancellig) {
-            return (
-                <SuccessMessage
-                    message_line1="עדכון פרטי הפעילות התבצע בהצלחה"
-                    message_line2={`תמיד נשמח לקבל פרגונים במייל Timerepublic@gmail.com`}
-                />
-            );
-        }
+    if (handlesMoreOptions.handleUpdateActivity && isModeCancellig) {
+      return (
+        <SuccessMessage
+          message_line1="עדכון פרטי הפעילות התבצע בהצלחה"
+          message_line2={`תמיד נשמח לקבל פרגונים במייל Timerepublic@gmail.com`}
+        />
+      );
+    }
 
-        if (handlesMoreOptions.handleCancellProposalActivity && !isModeCancellig) {
-            return (
-                <SuccessMessage
-                    message_line1="הפעילות שלך נמחקה בהצלחה"
-                    message_line2={`תמיד נשמח לקבל פרגונים במייל Timerepublic@gmail.com`}
-                />
-            );
-        }
+    if (handlesMoreOptions.handleCancellProposalActivity && !isModeCancellig) {
+      return (
+        <SuccessMessage
+          message_line1="הפעילות שלך נמחקה בהצלחה"
+          message_line2={`תמיד נשמח לקבל פרגונים במייל Timerepublic@gmail.com`}
+        />
+      );
+    }
 
-        if (handlesMoreOptions.handleRegistrationActivity) {
-            return (
-                <SuccessMessage
-                    message_line1="נרשמת לפעילות בהצלחה!"
-                    message_line2={`הודענו על כך ל${giver_receiver_details?.firstName} ${giver_receiver_details?.lastName}`}
-                    message_line3={
-                        giver_receiver_details?.gender === 'female'
-                            ? `תוכל ליצור איתה קשר בטלפון: ${giver_receiver_details?.phoneNumber}`
-                            : `תוכל ליצור איתו קשר בטלפון: ${giver_receiver_details?.phoneNumber}`
-                    }
-                    message_line4={`או במייל ${giver_receiver_details?.email}`}
-                />
-            );
-        }
+    if (handlesMoreOptions.handleRegistrationActivity) {
+      return (
+        <SuccessMessage
+          message_line1="נרשמת לפעילות בהצלחה!"
+          message_line2={`הודענו על כך ל${giver_receiver_details?.firstName} ${giver_receiver_details?.lastName}`}
+          message_line3={
+            giver_receiver_details?.gender === "female"
+              ? `תוכל ליצור איתה קשר בטלפון: ${giver_receiver_details?.phoneNumber}`
+              : `תוכל ליצור איתו קשר בטלפון: ${giver_receiver_details?.phoneNumber}`
+          }
+          message_line4={`או במייל ${giver_receiver_details?.email}`}
+        />
+      );
+    }
 
-        return null;
-    };
+    return null;
+  };
 
   const activityModalOpen = () => {
     return (
@@ -152,15 +161,19 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
           <div className={styles.form}>
             <div className={styles.heading}>פרטי פעילות</div>
             <div className={styles.cardClient}>
-              <div className={styles.formGroup}>
-                <div className={styles.name}>{activity.nameActivity}</div>
-              </div>
-              <div className={styles.formGroup}>
-                <div className={styles.actDetails}>{activity.description}</div>
-              </div>
-              <div className={styles.formGroup}>
-                <div className={styles.actDetails}>
-                  {activity.durationHours} שעות
+              <div className={styles.start}>
+                <div className={styles.formGroup}>
+                  <p className={styles.activityName}>
+                    <strong>{activity.nameActivity}</strong>
+                  </p>
+                  <p className={styles.hour}>
+                    {activity.durationHours} {"שעות"}
+                  </p>
+                </div>
+                <div className={styles.formGroup}>
+                  <div className={styles.actDetails}>
+                    {activity.description}
+                  </div>
                 </div>
               </div>
               <div className={styles.tagsContainer}>
@@ -170,7 +183,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                   </span>
                 ))}
               </div>
-            </div>      
+            </div>
             <div className={styles.cardClient}>
               {!isNeedUserDetails ? (
                 <p>אף אחד עדיין לא בחר את הפעילות הזאת</p>
@@ -194,25 +207,28 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                     )}
                   </div>
                   <p className={styles.name}>
-                    {giver_receiver_details?.firstName} {giver_receiver_details?.lastName}
+                    {giver_receiver_details?.firstName}{" "}
+                    {giver_receiver_details?.lastName}
                     <span className={styles.userDet}>
                       {giver_receiver_details?.address}
                     </span>
                     <span className={styles.userDet}>
                       {giver_receiver_details?.phoneNumber}
                     </span>
-                    <span className={styles.userDet}>{giver_receiver_details?.email}</span>
+                    <span className={styles.userDet}>
+                      {giver_receiver_details?.email}
+                    </span>
                   </p>
                 </>
               ) : (
                 <div className={styles.loader}>
                   <MiniLoader />
-                  <div className={styles.loaderText}>טוען פרטי משתמש...</div>
+                  {/* <div className={styles.loaderText}>טוען פרטי משתמש...</div> */}
                 </div>
               )}
-            </div>            
+            </div>
           </div>
-          
+
           <div>{renderButtons()}</div>
         </div>
       </div>
