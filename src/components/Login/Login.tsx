@@ -73,15 +73,12 @@ const Login: React.FC<LoginProps> = ({
       const data = await googleSignIn();
       setIsLoader(true);
       const user = await getUserByEmail(data.user.email);
-      console.log(user)
     
       if(!user){
         setError(true);
       }
-      const newUser= await loginUser(user[0].email, user[0].password, true);
-      console.log(newUser)
 
-      setUser({ ...newUser, photoURL: data.user.photoURL });
+      setUser({ ...user[0], photoURL: data.user.photoURL });
       if (!user[0].photoURL) {
         const updatedUserWithPhoto = {
           _id: user[0]._id,

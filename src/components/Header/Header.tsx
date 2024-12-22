@@ -20,7 +20,7 @@ export default function Header() {
   const handleOnMouseEnter = (page:string) : void => {
     let explanation = null;
     switch (page) {
-      case 'all_activities':
+      case 'all-activities':
         explanation = 'כאן תוכל להתרשם מכל הפעילויות שהחברים הציעו ו"לקנות" את הפעילות המועדפת עליך';
         break; 
       case 'give':
@@ -40,8 +40,8 @@ export default function Header() {
           <Link href="/home" className={styles.navItem}>
             דף הבית
           </Link>
-          <Link href="/all_activities" className={styles.navItem} 
-            onMouseEnter={() => handleOnMouseEnter('all_activities')}
+          <Link href="/all-activities" className={styles.navItem} 
+            onMouseEnter={() => handleOnMouseEnter('all-activities')}
             onMouseLeave={() => setIsExplanationPage(false)}>
             פעילויות
           </Link>
