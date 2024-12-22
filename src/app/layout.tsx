@@ -2,7 +2,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
-import ReactQueryProvider from '@/providers/ReactQueryProvider';
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { useAuthStore } from "@/store/authStore";
 import { HeaderLogin, HeaderLogout, HeaderLoading } from "@/components";
 import { useState, useEffect } from "react";
@@ -25,30 +25,50 @@ export default function RootLayout({
 }>) {
   const { isLoggedIn } = useAuthStore();
   const [isReady, setIsReady] = useState(false);
+  const [isFloating, setIsFloating] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn !== undefined) {
       setIsReady(true);
     }
   }, [isLoggedIn]);
- 
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsFloating(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <html lang="en" dir="rtl">
-        <head>
+      <head>
         <title>TimeRepublik</title>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-        {isReady ? (isLoggedIn ? <HeaderLogin /> : <HeaderLogout />) :
-        <HeaderLoading/>}
-        {children}
-        <Footer /> 
+          {isReady ? (
+            isLoggedIn ? (
+              <div className={isFloating ? "floatingHeader" : "header"}>
+                <HeaderLogin />
+              </div>
+            ) : (
+              <div className={isFloating ? "floatingHeader" : "header"}>
+                <HeaderLogout />
+              </div>
+            )
+          ) : (
+            <div className={isFloating ? "floatingHeader" : "header"}>
+              <HeaderLoading />
+            </div>
+          )}
+          {children}
+          <Footer />
         </ReactQueryProvider>
-        
       </body>
     </html>
   );
 }
-
