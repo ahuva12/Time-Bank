@@ -34,8 +34,9 @@ export default function RootLayout({
  
   return (
     <html lang="en" dir="rtl">
-        <head>
+      <head>
         <title>TimeRepublik</title>
+        <link href="/images/heands.png" rel="icon" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
