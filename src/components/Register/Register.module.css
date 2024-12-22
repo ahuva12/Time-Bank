@@ -94,51 +94,6 @@
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
   }
   
-  /* .socialAccountContainer {
-    margin-top: 25px;
-  }
-  
-  .socialAccountContainer .title {
-    display: block;
-    text-align: center;
-    font-size: 10px;
-    color: rgb(170, 170, 170);
-  }
-  
-  .socialAccountContainer .socialAccounts {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 5px;
-  }
-  
-  .socialAccountContainer .socialAccounts .socialButton {
-    background: linear-gradient(45deg, rgb(0, 0, 0) 0%, rgb(112, 112, 112) 100%);
-    border: 5px solid white;
-    padding: 5px;
-    border-radius: 50%;
-    width: 40px;
-    aspect-ratio: 1;
-    display: grid;
-    place-content: center;
-    box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 12px 10px -8px;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .socialAccountContainer .socialAccounts .socialButton .svg {
-    fill: white;
-    margin: auto;
-  }
-  
-  .socialAccountContainer .socialAccounts .socialButton:hover {
-    transform: scale(1.2);
-  }
-  
-  .socialAccountContainer .socialAccounts .socialButton:active {
-    transform: scale(0.9);
-  } */
-  
   .agreement {
     display: block;
     text-align: center;
@@ -149,7 +104,7 @@
   .agreement a {
     text-decoration: none;
     color: #0099ff;
-    font-size: 9px;
+    font-size: 11px;
   }
   
   .closeButton {
