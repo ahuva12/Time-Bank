@@ -1,11 +1,11 @@
-// "use client";
-import type { Metadata } from "next";
+"use client";
 import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
-import Header from '@/components/Header/Header';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
-
+import { useAuthStore } from "@/store/authStore";
+import { HeaderLogin, HeaderLogout, HeaderLoading } from "@/components";
+import { useState, useEffect } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,22 +18,31 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadata: Metadata = {
-  title: "TimeRepublik",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isLoggedIn } = useAuthStore();
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    if (isLoggedIn !== undefined) {
+      setIsReady(true);
+    }
+  }, [isLoggedIn]);
+ 
   return (
-    <html lang="en"  dir="rtl">
+    <html lang="en" dir="rtl">
+        <head>
+        <title>TimeRepublik</title>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-        <Header />
+        {isReady ? (isLoggedIn ? <HeaderLogin /> : <HeaderLogout />) :
+        <HeaderLoading/>}
         {children}
         <Footer /> 
         </ReactQueryProvider>
@@ -42,3 +51,4 @@ export default function RootLayout({
     </html>
   );
 }
+
