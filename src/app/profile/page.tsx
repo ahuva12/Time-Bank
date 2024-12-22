@@ -53,6 +53,8 @@ const Profile: React.FC = () => {
 
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
+  console.log(user)
+
 
   const [editingField, setEditingField] = useState<keyof EditableFields | null>(
     null
@@ -137,7 +139,7 @@ const Profile: React.FC = () => {
 
   const handleEditClick = (field: keyof EditableFields) => {
     setEditingField(field);
-    setValue(field, user[field]); // Pre-fill the input with the current value
+    setValue(field, user[field] as string); // Pre-fill the input with the current value
   };
 
   const Form = () => {
@@ -153,9 +155,9 @@ const Profile: React.FC = () => {
 
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
-        {Object.keys(editableFieldsSchema.shape).map((field) => (
+        {Object.keys(editableFieldsSchema.shape).map((field, index) => (
           <>
-            <div key={field} className={styles.field}>
+            <div key={index} className={styles.field}>
               <span className={styles.wrapperRow}>
                 <p className={styles.label}>
                   {fieldMappings[field as keyof EditableFields]}
@@ -208,7 +210,10 @@ const Profile: React.FC = () => {
     <div className={styles.container}>
       <main className={styles.main}>
         <div className={styles.logoContainer}>
-          {user.gender === "female" ? (
+          {user.photoURL ? (      
+            <img className={styles.imgPhoto} src={user.photoURL} alt="User Photo" />
+          ) :
+          user.gender === "female" ? (
             <DotLottieReact
               className={styles.icon}
               src="https://lottie.host/15aac7a1-b7b2-4340-b8f8-02eab363e880/ceE1Czg7gO.lottie"

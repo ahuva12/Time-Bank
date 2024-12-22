@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { loginSchema } from "@/validations/validationsClient/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser, getUserByEmail } from "@/services/users";
+import { loginUser, getUserByEmail, updateUser } from "@/services/users";
 import { SuccessMessage, MiniLoader , ErrorMessage } from "@/components";
 import { googleSignIn } from "@/services/auth";
 interface LoginProps {
@@ -70,19 +70,32 @@ const Login: React.FC<LoginProps> = ({
 
   const handleGoogleLogin = async () => {
     try {
-      setIsLoader(true);
       const data = await googleSignIn();
+      setIsLoader(true);
       const user = await getUserByEmail(data.user.email);
+    
       if(!user){
         setError(true);
       }
-      const newUser= await loginUser(user[0].email, user[0].password, true);
-      setUser(newUser);
+
+      setUser({ ...user[0], photoURL: data.user.photoURL });
+      if (!user[0].photoURL) {
+        const updatedUserWithPhoto = {
+          _id: user[0]._id,
+          photoURL: data.user.photoURL,
+        }
+        await updateUser(updatedUserWithPhoto);
+      }
       setShowSuccessMessage(true);
-      // setLogin();
-    } catch (error) {
-      setError(true);
-      console.error("Login failed:", error);
+
+    } catch (error:any) {
+      if (error.message.includes('Error updating user')) {
+        console.error("Error updating user:", error);
+        setShowSuccessMessage(true);
+      } else {
+        setError(true);
+        console.error("Login failed:", error);
+      }
     } finally {
       setIsLoader(false);
     }
