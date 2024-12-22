@@ -71,19 +71,25 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             <div className={styles.buttonsContainer}>
                 {buttonConfig.map((button, index) => (
                     button.handler && (
-                        <button
-                            key={index}
-                            className={`${styles.moreOptionButton} ${button.block ? styles.disabledButton : ''
-                                }`}
-                            onClick={button.handler}
-                            disabled={button.block} // Disable the button if the condition is true
-                        >
-                            {button.label}
-                        </button>
+                        <div key={index} className={styles.buttonWrapper}>
+                            <button
+                                className={`${styles.moreOptionButton} ${button.block ? styles.disabledButton : ''}`}
+                                onClick={button.handler}
+                                disabled={button.block} // Disable the button if the condition is true
+                            >
+                                {button.label}
+                            </button>
+                            {button.block && (
+                                <span className={styles.blockedMessage}>
+                                    אין לך מספיק שעות לצורך רישום לפעילות זו. 
+                                </span>
+                            )}
+                        </div>
                     )
                 ))}
             </div>
         );
+
     };
 
     const errorModal = () => {
@@ -108,7 +114,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
                 <SuccessMessage
                     message_line1="ביטול הפעילות התקבל בהצלחה"
                     message_line2={`יתרת השעות שלך עודכנה ל: ${user?.remainingHours}`}
-                    />
+                />
             );
         }
 

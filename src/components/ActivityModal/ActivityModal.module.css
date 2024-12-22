@@ -264,3 +264,12 @@
     padding: 1rem;
     width: 100%;
 }
+
+.buttonWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
