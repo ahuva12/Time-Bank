@@ -18,8 +18,8 @@ const AllActivities = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    setIsInitialized(true); 
-}, [isLoggedIn]);
+    setIsInitialized(true);
+  }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -29,6 +29,10 @@ const AllActivities = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
   const [giverDetails, setGiverDetails] = useState<User | null>(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchTags, setSearchTags] = useState<string[]>([]);
+  const [isFilterPopup, setIsFilterPopup] = useState(false);
 
   const tabs = [
     { id: 'all', label: 'כל הפעילויות' },
@@ -60,6 +64,7 @@ const AllActivities = () => {
     }
   }, [activeTab, data, favorites]);
 
+
   const registerForActivityMutation = useMutation({
     mutationFn: registrationForActivity,
     onMutate: async ({
@@ -69,17 +74,17 @@ const AllActivities = () => {
       status,
     }: RegistrationActivityPayload) => {
       await queryClient.cancelQueries({ queryKey: ['allActivities'] });
-  
+
       const previousSavedActivities = queryClient.getQueryData<Activity[]>(['allActivities']);
-  
+
       queryClient.setQueryData<Activity[]>(
         ['allActivities'],
         (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
       );
-      setModeActivityModel('success'); 
+      setModeActivityModel('success');
       if (user.remainingHours !== undefined && selectedActivity?.durationHours !== undefined) {
-        setUserField('remainingHours', user.remainingHours - selectedActivity.durationHours); 
-      } 
+        setUserField('remainingHours', user.remainingHours - selectedActivity.durationHours);
+      }
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
@@ -88,8 +93,8 @@ const AllActivities = () => {
       }
       setModeActivityModel('error');
       if (user.remainingHours !== undefined && selectedActivity?.durationHours !== undefined) {
-        setUserField('remainingHours', user.remainingHours + selectedActivity.durationHours); 
-      } 
+        setUserField('remainingHours', user.remainingHours + selectedActivity.durationHours);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allActivities'] });
@@ -147,7 +152,7 @@ const AllActivities = () => {
       giverId: selectedActivity.giverId as string,
       receiverId: user._id as string,
       status: 'caughted',
-    });  
+    });
   };
 
   const handleToggleFavorite = (activityId: string, isFavorite: boolean) => {
@@ -167,6 +172,66 @@ const AllActivities = () => {
     }
   };
 
+  const handleTitleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    console.log(value);
+    if (value.trim() === "") {
+      // If the search query is empty, show all data
+      setFilteredActivities(data);
+    } else {
+      // Filter the data based on the search query
+      const filtered = data.filter((item: Activity) =>
+        item.nameActivity.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredActivities(filtered);
+    }
+  };
+
+  // const handleTagSearch = (tag: string) => {
+  //   const tags = [...searchTags, tag];
+  //   setSearchTags(tags);
+
+  //   const filtered = data.filter((item: Activity) =>
+  //     item.tags.some((t) => tags.includes(t))
+  //   );
+  //   setFilteredActivities(filtered);
+  // };
+
+  const handleTagSearch = (tag: string) => {
+    setSearchTags((prevTags) => {
+      if (prevTags.includes(tag)) {
+        // Remove the tag if it's already selected
+        const newTags = prevTags.filter((t) => t !== tag);
+        updateFilteredActivities(newTags);
+        return newTags;
+      } else {
+        // Add the tag if it's not selected
+        const newTags = [...prevTags, tag];
+        updateFilteredActivities(newTags);
+        return newTags;
+      }
+    });
+  };
+
+  // Helper function to update activities based on tags
+  const updateFilteredActivities = (tags: string[]) => {
+    if (tags.length === 0) {
+      setFilteredActivities(data);
+    } else {
+      const filtered = data.filter((item: Activity) =>
+        item.tags.some((t) => tags.includes(t))
+      );
+      setFilteredActivities(filtered);
+    }
+  };
+
+
+  const clearSelectedTags = () => {
+    setSearchTags([]);
+    setFilteredActivities(data);
+  };
+
   const closeModal = () => {
     setModeActivityModel('close');
   };
@@ -177,26 +242,37 @@ const AllActivities = () => {
         {tabs.map((tab) => (
           <div
             key={tab.id}
-            className={`${styles.tab} ${activeTab === tab.id ? styles.activeTab : ''
-              }`}
+            className={`${styles.tab} ${activeTab === tab.id ? styles.activeTab : ''}`}
             onClick={() => setActiveTab(tab.id)}
           >
             {tab.label}
           </div>
         ))}
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", padding: "10px" }}>
+          <div className={`${styles.tag} ${styles.clearTags}`} onClick={clearSelectedTags}>ניקוי</div>
+          {activityTags.sort((a, b) => a.localeCompare(b, 'he')).map((tag, index) => (
+            <div
+              key={index}
+              className={`${styles.tag} ${searchTags.includes(tag) ? styles.activeTag : ''}`}
+              onClick={() => handleTagSearch(tag)}
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 
-  //   if (!isLoggedIn && isInitialized) {
-  //     return (
-  //         <ErrorMessage
-  //         message_line1="אתה לא מחובר!"
-  //         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-  //         link='/home'
-  //         />
-  //     );
-  // }
+  if (!isLoggedIn && isInitialized) {
+    return (
+      <ErrorMessage
+        message_line1="אתה לא מחובר!"
+        message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
+        link='/home'
+      />
+    );
+  }
 
   // Render content based on the query's state
   if (isError) {
@@ -210,9 +286,15 @@ const AllActivities = () => {
 
   return (
     <div className={styles.savedActivities}>
-      <h1 className={styles.title}>
-        איזו פעילות אתה בוחר היום? יתרת השעות שלך היא: {user.remainingHours}
-      </h1>
+      <div className={styles.title}>
+        <input
+          className={`${styles.input} ${styles.tab}`}
+          type="text"
+          placeholder="חיפוש חופשי"
+          value={searchQuery}
+          onChange={handleTitleSearch}
+        />
+      </div>
       {isLoading || isFetching ? (
         <Loader />
       ) : (
@@ -247,5 +329,40 @@ const AllActivities = () => {
     </div>
   );
 };
+
+
+const activityTags = [
+  "ספורט",
+  "טיול",
+  "אומנות",
+  "מוזיקה",
+  "בישול",
+  "קריאה",
+  "ריקוד",
+  "משחקים",
+  "גינון",
+  "צילום",
+  "עבודות יד",
+  "התנדבות",
+  "בייביסיטר",
+  "לימודים",
+  "כושר",
+  "טכנולוגיה",
+  "מחשבים",
+  "עיצוב",
+  "שחייה",
+  "אופנה",
+  "נסיעות",
+  "תיקון",
+  "טיפוח",
+  "בריאות",
+  "לימודי שפה",
+  "שיעור פרטי",
+  "שפות",
+  "טכנאי",
+  "ילדים",
+  "מבוגרים"
+
+];
 
 export default AllActivities;

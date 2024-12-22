@@ -1,60 +1,60 @@
 .tagsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .tag {
-  padding: 0px 10px;
-  background-color: #ffffffff;
-  border-radius: 20px;
-  font-size: 14px;
-  color: #333;
-  display: flex;
-  align-items: center;
+    padding: 0px 10px;
+    background-color: #ffffffff;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
 }
 
 .iconSucc {
-  margin-bottom: 20px;
-  align-self: center;
+    margin-bottom: 20px;
+    align-self: center;
 }
 
 .textSucc {
-  color: #555;
+    color: #555;
 }
 
 .buttonSucc {
-  background-color: #11b823;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+    background-color: #11b823;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
 }
 
 .disabledButton {
-  /* background-color: gray; */
-  cursor: not-allowed;
-  opacity: 0.6; /* Optional, to indicate disabled state */
+    /* background-color: gray; */
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .loader {
-  height: 104px;
-  position: relative;
-  left: 44%;
-  padding-top: 10px;
+    height: 104px;
+    position: relative;
+    left: 44%;
+    padding-top: 10px;
 }
 
 .loaderText {
-  position: absolute;
-  font-size: 12px;
-  width: 102px;
-  right: 9px;
-  top: 35px;
-  text-align: center;
-  color: #4a90e2;
-  font-weight: 600;
+    position: absolute;
+    font-size: 12px;
+    width: 102px;
+    right: 9px;
+    top: 35px;
+    text-align: center;
+    color: #4a90e2;
+    font-weight: 600;
 }
 
 .container {
@@ -74,194 +74,196 @@
 }
 
 .closeButton {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 20px;
-  font-weight: bold;
-  color: rgb(170, 170, 170);
-  cursor: pointer;
-  background: none;
-  border: none;
-  outline: none;
-  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(170, 170, 170);
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .closeButton:hover {
-  color: rgb(255, 80, 80);
-  transform: scale(1.1);
+    color: rgb(255, 80, 80);
+    transform: scale(1.1);
 }
 
 .closeButton:active {
-  transform: scale(0.9);
+    transform: scale(0.9);
 }
 
 .form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 19px;
-  align-items: start;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 19px;
+    align-items: start;
 }
 
 .heading {
-  text-align: center;
-  font-weight: 900;
-  font-size: 30px;
-  color: rgb(16, 137, 211);
-  grid-column: 1 / 3;
+    text-align: center;
+    font-weight: 900;
+    font-size: 30px;
+    color: rgb(16, 137, 211);
+    grid-column: 1 / 3;
 }
 
 .cardClient {
-  background: #c5ecf0;
-  width: 100%;
-  padding-top: 25px;
-  padding-bottom: 25px;
-  padding-left: 20px;
-  padding-right: 20px;
-  box-shadow: 0 6px 10px rgba(207, 212, 222, 1);
-  border-radius: 20px;
-  text-align: center;
-  color: #475556;
-  font-family: "Poppins", sans-serif;
-  transition: all 0.3s ease;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    background: #c5ecf0;
+    width: 100%;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: 0 6px 10px rgba(207, 212, 222, 1);
+    border-radius: 20px;
+    text-align: center;
+    color: #475556;
+    font-family: "Poppins", sans-serif;
+    transition: all 0.3s ease;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .logoContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* margin-top: 3rem; */
-  /* margin-bottom: 30px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* margin-top: 3rem; */
+    /* margin-bottom: 30px; */
 }
+
 .icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 60px;
-  width: 14vw;
-  height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    width: 14vw;
+    height: auto;
 }
 
 .name {
-  margin: 0;
-  /* margin-top: 10px; */
-  font-weight: 600;
-  font-size: 18px;
+    margin: 0;
+    /* margin-top: 10px; */
+    font-weight: 600;
+    font-size: 18px;
 }
 
 .name span {
-  display: block;
-  font-weight: 100;
-  font-size: 14px;
+    display: block;
+    font-weight: 100;
+    font-size: 14px;
 }
+
 .userDet {
-  margin: 2px;
+    margin: 2px;
 }
+
 .actDetails {
-  font-size: 16px;
-  color: #555;
-  margin-top: 30px;
+    font-size: 16px;
+    color: #555;
+    margin-top: 30px;
 }
+
 .formGroup {
-  margin: 0;
-  padding: 0;
-  text-align: right;
+    margin: 0;
+    padding: 0;
+    text-align: right;
 }
 
 .btn {
-  grid-column: span 1;
-  display: block;
-  width: 100%;
-  font-weight: bold;
-  background: linear-gradient(
-    45deg,
-    rgb(16, 137, 211) 0%,
-    rgb(18, 177, 209) 100%
-  );
-  color: white;
-  padding-block: 15px;
-  margin: 20px auto;
-  border-radius: 20px;
-  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 20px 10px -15px;
-  border: none;
-  transition: all 0.2s ease-in-out;
+    grid-column: span 1;
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    background: linear-gradient(45deg,
+            rgb(16, 137, 211) 0%,
+            rgb(18, 177, 209) 100%);
+    color: white;
+    padding-block: 15px;
+    margin: 20px auto;
+    border-radius: 20px;
+    box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 20px 10px -15px;
+    border: none;
+    transition: all 0.2s ease-in-out;
 }
 
 .btn :hover {
-  transform: scale(1.03);
-  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
-  cursor: pointer;
+    transform: scale(1.03);
+    box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
+    cursor: pointer;
 }
 
 .btn:active {
-  transform: scale(0.95);
-  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
+    transform: scale(0.95);
+    box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
 }
 
 .buttonsContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 40px;
 }
 
 .moreOptionButton {
-  flex: 1;
-  max-width: 200px;
-  padding: 10px 0;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(45deg, #1089d3, #12b1d1);
-  color: white;
-  font-size: 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
+    flex: 1;
+    max-width: 200px;
+    padding: 10px 0;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #1089d3, #12b1d1);
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
 .moreOptionButton:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 10px 15px rgba(133, 189, 215, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0px 10px 15px rgba(133, 189, 215, 0.5);
 }
 
 .moreOptionButton:active {
-  transform: scale(0.95);
-  box-shadow: 0px 5px 10px rgba(133, 189, 215, 0.5);
+    transform: scale(0.95);
+    box-shadow: 0px 5px 10px rgba(133, 189, 215, 0.5);
 }
 
 .disabledButton {
-  background: #ccc;
-  color: #888;
-  cursor: not-allowed;
-  box-shadow: none;
+    background: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .popUpOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
 .activityName {
-  font-size: 1.1rem;
-  margin-bottom: 1px;
+    font-size: 1.1rem;
+    margin-bottom: 1px;
 }
 
 .hour {
-  color: #b0b0b0;
+    color: #b0b0b0;
 }
 .start{
   display: flex;
