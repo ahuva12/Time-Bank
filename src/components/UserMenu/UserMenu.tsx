@@ -29,7 +29,6 @@ export default function UserMenu() {
     setIsOpen(false);
   };
 
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -112,7 +111,7 @@ export default function UserMenu() {
               </li>
               <li
                 className={styles.element}
-                onClick={() => handleRedirect("saved_activities")}
+                onClick={() => handleRedirect("saved-activities")}
               >
                 <FaRegStar />
                 <p className={styles.label}>פעילויות שמורות</p>
