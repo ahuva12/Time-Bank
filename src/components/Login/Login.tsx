@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { loginSchema } from "@/validations/validationsClient/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser, getUserByEmail } from "@/services/users";
-import { SuccessMessage, MiniLoader } from "@/components";
+import { loginUser, getUserByEmail, updateUser } from "@/services/users";
+import { SuccessMessage, MiniLoader , ErrorMessage } from "@/components";
 import { googleSignIn } from "@/services/auth";
 interface LoginProps {
   closePopup: () => void;
@@ -27,7 +27,7 @@ const Login: React.FC<LoginProps> = ({
   setIsLoginOpen,
 }) => {
   const { setLogin } = useAuthStore();
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
   const { setUser } = useUserStore();
   const router = useRouter();
   const [isLoader, setIsLoader] = useState(false);
@@ -71,15 +71,33 @@ const Login: React.FC<LoginProps> = ({
   const handleGoogleLogin = async () => {
     try {
       const data = await googleSignIn();
+      setIsLoader(true);
       const user = await getUserByEmail(data.user.email);
-      console.error(user[0].email);
-      const newUser= await loginUser(user[0].email, user[0].password, true);
+    
+      if(!user){
+        setError(true);
+      }
 
-      setUser(newUser);
+      setUser({ ...user[0], photoURL: data.user.photoURL });
+      if (!user[0].photoURL) {
+        const updatedUserWithPhoto = {
+          _id: user[0]._id,
+          photoURL: data.user.photoURL,
+        }
+        await updateUser(updatedUserWithPhoto);
+      }
       setShowSuccessMessage(true);
-      // setLogin();
-    } catch (error) {
-      console.error("Login failed:", error);
+
+    } catch (error:any) {
+      if (error.message.includes('Error updating user')) {
+        console.error("Error updating user:", error);
+        setShowSuccessMessage(true);
+      } else {
+        setError(true);
+        console.error("Login failed:", error);
+      }
+    } finally {
+      setIsLoader(false);
     }
   };
 
@@ -149,6 +167,12 @@ const Login: React.FC<LoginProps> = ({
           message_line1="התחברת בהצלחה!"
           message_line2="כעת תוכל להתחיל לגלוש ולראות מה חדש:)"
           onOkClick={handleOkClick}
+        />
+      )}
+      {error && (
+        <ErrorMessage
+          message_line1="שגיאה בהתחברות"
+          message_line2="נסה להתחבר עם אמייל אחר"
         />
       )}
     </div>

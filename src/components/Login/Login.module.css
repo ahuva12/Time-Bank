@@ -85,7 +85,7 @@
   .socialAccountContainer .title {
     display: block;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     color: rgb(170, 170, 170);
   }
   
@@ -133,7 +133,7 @@
   .agreement a {
     text-decoration: none;
     color: #0099ff;
-    font-size: 9px;
+    font-size: 11px;
   }
   
   .closeButton {
@@ -172,6 +172,6 @@
   }
 
   .loader {
-    margin: 12.5px 41% 0 41%;
+    margin: 13.1px 41% 0 41%;
     position: relative;
   }

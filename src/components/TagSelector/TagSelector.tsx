@@ -8,7 +8,11 @@ interface TagSelectorProps {
     onTagsChange: (tags: string[]) => void;
 }
 
-const TagSelector: React.FC<TagSelectorProps> = ({ existingTags, tags, onTagsChange }) => {
+const TagSelector: React.FC<TagSelectorProps> = ({
+    existingTags,
+    tags,
+    onTagsChange,
+}) => {
     const [selectedTags, setSelectedTags] = useState<string[]>(tags);
     const [inputValue, setInputValue] = useState("");
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
@@ -18,9 +22,12 @@ const TagSelector: React.FC<TagSelectorProps> = ({ existingTags, tags, onTagsCha
         setInputValue(value);
 
         // Filter suggestions based on input value
+        
         if (value) {
             const suggestions = existingTags.filter(
-                (tag) => tag.toLowerCase().includes(value.toLowerCase()) && !selectedTags.includes(tag)
+                (tag) =>
+                    tag.toLowerCase().includes(value.toLowerCase()) &&
+                    !selectedTags.includes(tag)
             );
             setFilteredSuggestions(suggestions);
         } else {
@@ -49,32 +56,26 @@ const TagSelector: React.FC<TagSelectorProps> = ({ existingTags, tags, onTagsCha
         if (event.key === "Enter" && tag) {
             event.preventDefault();
             handleAddTag(inputValue.trim());
-            event.currentTarget.value = ""; 
-
+            event.currentTarget.value = "";
         }
     };
 
     return (
-        <div style={{ /* width: "100%", */ maxWidth: "375px", margin: "0 auto" }}>
+        <div style={{ maxWidth: "375px", margin: "0" }}>
             <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                 {selectedTags.map((tag, index) => (
                     <div
                         key={index}
                         style={{
-
-                            // padding: 2px 4px;
-                            // margin-left: 5px;
-                            // font-size: 15px;
-                            // margin-top: 5px;
-
                             padding: "5px 10px",
-                            borderRadius: "5px",
+                            borderRadius: "20px",
                             backgroundColor: "#effdff",
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
                             color: "#048ebc",
-
+                            boxShadow: "#cff0ff 0px 10px 10px -5px",
+                            border: "2px solid transparent",
                         }}
                     >
                         {tag}
@@ -85,6 +86,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({ existingTags, tags, onTagsCha
                                 border: "none",
                                 cursor: "pointer",
                                 color: "#555",
+                                fontSize: "18px",
+                                fontWeight: "bold",
                             }}
                         >
                             &times;
@@ -92,9 +95,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({ existingTags, tags, onTagsCha
                     </div>
                 ))}
             </div>
-
-            {/* <div style={{ marginTop: "10px", position: "relative" }}> */}
-            <div>
+            
+            <div style={{ marginTop: "10px", position: "relative" }}>
                 <input
                     type="text"
                     value={inputValue}
@@ -102,19 +104,19 @@ const TagSelector: React.FC<TagSelectorProps> = ({ existingTags, tags, onTagsCha
                     onKeyDown={handleKeyDown}
                     placeholder="הוסף תגיות"
                     style={{
-                        // width: "100%",
-                        // padding: "8px",
-                        // borderRadius: "4px",
-                        // border: "1px solid #ddd",
-                        width: "375px",
-                        height: "50px",
-                        alignSelf: "center",
-                        backgroundColor: "#e0f5f8",
-                        borderBottom: "2px solid #048ebc",
+                        width: "100%",
+                        background: "white",
+                        border: "none",
+                        padding: "15px 20px",
+                        borderRadius: "20px",
+                        boxShadow: "#cff0ff 0px 10px 10px -5px",
+                        borderInline: "2px solid transparent",
+                        color: "rgb(170, 170, 170)",
+                        fontSize: "16px",
+                        outline: "none",
                         marginTop: "0.5rem",
                     }}
                 />
-
                 {filteredSuggestions.length > 0 && (
                     <ul
                         style={{
@@ -124,11 +126,12 @@ const TagSelector: React.FC<TagSelectorProps> = ({ existingTags, tags, onTagsCha
                             position: "absolute",
                             backgroundColor: "#fff",
                             border: "1px solid #ddd",
-                            borderRadius: "4px",
+                            borderRadius: "20px",
                             zIndex: 1000,
                             width: "100%",
                             maxHeight: "150px",
                             overflowY: "auto",
+                            boxShadow: "#cff0ff 0px 10px 10px -5px",
                         }}
                     >
                         {filteredSuggestions.map((tag, index) => (
@@ -136,9 +139,11 @@ const TagSelector: React.FC<TagSelectorProps> = ({ existingTags, tags, onTagsCha
                                 key={index}
                                 onClick={() => handleAddTag(tag)}
                                 style={{
-                                    padding: "5px",
+                                    padding: "10px",
                                     cursor: "pointer",
                                     backgroundColor: "#f9f9f9",
+                                    borderRadius: "10px",
+                                    marginBottom: "5px",
                                 }}
                             >
                                 {tag}

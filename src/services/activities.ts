@@ -1,11 +1,9 @@
 import { http } from '@/services/http';
 import { Activity } from '@/types/activity';
-// import { updateRemainingHours } from './users';
 
 //get activities based on filtering 
 //(the filters are can be: 'caughted', 'history', 'proposed', 'caughtedGiver', 'proposedGiver')
 export const getFilteringActivities = async (filterType:string, userId:string) => {
-  console.log('getFilteringActivities');
   const body = { filterType };
 
   try {
@@ -24,7 +22,6 @@ export const getFilteringActivities = async (filterType:string, userId:string) =
 // Post activitiy
 export const postActivity = async (newActivity: Activity) => {
     try {
-      // console.log(newActivity)
       const response = await http.post('/activities', {...newActivity, status: 'proposed', receiverId: null});
 
       if (response.status !== 201)
@@ -35,13 +32,11 @@ export const postActivity = async (newActivity: Activity) => {
       console.error('Error posting activitiy:', error);
       throw new Error(`'Error posting activitiy: ${error.message}`);
     }
-  };
+};
 
 //update activitiy
 export const updateActivity = async (updatedActivity:Activity) => {
     try {
-      console.log(`Request URL: /activities/${updatedActivity._id}`);
-
         const response = await http.patch(`/activities/${updatedActivity._id}`, updatedActivity);
 
         if (response.status !== 200)

@@ -1,13 +1,9 @@
-'use client'
-import { FaCheckCircle } from 'react-icons/fa';
+"use client";
 import styles from "./ActivityModal.module.css";
 import { Activity } from "@/types/activity";
 import { User } from "@/types/user";
-import { calculateAge } from "@/services/utils";
-import { CiUser } from "react-icons/ci";
-import { ErrorMessage, SuccessMessage, MiniLoader } from '@/components';
-import { useEffect, useState } from 'react';
-import { getUserById } from '@/services/users'
+import { ErrorMessage, SuccessMessage, MiniLoader } from "@/components";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 interface ActivityModalProps {
     modeModel: string;
@@ -15,6 +11,8 @@ interface ActivityModalProps {
     onClose: () => void;
     activity: Activity;
     user: User | null;
+    giver_receiver_details?: User;
+    isNeedUserDetails: boolean;
     handlesMoreOptions: {
         handleAcceptActivity?: () => void;
         handleCancellRequestActivity?: () => void;
@@ -24,77 +22,75 @@ interface ActivityModalProps {
     };
 }
 
-const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancellig, onClose, activity, user, handlesMoreOptions }) => {
-    if (modeModel === 'close') return null;
-    const [userDetails, setUserDetails] = useState<User | null>(null);
-    const [loadingUserDetails, setLoadingUserDetails] = useState<boolean>(true);
-
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-            try {
-                let userId = user?._id;
-                if (activity.giverId !== user?._id)
-                    userId = activity.giverId; // Check recipient first, fallback to giver
-                else if (activity.receiverId)
-                    userId = activity.receiverId;
-                else {
-                    setUserDetails(null);
-                    return;
-                }
-                if (userId) {
-                    const user = await getUserById(userId as string); // Fetch user details
-                    setUserDetails(user);
-                } else {
-                    setUserDetails(null);
-                }
-            } catch (err) {
-                console.error("Failed to fetch user details:", err);
-                // setError("Failed to fetch user details. Please try again.");
-            } finally {
-                setLoadingUserDetails(false);
-            }
-        };
-
-        fetchUserDetails();
-    }, []);
+const ActivityModal: React.FC<ActivityModalProps> = ({
+    modeModel,
+    isModeCancellig,
+    onClose,
+    activity,
+    user,
+    giver_receiver_details,
+    isNeedUserDetails,
+    handlesMoreOptions,
+}) => {
+    if (modeModel === "close") return null;
 
     const renderButtons = () => {
         const buttonConfig = [
-            { handler: handlesMoreOptions.handleAcceptActivity, label: 'קיבלתי', block: false },
-            { handler: handlesMoreOptions.handleCancellRequestActivity, label: 'ביטול', block: false },
-            { handler: handlesMoreOptions.handleRegistrationActivity, label: 'אני מעוניין בפעילות זו', block: !user?.remainingHours || user.remainingHours < activity.durationHours },
-            { handler: handlesMoreOptions.handleUpdateActivity, label: 'עדכון', block: false },
-            { handler: handlesMoreOptions.handleCancellProposalActivity, label: 'מחיקה', block: false },
+            {
+                handler: handlesMoreOptions.handleAcceptActivity,
+                label: "קיבלתי",
+                block: false,
+            },
+            {
+                handler: handlesMoreOptions.handleCancellRequestActivity,
+                label: "ביטול",
+                block: false,
+            },
+            {
+                handler: handlesMoreOptions.handleRegistrationActivity,
+                label: "אני מעוניין בפעילות זו",
+                block:
+                    !user?.remainingHours || user.remainingHours < activity.durationHours,
+            },
+            {
+                handler: handlesMoreOptions.handleUpdateActivity,
+                label: "עדכון",
+                block: false,
+            },
+            {
+                handler: handlesMoreOptions.handleCancellProposalActivity,
+                label: "מחיקה",
+                block: false,
+            },
         ];
 
         return (
             <div className={styles.buttonsContainer}>
-                {buttonConfig.map((button, index) => (
-                    button.handler && (
-                        <div key={index} className={styles.buttonWrapper}>
+                {buttonConfig.map(
+                    (button, index) =>
+                        button.label &&
+                        button.handler && ( // תנאי נוסף - רק אם יש כיתוב
                             <button
-                                className={`${styles.moreOptionButton} ${button.block ? styles.disabledButton : ''}`}
+                                key={index}
+                                className={`${styles.moreOptionButton} ${button.block ? styles.disabledButton : ""
+                                    }`}
                                 onClick={button.handler}
-                                disabled={button.block} // Disable the button if the condition is true
+                                disabled={button.block}
                             >
                                 {button.label}
                             </button>
-                            {button.block && (
-                                <span className={styles.blockedMessage}>
-                                    אין לך מספיק שעות לצורך רישום לפעילות זו. 
-                                </span>
-                            )}
-                        </div>
-                    )
-                ))}
+                        )
+                )}
             </div>
         );
-
     };
 
     const errorModal = () => {
         return (
-            <ErrorMessage message_line1="משהו השתבש... פעולתך נכשלה" message_line2='תוכל לנסות שוב במועד מאוחר יותר' />
+            <ErrorMessage
+                message_line1="משהו השתבש... פעולתך נכשלה"
+                message_line2="תוכל לנסות שוב במועד מאוחר יותר"
+            />
         );
     };
 
@@ -140,13 +136,13 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
             return (
                 <SuccessMessage
                     message_line1="נרשמת לפעילות בהצלחה!"
-                    message_line2={`הודענו על כך ל${userDetails?.firstName} ${userDetails?.lastName}`}
+                    message_line2={`הודענו על כך ל${giver_receiver_details?.firstName} ${giver_receiver_details?.lastName}`}
                     message_line3={
-                        userDetails?.gender === 'female'
-                            ? `תוכל ליצור איתה קשר בטלפון: ${userDetails?.phoneNumber}`
-                            : `תוכל ליצור איתו קשר בטלפון: ${userDetails?.phoneNumber}`
+                        giver_receiver_details?.gender === "female"
+                            ? `תוכל ליצור איתה קשר בטלפון: ${giver_receiver_details?.phoneNumber}`
+                            : `תוכל ליצור איתו קשר בטלפון: ${giver_receiver_details?.phoneNumber}`
                     }
-                    message_line4={`או במייל ${userDetails?.email}`}
+                    message_line4={`או במייל ${giver_receiver_details?.email}`}
                 />
             );
         }
@@ -156,61 +152,83 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
 
     const activityModalOpen = () => {
         return (
-            <div className={styles.overlay}>
-                <div className={styles.modal}>
-                    <button className={styles.closeButton} onClick={onClose}>
-                        ✕
-                    </button>
-                    <h2 className={styles.title}>פרטי פעילויות</h2>
-                    <div className={styles.wrapperRow}>
-                        <div className={styles.content}>
-                            <div className={styles.description}>
+            <div className={styles.popUpOverlay}>
+                <div className={styles.container}>
+                    <div className={styles.closeButton} onClick={onClose}>
+                        &times;
+                    </div>
+                    <div className={styles.form}>
+                        <div className={styles.heading}>פרטי פעילות</div>
+                        <div className={styles.cardClient}>
+                            <div className={styles.start}>
                                 <div className={styles.formGroup}>
-                                    <label className={styles.label}>שם ההפעילות</label>
-                                    <div className={styles.text}>{activity.nameActivity}</div>
+                                    <p className={styles.activityName}>
+                                        <strong>{activity.nameActivity}</strong>
+                                    </p>
+                                    <p className={styles.hour}>
+                                        {activity.durationHours} {"שעות"}
+                                    </p>
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label className={styles.label}>תיאור</label>
-                                    <div className={`${styles.text} ${styles.textLimited}`}>{activity.description}</div>
+                                    <div className={styles.actDetails}>
+                                        {activity.description}
+                                    </div>
                                 </div>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>מספר שעות</label>
-                                    <div className={styles.text}>{activity.durationHours} שעות</div>
-                                </div>
-                                <div className={styles.tagsContainer}>
-                                    {activity.tags.map((tag, index) => (
-                                        <span key={index} className={styles.tag}>{tag}</span>
-                                    ))}
-                                </div>
+                            </div>
+                            <div className={styles.tagsContainer}>
+                                {activity.tags.map((tag, index) => (
+                                    <span key={index} className={styles.tag}>
+                                        {tag}
+                                    </span>
+                                ))}
                             </div>
                         </div>
-
-                        <div>
-                            <div className={styles.userDetailsDescription}>
-                                <div className={styles.profileIcon}>
-                                    <CiUser className={styles.icon} />
+                        <div className={styles.cardClient}>
+                            {!isNeedUserDetails ? (
+                                <p>אף אחד עדיין לא בחר את הפעילות הזאת</p>
+                            ) : giver_receiver_details ? (
+                                <>
+                                    <div className={styles.logoContainer}>
+                                        {giver_receiver_details?.gender === "female" ? (
+                                            <DotLottieReact
+                                                className={styles.icon}
+                                                src="https://lottie.host/15aac7a1-b7b2-4340-b8f8-02eab363e880/ceE1Czg7gO.lottie"
+                                                loop
+                                                autoplay
+                                            />
+                                        ) : (
+                                            <DotLottieReact
+                                                className={styles.icon}
+                                                src="https://lottie.host/83af3d68-b7da-4527-bad5-ba99dc3455b2/Y1TNg89TDr.lottie"
+                                                loop
+                                                autoplay
+                                            />
+                                        )}
+                                    </div>
+                                    <p className={styles.name}>
+                                        {giver_receiver_details?.firstName}{" "}
+                                        {giver_receiver_details?.lastName}
+                                        <span className={styles.userDet}>
+                                            {giver_receiver_details?.address}
+                                        </span>
+                                        <span className={styles.userDet}>
+                                            {giver_receiver_details?.phoneNumber}
+                                        </span>
+                                        <span className={styles.userDet}>
+                                            {giver_receiver_details?.email}
+                                        </span>
+                                    </p>
+                                </>
+                            ) : (
+                                <div className={styles.loader}>
+                                    <MiniLoader />
+                                    {/* <div className={styles.loaderText}>טוען פרטי משתמש...</div> */}
                                 </div>
-                                {loadingUserDetails ? (
-                                    <div className={styles.loader}>
-                                        <MiniLoader />
-                                        <div className={styles.loaderTest}>טוען פרטי משתמש...</div>
-                                    </div>
-                                ) : userDetails ? (
-                                    <div className={styles.description}>
-                                        <p className={styles.text}>{userDetails?.firstName} {userDetails?.lastName}</p>
-                                        <p className={styles.text}>{userDetails?.address}</p>
-                                        <p className={styles.text}>{userDetails?.email}</p>
-                                    </div>
-                                ) : (
-                                    <p>אף אחד עדיין לא בחר את הפעילות הזאת</p>
-                                )}
-                            </div>
+                            )}
                         </div>
                     </div>
 
-                    <div>
-                        {renderButtons()}
-                    </div>
+                    <div>{renderButtons()}</div>
                 </div>
             </div>
         );
@@ -218,9 +236,9 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ modeModel, isModeCancelli
 
     return (
         <>
-            {modeModel === 'open' && activityModalOpen()}
-            {modeModel.startsWith('success') && successModal()}
-            {modeModel === 'error' && errorModal()}
+            {modeModel === "open" && activityModalOpen()}
+            {modeModel.startsWith("success") && successModal()}
+            {modeModel === "error" && errorModal()}
         </>
     );
 };

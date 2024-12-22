@@ -5,7 +5,7 @@ import Styles from "./Register.module.css";
 import { useRouter } from "next/navigation";
 import { userSchema } from "@/validations/validationsClient/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, } from "react-hook-form";
 import { registerUser } from "@/services/users";
 import { User } from "@/types/user";
 import SuccessMessage from "../SuccessMessage/SuccessMessage";
@@ -23,6 +23,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<User>({
     resolver: zodResolver(userSchema),
@@ -75,6 +76,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
 
   const handleSuggestionClick = (suggestion: string) => {
     setAddressSuggestions([]);
+    setValue("address", suggestion);
   };
 
   return (
@@ -82,7 +84,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
       {successMessage && (
         <SuccessMessage
           message_line1={successMessage}
-          message_line2=""
+          message_line2="כעת תוכל להתחבר ולהתחיל לגלוש:)"
           onOkClick={handleOkClick}
         />
       )}
@@ -115,7 +117,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
               <p className={Styles.errorMessage}>{errors.lastName.message}</p>
             )}
           </div>
-          <div className={Styles.fieldContainer}>
+          <div className={Styles.fieldContainer}  style={{ position: "relative" }}>
             <input
               className={Styles.input}
               type="text"
