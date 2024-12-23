@@ -1,0 +1,112 @@
+
+.savedActivities {
+    background-color: #e0f5f8;
+}
+
+.title {
+    font-size: 1.7rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    /* border: 1px solid #ddd; */
+}
+
+.sidebar {
+    width: 200px;
+    border-left: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #333;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+    background-color: #f9f9f9;
+}
+
+.activeTab {
+    background-color: #f0f4f8;
+    font-weight: bold;
+    border-left: 3px solid #048ebc;
+}
+
+.tag {
+    padding: 0px 10px;
+    background-color: #ffffffff;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tag:hover {
+    background-color: #e0e0e0;
+}
+
+.activeTag {
+    background-color: #00bcd4;
+    /* Active tag color */
+    color: #fff;
+    font-weight: bold;
+}
+
+.clearTags {
+    background-color: #048ebc;
+    color: white;
+}
+
+.content {
+    padding: 20px;
+    flex: 1;
+}
+
+.activitiesContainer {
+    flex: 1;
+    /* Let the activities container take the remaining space */
+    display: flex;
+    /* Ensure cards stack vertically */
+    gap: 15px;
+    /* Add spacing between cards */
+}
+
+.activities {
+    flex-grow: 1;
+}
+
+
+/* From Uiverse.io by alexruix */
+.input {
+    max-width: 190px;
+    background-color: #f5f5f5;
+    color: #242424;
+    padding: .15rem .5rem;
+    min-height: 40px;
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    line-height: 1.15;
+    box-shadow: 0px 10px 20px -18px;
+}
+
+/* 
+.sidebar input:focus {
+    border-bottom: 2px solid #5b5fc7;
+    border-radius: 4px 4px 2px 2px;
+}
+
+.sidebar input:hover {
+    outline: 1px solid lightgrey;
+} */

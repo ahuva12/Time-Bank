@@ -29,7 +29,6 @@ export default function UserMenu() {
     setIsOpen(false);
   };
 
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,12 +57,16 @@ export default function UserMenu() {
     router.push('/home')
   }
 
-  return (
-    <div className={styles.profileContainer} ref={dropdownRef}>
+  return (    
+  <div className={styles.profileContainer} ref={dropdownRef}>
       {/* Profile Icon */}
       <div className={styles.userMenu} onClick={toggleDropdown}>
         <div className={styles.profileIcon}>
-          <CiUser className={styles.icon} />
+          {user.photoURL ? (
+            <img className={styles.imgIcon} src={user.photoURL} />
+          ) : (
+            <CiUser className={styles.icon} />
+          )}
         </div>
       </div>
 
@@ -108,7 +111,7 @@ export default function UserMenu() {
               </li>
               <li
                 className={styles.element}
-                onClick={() => handleRedirect("saved_activities")}
+                onClick={() => handleRedirect("saved-activities")}
               >
                 <FaRegStar />
                 <p className={styles.label}>פעילויות שמורות</p>

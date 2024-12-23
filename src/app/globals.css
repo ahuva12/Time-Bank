@@ -29,3 +29,21 @@ body {
     text-wrap: balance;
   }
 }
+
+.floatingHeader {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 10vh;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 1); 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.header{
+  margin-top: 10px;
+}
