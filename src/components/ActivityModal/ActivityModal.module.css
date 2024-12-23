@@ -42,15 +42,14 @@
 .loader {
   height: 104px;
   position: relative;
-  left: 44%;
   padding-top: 10px;
+  text-align: center;
 }
 
 .loaderText {
-  position: absolute;
+  position: relative;
   font-size: 12px;
   width: 102px;
-  right: 9px;
   top: 35px;
   text-align: center;
   color: #4a90e2;
