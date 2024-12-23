@@ -84,7 +84,7 @@ const MyDonation = () => {
             onClose={closeModal}
             activity={selectedActivity}
             giver_receiver_details={receiverDetails as User}
-             isNeedUserDetails={true}
+            isNeedUserDetails={true}
             user={user}
             handlesMoreOptions={{}}
           />

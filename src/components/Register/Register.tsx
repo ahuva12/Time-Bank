@@ -1,14 +1,14 @@
 "use client";
 import { useState } from "react";
 import { http } from "@/services/http";
-import Styles from "./Register.module.css";
+import styles from "./Register.module.css";
 import { useRouter } from "next/navigation";
 import { userSchema } from "@/validations/validationsClient/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler, } from "react-hook-form";
 import { registerUser } from "@/services/users";
 import { User } from "@/types/user";
-import SuccessMessage from "../SuccessMessage/SuccessMessage";
+import { SuccessMessage, MiniLoader , ErrorMessage } from "@/components";
 
 interface RegisterProps {
   closePopup: () => void;
@@ -16,8 +16,11 @@ interface RegisterProps {
 }
 
 const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
-  const [successMessage, setSuccessMessage] = useState<string>(""); // State for success message
-  const [error, setError] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>(""); 
+  const [errorServer, setErrorServer] = useState(false);
+  const [errorUser, setErrorUser] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
+
   const router = useRouter();
 
   const {
@@ -30,20 +33,21 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
   });
 
   const onSubmit: SubmitHandler<User> = async (data: User) => {
+    setIsLoader(true);
     try {
       const response = await registerUser(data);
-      setSuccessMessage("ההרשמה בוצעה בהצלחה!"); // Set success message
-      setError(""); // Reset error
+      setSuccessMessage("ההרשמה בוצעה בהצלחה!"); 
     } catch (error: any) {
-      if (error.message.includes('409')) {
-        setError("קיים משתמש עם אמייל זה");
+      if (error.toString().includes("User already exists")) {
+        setErrorUser(true);
       } else {
-        setError(error.response?.data?.message || "אירעה שגיאה");
+        setErrorServer(true)
       }
+    } finally {
+      setIsLoader(false);
     }
   };
   
-
   const goLogin = () => {
     closePopup();
     setIsLoginOpen(true);
@@ -86,45 +90,42 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
 
   return (
     <>
-      {successMessage && (
-        <SuccessMessage
-          message_line1={successMessage}
-          message_line2="כעת תוכל להתחבר ולהתחיל לגלוש:)"
-          onOkClick={handleOkClick}
-        />
-      )}
-
-      <div className={Styles.container}>
-        <div className={Styles.closeButton} onClick={closePopup}>
+      <div className={styles.container}>
+        <div className={styles.closeButton} onClick={closePopup}>
           &times;
         </div>
-        <div className={Styles.heading}>הרשמה</div>
-        <form onSubmit={handleSubmit(onSubmit)} className={Styles.form}>
-          <div className={Styles.fieldContainer}>
+        <div className={styles.heading}>הרשמה</div>
+        {isLoader && (
+        <div className={styles.loader}>
+          <MiniLoader />
+        </div>
+        )}
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+          <div className={styles.fieldContainer}>
             <input
-              className={Styles.input}
+              className={styles.input}
               type="text"
               placeholder="שם פרטי"
               {...register("firstName")}
             />
             {errors.firstName && (
-              <p className={Styles.errorMessage}>{errors.firstName.message}</p>
+              <p className={styles.errorMessage}>{errors.firstName.message}</p>
             )}
           </div>
-          <div className={Styles.fieldContainer}>
+          <div className={styles.fieldContainer}>
             <input
-              className={Styles.input}
+              className={styles.input}
               type="text"
               placeholder="שם משפחה"
               {...register("lastName")}
             />
             {errors.lastName && (
-              <p className={Styles.errorMessage}>{errors.lastName.message}</p>
+              <p className={styles.errorMessage}>{errors.lastName.message}</p>
             )}
           </div>
-          <div className={Styles.fieldContainer}  style={{ position: "relative" }}>
+          <div className={styles.fieldContainer}  style={{ position: "relative" }}>
             <input
-              className={Styles.input}
+              className={styles.input}
               type="text"
               placeholder="כתובת"
               {...register("address", {
@@ -134,10 +135,10 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
               })}
             />
             {errors.address && (
-              <p className={Styles.errorMessage}>{errors.address.message}</p>
+              <p className={styles.errorMessage}>{errors.address.message}</p>
             )}
             {addressSuggestions.length > 0 && (
-              <ul className={Styles.suggestions}>
+              <ul className={styles.suggestions}>
                 {addressSuggestions.map((suggestion, index) => (
                   <li
                     key={index}
@@ -154,21 +155,21 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
               </ul>
             )}
           </div>
-          <div className={Styles.fieldContainer}>
+          <div className={styles.fieldContainer}>
             <input
-              className={Styles.input}
+              className={styles.input}
               type="email"
               placeholder="אמייל"
               {...register("email")}
             />
             {errors.email && (
-              <p className={Styles.errorMessage}>{errors.email.message}</p>
+              <p className={styles.errorMessage}>{errors.email.message}</p>
             )}
           </div>
-          <div className={Styles.fieldContainer}>
+          <div className={styles.fieldContainer}>
             <select
               id="gender"
-              className={Styles.input}
+              className={styles.input}
               {...register("gender")}
             >
               <option value="" disabled selected>
@@ -178,67 +179,74 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
               <option value="female">נקבה</option>
             </select>
             {errors.gender && (
-              <p className={Styles.errorMessage}>{errors.gender.message}</p>
+              <p className={styles.errorMessage}>{errors.gender.message}</p>
             )}
           </div>
-          <div className={Styles.fieldContainer}>
+          <div className={styles.fieldContainer}>
             <input
-              className={Styles.input}
+              className={styles.input}
               type="text"
               placeholder="טלפון"
               {...register("phoneNumber")}
             />
             {errors.phoneNumber && (
-              <p className={Styles.errorMessage}>
+              <p className={styles.errorMessage}>
                 {errors.phoneNumber.message}
               </p>
             )}
           </div>
-          <div className={Styles.fieldContainer}>
+          <div className={styles.fieldContainer}>
             <input
-              className={Styles.input}
+              className={styles.input}
               type="date"
               {...register("dateOfBirth")}
             />
             {errors.dateOfBirth && (
-              <p className={Styles.errorMessage}>
+              <p className={styles.errorMessage}>
                 {errors.dateOfBirth.message}
               </p>
             )}
           </div>
-          <div className={Styles.fieldContainer}>
+          <div className={styles.fieldContainer}>
             <input
-              className={Styles.input}
+              className={styles.input}
               type="password"
               placeholder="סיסמא"
               {...register("password")}
             />
             {errors.password && (
-              <p className={Styles.errorMessage}>{errors.password.message}</p>
+              <p className={styles.errorMessage}>{errors.password.message}</p>
             )}
           </div>
-          {error && <p className={Styles.errorMessage}>{error}</p>} {/* Display error */}
-          <input className={Styles.loginButton} type="submit" value="הרשמה" />
+          <input className={styles.loginButton} type="submit" value="הרשמה" />
         </form>
-        {/* <div className={Styles.socialAccountContainer}>
-          <span className={Styles.title}>או הירשם עם</span>
-          <div className={Styles.socialAccounts}>
-            <button className={Styles.socialButton}>
-              <svg
-                viewBox="0 0 488 512"
-                height="1em"
-                xmlns="http://www.w3.org/2000/svg"
-                className={Styles.svg}
-              >
-                <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
-              </svg>
-            </button>
-          </div> */}
-        {/* </div> */}
-        <span className={Styles.agreement}>
+
+        <span className={styles.agreement}>
           <a onClick={goLogin}>כבר חבר? היכנס</a>
         </span>
       </div>
+      {successMessage && (
+        <SuccessMessage
+          message_line1={successMessage}
+          message_line2="כעת תוכל להתחבר ולהתחיל לגלוש:)"
+          onOkClick={handleOkClick}
+        />
+      )}
+       {errorServer && (
+        <ErrorMessage
+          message_line1="אופס... משהו השתבש"
+          message_line2="נסה שוב בעוד מספר דקות"
+          onOkClick={()=>setErrorServer(false)}
+        />
+      )}
+      {errorUser && (
+        <ErrorMessage
+          message_line1="המשתמש כבר קיים במערכת"
+          message_line2="תוכל לנסות שוב עם כתובת מייל אחרת"
+          onOkClick={()=>setErrorUser(false)}
+        />
+      )}
+
     </>
   );
 };

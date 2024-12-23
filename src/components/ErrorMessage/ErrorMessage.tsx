@@ -6,10 +6,12 @@ import { useRouter } from 'next/navigation';
 interface ErrorMessageProps {
     message_line1: string; 
     message_line2: string; 
+    message_line3?: string; 
     link?: string;
+    onOkClick?: Function; 
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message_line1, message_line2, link }) => {
+const ErrorMessage: React.FC<ErrorMessageProps> = ({ message_line1, message_line2, message_line3, link, onOkClick }) => {
 
     const [isShow, setIsShow] = useState<boolean>(true);
     const router = useRouter(); 
@@ -18,6 +20,8 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message_line1, message_line
         setIsShow(false);
         if (link)
             router.push(link); 
+        if (onOkClick) 
+            onOkClick();
     }; 
     
     return (
@@ -34,6 +38,12 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message_line1, message_line
                         {message_line1}
                         <br />
                         {message_line2}
+                        {message_line3 && (
+                            <>
+                                <br />
+                                {message_line3}
+                            </>
+                        )}
                     </p>
                     <button className={styles.buttonSucc} onClick={handleRedirect}>
                         OK

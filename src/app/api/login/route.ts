@@ -37,6 +37,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ user }, { status: 200 });
+    
   } catch (error) {
     console.error("Error in POST /login:", error);
     if (error instanceof z.ZodError) {
