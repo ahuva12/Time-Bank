@@ -47,7 +47,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
       setIsLoader(false);
     }
   };
-
+  
   const goLogin = () => {
     closePopup();
     setIsLoginOpen(true);

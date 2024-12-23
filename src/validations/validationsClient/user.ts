@@ -5,7 +5,7 @@ export const userSchema = z.object({
     lastName: z.string().min(1, "חובה להזין שם משפחה"),
     address: z.string().min(1, "חובה להזין כתובת"),
     email: z.string().email("כתובת המייל לא חוקית"),
-    phoneNumber: z.string().min(10, "מספר טלפון לא חוקי"),
+    phoneNumber: z.string().min(10, "מספר טלפון צריך להיות באורך 10"),
     gender:  z.enum(["male", "female"]),
     dateOfBirth: z.coerce.date(),
     password: z.string().min(4, "סיסמא חייבת להכיל לפחות 4 ספרות"),
