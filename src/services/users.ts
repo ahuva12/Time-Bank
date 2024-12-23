@@ -23,7 +23,6 @@ export const registerUser = async (newUser: User) => {
 
     try {
         const response = await http.post("/register", newUser);
-        console.log(response)
 
         if (response.status !== 201) {
             throw new Error(`${response.status}: ${response.data}`);

@@ -28,7 +28,7 @@ const MyDonation = () => {
       const fetchGievrActivityDetails = async () => {
         if(!selectedActivity) return;
         try {
-            const giver = await getUserById(selectedActivity.giverId as string);
+            const giver = await getUserById(selectedActivity.receiverId as string);
             setReceiverDetails(giver);
     
         } catch (err) {

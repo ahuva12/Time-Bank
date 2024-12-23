@@ -30,14 +30,19 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
   });
 
   const onSubmit: SubmitHandler<User> = async (data: User) => {
-    console.log(data)
     try {
       const response = await registerUser(data);
       setSuccessMessage("ההרשמה בוצעה בהצלחה!"); // Set success message
+      setError(""); // Reset error
     } catch (error: any) {
-      setError(error.response?.data?.message || "An error occurred");
+      if (error.message.includes('409')) {
+        setError("קיים משתמש עם אמייל זה");
+      } else {
+        setError(error.response?.data?.message || "אירעה שגיאה");
+      }
     }
   };
+  
 
   const goLogin = () => {
     closePopup();
@@ -212,6 +217,7 @@ const Register: React.FC<RegisterProps> = ({ closePopup, setIsLoginOpen }) => {
               <p className={Styles.errorMessage}>{errors.password.message}</p>
             )}
           </div>
+          {error && <p className={Styles.errorMessage}>{error}</p>} {/* Display error */}
           <input className={Styles.loginButton} type="submit" value="הרשמה" />
         </form>
         {/* <div className={Styles.socialAccountContainer}>
