@@ -1,5 +1,5 @@
 "use client";
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from "@/store/authStore";
 import styles from "./Login.module.css";
@@ -27,7 +27,8 @@ const Login: React.FC<LoginProps> = ({
   setIsLoginOpen,
 }) => {
   const { setLogin } = useAuthStore();
-  const [error, setError] = useState(false);
+  const [errorServer, setErrorServer] = useState(false);
+  const [errorUser, setErrorUser] = useState(false);
   const { setUser } = useUserStore();
   const router = useRouter();
   const [isLoader, setIsLoader] = useState(false);
@@ -51,8 +52,11 @@ const Login: React.FC<LoginProps> = ({
       setUser(user);
       setShowSuccessMessage(true);
     } catch (error: any) {
-      console.log(error);
-      setError(error.data?.message || "An error occurred");
+      if (error.toString().includes("The password is uncorrect") || error.toString().includes("The user not found")) {
+        setErrorUser(true);
+      } else {
+        setErrorServer(true)
+      }
     } finally {
       setIsLoader(false);
     }
@@ -74,8 +78,8 @@ const Login: React.FC<LoginProps> = ({
       setIsLoader(true);
       const user = await getUserByEmail(data.user.email);
     
-      if(!user){
-        setError(true);
+      if(user.length === 0){
+        throw new Error('user not found');
       }
 
       setUser({ ...user[0], photoURL: data.user.photoURL });
@@ -90,11 +94,9 @@ const Login: React.FC<LoginProps> = ({
 
     } catch (error:any) {
       if (error.message.includes('Error updating user')) {
-        console.error("Error updating user:", error);
         setShowSuccessMessage(true);
       } else {
-        setError(true);
-        console.error("Login failed:", error);
+        setErrorServer(true);
       }
     } finally {
       setIsLoader(false);
@@ -169,10 +171,19 @@ const Login: React.FC<LoginProps> = ({
           onOkClick={handleOkClick}
         />
       )}
-      {error && (
+      {errorServer && (
         <ErrorMessage
           message_line1="שגיאה בהתחברות"
-          message_line2="נסה להתחבר עם אמייל אחר"
+          message_line2="נסה שוב בעוד מספר דקות"
+          message_line3="או נסה להתחבר עם מייל אחר"
+          onOkClick={()=>setErrorServer(false)}
+        />
+      )}
+      {errorUser && (
+        <ErrorMessage
+          message_line1="שם המשתמש או הסיסמא שגויים"
+          message_line2="נסה שוב..."
+          onOkClick={()=>setErrorUser(false)}
         />
       )}
     </div>

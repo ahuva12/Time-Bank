@@ -1,5 +1,5 @@
 .header {
-  height: 13.7vh;
+  height: 10vh;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -74,7 +74,7 @@
 }
 
 .logo {
-  margin-left: 4rem;
+  margin-left: 2rem;
 }
 
 .popup {

@@ -5,39 +5,36 @@ import { User } from '@/types/user';
 export const loginUser = async (email: string, password: string, encrypted: boolean) => {
     const body = { email, password,encrypted };
     try {
-        const response = await http.post("/login", body);
+        const response = await http.post("/login", body); 
 
         if (response.status !== 200) {
             throw new Error(`${response.status}: ${response.data}`);
         }
         return response.data.user;
         
-    } catch (error) {
-        console.error('Error login:', error);
-        throw new Error(`Error login: ${error}`);
+    } catch (error:any) {
+        console.error('Error Login:', error);
+        throw new Error(`Error Login: ${error.response.data.error || error}`);
     }
 };
 
 //send register request
 export const registerUser = async (newUser: User) => {
-
     try {
         const response = await http.post("/register", newUser);
-        console.log(response)
 
         if (response.status !== 201) {
             throw new Error(`${response.status}: ${response.data}`);
         }
 
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         console.error('Error register:', error);
-        throw new Error(`Error register: ${error}`);
+        throw new Error(`Error register: ${error.response.data.error || error}`);
     }
 };
 
 export const updateUser = async (updatedUser: User) => {
-    console.log(updatedUser)
     try {
         const response = await http.patch(`/users/${updatedUser._id}`, updatedUser);
 

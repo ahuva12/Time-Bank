@@ -8,7 +8,7 @@ interface SuccessMessageProps {
     message_line2: string;
     message_line3?: string;
     message_line4?:string
-    onOkClick?: Function; // Function to call when OK is clicked
+    onOkClick?: Function; 
 }
 
 const SuccessMessage: React.FC<SuccessMessageProps> = ({ message_line1, message_line2, message_line3, message_line4, onOkClick }) => {
