@@ -10,6 +10,7 @@ export const userSchema = z.object({
     dateOfBirth: z.coerce.date(),
     password: z.string().min(4, "סיסמא חייבת להכיל לפחות 4 ספרות"),
     remainingHours: z.number().min(0, "יתרת שעות לא חוקית").optional(),
+    photoURL: z.string().optional(),
 });
 
 export const loginSchema = z.object({

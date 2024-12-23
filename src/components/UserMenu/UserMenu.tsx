@@ -79,7 +79,7 @@ export default function UserMenu() {
                 <div className={styles.label}>
                   <p className={styles.hello}>
                     שלום,&nbsp;
-                    <span>{user ? user.firstName : "משתמש"}</span>
+                    <span>{user ? user.firstName : "משתמש"}!</span>
                   </p>
                   <p className={styles.hours}>
                     יתרת השעות שלי:&nbsp;
