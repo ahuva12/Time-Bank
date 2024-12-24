@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
 
 interface TagSelectorProps {
     existingTags: string[];
@@ -22,7 +24,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
         setInputValue(value);
 
         // Filter suggestions based on input value
-        
+
         if (value) {
             const suggestions = existingTags.filter(
                 (tag) =>
@@ -47,18 +49,33 @@ const TagSelector: React.FC<TagSelectorProps> = ({
 
     const handleRemoveTag = (tag: string) => {
         const newTags = selectedTags.filter((t) => t !== tag);
+        console.log(newTags);
         setSelectedTags(newTags);
         onTagsChange(newTags);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const tag = (event.currentTarget.value || "").trim();
+        console.log(tag);
         if (event.key === "Enter" && tag) {
+            console.log("Enter");
             event.preventDefault();
             handleAddTag(inputValue.trim());
             event.currentTarget.value = "";
+        } else if (event.key === "Enter" && !tag) {
+            console.log("Space");
+            event.preventDefault();
         }
     };
+
+    const handleToggleSuggestions = () => {
+        if (filteredSuggestions.length > 0) {
+            setFilteredSuggestions([]);
+        }
+        else {
+            setFilteredSuggestions(existingTags);
+        }
+    }
 
     return (
         <div style={{ maxWidth: "375px", margin: "0" }}>
@@ -95,16 +112,19 @@ const TagSelector: React.FC<TagSelectorProps> = ({
                     </div>
                 ))}
             </div>
-            
+
             <div style={{ marginTop: "10px", position: "relative" }}>
+
                 <input
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
+                    // onClick={() => setFilteredSuggestions(existingTags)}
+                    // onBlur={() => setFilteredSuggestions([])}
                     placeholder="הוסף תגיות"
                     style={{
-                        width: "100%",
+                        width: "85%",
                         background: "white",
                         border: "none",
                         padding: "15px 20px",
@@ -117,6 +137,21 @@ const TagSelector: React.FC<TagSelectorProps> = ({
                         marginTop: "0.5rem",
                     }}
                 />
+                <div
+                    onClick={handleToggleSuggestions}
+                    style={{
+                        width: "10%",
+                        backgroundColor: "rgb(239, 253, 255)",
+                        border: "none",
+                        // padding: "15px 20px",
+                        borderRadius: "35%",
+                        boxShadow: "#cff0ff 0px 10px 10px -5px",
+                        borderInline: "2px solid transparent",
+                        color: "rgb(170, 170, 170)",
+                        fontSize: "16px",
+                        outline: "none",
+                        marginTop: "0.5rem",
+                    }}>{filteredSuggestions ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
                 {filteredSuggestions.length > 0 && (
                     <ul
                         style={{

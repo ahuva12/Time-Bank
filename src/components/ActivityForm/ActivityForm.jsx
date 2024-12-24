@@ -9,19 +9,24 @@ import { useState } from "react";
 
 export default function ActivityForm({ activity, closePopup, handleAddActivity, handleUpdateActivity, isNew = false }) {
   const { register, handleSubmit, formState: { errors }, } = useForm({
-      resolver: zodResolver(addActivityForm),
-      defaultValues: {
-        nameActivity: activity?.nameActivity,
-        durationHours: String(activity?.durationHours),
-        description: activity?.description,
-      }
-    });
+    resolver: zodResolver(addActivityForm),
+    defaultValues: {
+      nameActivity: activity?.nameActivity,
+      durationHours: String(activity?.durationHours),
+      description: activity?.description,
+    }
+  });
 
-    const [tags, setTags] = useState(activity.tags || []);
-    const { user } = useUserStore();
-    const [error, setError] = useState("");
+  const [tags, setTags] = useState(activity.tags || []);
+  const { user } = useUserStore();
+  const [error, setError] = useState("");
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, event) => {
+    console.log(event);
+    if (event.nativeEvent.submitter.textContent === "×") {
+      console.log(event.nativeEvent.submitter);
+      return;
+    } 
     try {
       const processedTags = typeof tags === "string"
         ? tags.split(",").map(tag => tag.trim())
@@ -39,7 +44,7 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
         const updatedActivity = {
           ...activity,
           ...data,
-          tags: processedTags, 
+          tags: processedTags,
         }
         updatedActivity.durationHours = Number(updatedActivity.durationHours);
         handleUpdateActivity(updatedActivity)
@@ -52,7 +57,8 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
   }
 
   const handleTagChange = (newTags) => {
-    setTags(newTags.join(", "));
+    // setTags(newTags.join(", "));
+    setTags(newTags);
   };
 
   return (
@@ -63,14 +69,21 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
       <div className={Styles.heading}>
         {isNew ? "הוסף פעילות חדשה" : "פרטי הפעילות"}
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className={Styles.form}>
+      <form
+        // onSubmit={handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault(); // Prevent default form submission
+          handleSubmit((data) => onSubmit(data, e))(e); // Pass both data and event to onSubmit
+        }}
+        className={Styles.form}
+      >
         <div className={Styles.fieldContainer}>
           <input
             className={Styles.input}
             type="text"
-            placeholder="שם הפעילות"   
-            { ...register("nameActivity") }         
-            // required 
+            placeholder="שם הפעילות"
+            {...register("nameActivity")}
+          // required 
           />
           {errors.nameActivity && (
             <p className={Styles.errorMessage}>
@@ -93,8 +106,8 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
             className={Styles.input}
             type="number"
             placeholder="מספר שעות"
-            { ...register("durationHours") }
-            // required
+            {...register("durationHours")}
+          // required
           />
           {errors.durationHours && (
             <p className={Styles.errorMessage}>
@@ -108,8 +121,8 @@ export default function ActivityForm({ activity, closePopup, handleAddActivity, 
             className={Styles.input}
             type="text"
             placeholder="תיאור"
-            { ...register("description") }
-            // required
+            {...register("description")}
+          // required
           />
           {errors.description && (
             <p className={Styles.errorMessage}>
