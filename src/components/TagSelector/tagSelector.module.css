@@ -1,0 +1,90 @@
+.container {
+  max-width: 375px;
+  margin: 0;
+}
+
+.tagList {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tagItem {
+  padding: 5px 10px;
+  border-radius: 20px;
+  background-color: #effdff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #048ebc;
+  box-shadow: #cff0ff 0px 10px 10px -5px;
+  border: 2px solid transparent;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.inputContainer {
+  margin-top: 10px;
+  position: relative;
+}
+
+.inputFieldWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.inputField {
+  width: 100%;
+  background: white;
+  border: none;
+  padding: 15px 20px;
+  padding-left: 40px; /* יצירת מרווח בצד שמאל לחץ */
+  border-radius: 20px;
+  box-shadow: #cff0ff 0px 10px 10px -5px;
+  border-inline: 2px solid transparent;
+  color: rgb(170, 170, 170);
+  font-size: 16px;
+  outline: none;
+  margin-top: 0.5rem;
+}
+
+.toggleButton {
+  position: absolute;
+  left: 10px; /* מיקום החץ בצד שמאל של ה-input */
+  top: 50%;
+  transform: translateY(-50%); /* למרכז את החץ בצורה מדויקת */
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.suggestionsList {
+  margin: 0;
+  padding: 10px;
+  list-style: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  z-index: 1000;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  box-shadow: #cff0ff 0px 10px 10px -5px;
+}
+
+.suggestionItem {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
