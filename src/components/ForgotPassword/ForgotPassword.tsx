@@ -33,7 +33,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
             resetCodeRef.current = generatedCode; 
             const bodySendEmail = {
             toEmail: email,
-            subjectEmail: 'איפוס סיסמא - בנק הזמן',
+            subjectEmail: 'איפוס סיסמה - בנק הזמן',
             textEmail: `
             <div style="direction: rtl; text-align: right;">
                 היי <strong>${fetchedUser[0].firstName}</strong>,<br /><br />
