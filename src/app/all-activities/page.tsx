@@ -1,17 +1,23 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import styles from './allActivities.module.css';
-import { Activities, Loader, ActivityModal, ErrorMessage } from '@/components';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getFilteringActivities, updateStatusActivity } from '@/services/activities';
-import { useUserStore } from '@/store/useUserStore';
-import { Activity } from '@/types/activity';
-import { useAuthStore } from '@/store/authStore';
-import { registrationForActivity, RegistrationActivityPayload } from '@/services/registrationForActivity';
-import { sendEmail } from '@/services/email/sendEmailClient';
-import { User } from '@/types/user';
-import { getUserById } from '@/services/users';
-
+"use client";
+import React, { useState, useEffect } from "react";
+import styles from "./allActivities.module.css";
+import { Activities, Loader, ActivityModal, ErrorMessage } from "@/components";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getFilteringActivities,
+  updateStatusActivity,
+} from "@/services/activities";
+import { useUserStore } from "@/store/useUserStore";
+import { Activity } from "@/types/activity";
+import { useAuthStore } from "@/store/authStore";
+import {
+  registrationForActivity,
+  RegistrationActivityPayload,
+} from "@/services/registrationForActivity";
+import { sendEmail } from "@/services/email/sendEmailClient";
+import { User } from "@/types/user";
+import { getUserById } from "@/services/users";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 const AllActivities = () => {
   const { user, setUserField } = useUserStore();
   const { isLoggedIn } = useAuthStore();
@@ -22,10 +28,12 @@ const AllActivities = () => {
   }, [isLoggedIn]);
 
   const queryClient = useQueryClient();
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
-  const [modeActivityModel, setModeActivityModel] = useState<string>('close');
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
+    null
+  );
+  const [modeActivityModel, setModeActivityModel] = useState<string>("close");
   const [isModeCancellig, setIsModeCancellig] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState('all'); // Default active tab
+  const [activeTab, setActiveTab] = useState("all"); // Default active tab
   const [favorites, setFavorites] = useState<string[]>([]);
   const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
   const [giverDetails, setGiverDetails] = useState<User | null>(null);
@@ -35,35 +43,36 @@ const AllActivities = () => {
   const [isFilterPopup, setIsFilterPopup] = useState(false);
 
   const tabs = [
-    { id: 'all', label: 'כל הפעילויות' },
-    { id: 'liked', label: 'פעילויות שאהבת' },
+    { id: "all", label: "כל הפעילויות" },
+    { id: "liked", label: "פעילויות שאהבת" },
   ];
 
   const { data, isLoading, isFetching, isError } = useQuery({
-    queryKey: ['allActivities'],
-    queryFn: () => getFilteringActivities('proposed', user._id as string),
+    queryKey: ["allActivities"],
+    queryFn: () => getFilteringActivities("proposed", user._id as string),
     staleTime: 10000,
     enabled: isLoggedIn,
   });
 
   // Fetch favorites from localStorage on mount
   useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const storedFavorites = JSON.parse(
+      localStorage.getItem("favorites") || "[]"
+    );
     setFavorites(storedFavorites);
   }, []);
 
   // Filter activities based on active tab
   useEffect(() => {
-    if (activeTab === 'liked' && data) {
+    if (activeTab === "liked" && data) {
       const likedActivities = data.filter((activity: Activity) =>
         favorites.includes(activity._id as string)
       );
       setFilteredActivities(likedActivities);
-    } else if (activeTab === 'all') {
+    } else if (activeTab === "all") {
       setFilteredActivities(data || []);
     }
   }, [activeTab, data, favorites]);
-
 
   const registerForActivityMutation = useMutation({
     mutationFn: registrationForActivity,
@@ -73,49 +82,64 @@ const AllActivities = () => {
       receiverId,
       status,
     }: RegistrationActivityPayload) => {
-      await queryClient.cancelQueries({ queryKey: ['allActivities'] });
+      await queryClient.cancelQueries({ queryKey: ["allActivities"] });
 
-      const previousSavedActivities = queryClient.getQueryData<Activity[]>(['allActivities']);
+      const previousSavedActivities = queryClient.getQueryData<Activity[]>([
+        "allActivities",
+      ]);
 
-      queryClient.setQueryData<Activity[]>(
-        ['allActivities'],
-        (old) => (old ? old.filter((activity) => activity._id !== activityId) : [])
+      queryClient.setQueryData<Activity[]>(["allActivities"], (old) =>
+        old ? old.filter((activity) => activity._id !== activityId) : []
       );
-      setModeActivityModel('success');
-      if (user.remainingHours !== undefined && selectedActivity?.durationHours !== undefined) {
-        setUserField('remainingHours', user.remainingHours - selectedActivity.durationHours);
+      setModeActivityModel("success");
+      if (
+        user.remainingHours !== undefined &&
+        selectedActivity?.durationHours !== undefined
+      ) {
+        setUserField(
+          "remainingHours",
+          user.remainingHours - selectedActivity.durationHours
+        );
       }
       return { previousSavedActivities };
     },
     onError: (error, variables, context: any) => {
       if (context?.previousSavedActivities) {
-        queryClient.setQueryData(['allActivities'], context.previousSavedActivities);
+        queryClient.setQueryData(
+          ["allActivities"],
+          context.previousSavedActivities
+        );
       }
-      setModeActivityModel('error');
-      if (user.remainingHours !== undefined && selectedActivity?.durationHours !== undefined) {
-        setUserField('remainingHours', user.remainingHours + selectedActivity.durationHours);
+      setModeActivityModel("error");
+      if (
+        user.remainingHours !== undefined &&
+        selectedActivity?.durationHours !== undefined
+      ) {
+        setUserField(
+          "remainingHours",
+          user.remainingHours + selectedActivity.durationHours
+        );
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allActivities'] });
+      queryClient.invalidateQueries({ queryKey: ["allActivities"] });
       sendEmailToGiverActivity();
     },
   });
 
   useEffect(() => {
     const fetchGievrActivityDetails = async () => {
-      if(!selectedActivity) return;
+      if (!selectedActivity) return;
       try {
-          const giver = await getUserById(selectedActivity.giverId as string);
-          setGiverDetails(giver);
-  
+        const giver = await getUserById(selectedActivity.giverId as string);
+        setGiverDetails(giver);
       } catch (err) {
-          console.error("Failed to fetch user details:", err);
+        console.error("Failed to fetch user details:", err);
       }
     };
 
     fetchGievrActivityDetails();
-}, [selectedActivity]);
+  }, [selectedActivity]);
 
   const sendEmailToGiverActivity = async () => {
     if (!selectedActivity || !giverDetails) return;
@@ -126,22 +150,29 @@ const AllActivities = () => {
         textEmail: `
         <div style="direction: rtl; text-align: right;">
           היי <strong>${giverDetails?.firstName}</strong>,<br /><br />
-          אנחנו שמחים לעדכן אותך שהמשתמש <strong>${user.firstName} ${user.lastName}</strong> נרשם לפעילות שהצעת - <strong>${selectedActivity?.nameActivity}</strong>.<br /><br />
+          אנחנו שמחים לעדכן אותך שהמשתמש <strong>${user.firstName} ${
+          user.lastName
+        }</strong> נרשם לפעילות שהצעת - <strong>${
+          selectedActivity?.nameActivity
+        }</strong>.<br /><br />
           העברנו לו את פרטי הקשר שלך והוא יצור איתך קשר בהקדם.<br /><br />
-          יתרת השעות שלך עומדת על: <strong>${giverDetails?.remainingHours as number + selectedActivity?.durationHours}</strong><br />
+          יתרת השעות שלך עומדת על: <strong>${
+            (giverDetails?.remainingHours as number) +
+            selectedActivity?.durationHours
+          }</strong><br />
         </div>
       `,
-      };    
-      await sendEmail(bodySendEmail); 
-    } catch(error) {
-      console.error(error)
+      };
+      await sendEmail(bodySendEmail);
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
 
   // Handlers
   const handleMoreDetails = async (activity: Activity) => {
     setSelectedActivity(activity);
-    setModeActivityModel('open');
+    setModeActivityModel("open");
   };
 
   const handleRegistrationActivity = () => {
@@ -151,13 +182,13 @@ const AllActivities = () => {
       activityId: selectedActivity._id as string,
       giverId: selectedActivity.giverId as string,
       receiverId: user._id as string,
-      status: 'caughted',
+      status: "caughted",
     });
   };
 
   const handleToggleFavorite = (activityId: string, isFavorite: boolean) => {
-    const updatedFavorites = isFavorite ?
-      favorites.filter((id) => id !== activityId)
+    const updatedFavorites = isFavorite
+      ? favorites.filter((id) => id !== activityId)
       : [...favorites, activityId];
     setFavorites(updatedFavorites);
 
@@ -188,16 +219,6 @@ const AllActivities = () => {
     }
   };
 
-  // const handleTagSearch = (tag: string) => {
-  //   const tags = [...searchTags, tag];
-  //   setSearchTags(tags);
-
-  //   const filtered = data.filter((item: Activity) =>
-  //     item.tags.some((t) => tags.includes(t))
-  //   );
-  //   setFilteredActivities(filtered);
-  // };
-
   const handleTagSearch = (tag: string) => {
     setSearchTags((prevTags) => {
       if (prevTags.includes(tag)) {
@@ -226,50 +247,120 @@ const AllActivities = () => {
     }
   };
 
-
   const clearSelectedTags = () => {
     setSearchTags([]);
     setFilteredActivities(data);
   };
 
   const closeModal = () => {
-    setModeActivityModel('close');
+    setModeActivityModel("close");
   };
 
-  const SideBar = () => (
-    <div className={styles.container}>
-      <div className={styles.sidebar}>
-        {tabs.map((tab) => (
-          <div
-            key={tab.id}
-            className={`${styles.tab} ${activeTab === tab.id ? styles.activeTab : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </div>
-        ))}
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", padding: "10px" }}>
-          <div className={`${styles.tag} ${styles.clearTags}`} onClick={clearSelectedTags}>ניקוי</div>
-          {activityTags.sort((a, b) => a.localeCompare(b, 'he')).map((tag, index) => (
+  const SideBar = () => {
+    const [showAllTags, setShowAllTags] = useState(false);
+    const visibleTags = showAllTags
+      ? activityTags // אם מוצגות כל התגיות
+      : activityTags.slice(0, 5); // אחרת מוצגות רק חצי מהן
+
+    const toggleTags = () => {
+      setShowAllTags((prevState) => !prevState); // שינוי המצב של התצוגה
+    };
+
+    return (
+      <div className={styles.container}>
+        <div className={styles.sidebar}>
+          {tabs.map((tab) => (
             <div
-              key={index}
-              className={`${styles.tag} ${searchTags.includes(tag) ? styles.activeTag : ''}`}
-              onClick={() => handleTagSearch(tag)}
+              key={tab.id}
+              className={`${styles.tab} ${
+                activeTab === tab.id ? styles.activeTab : ""
+              }`}
+              onClick={() => {
+                setActiveTab(tab.id);
+              }}
             >
-              {tag}
+              {tab.label}
             </div>
           ))}
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              flexWrap: "wrap",
+              padding: "10px",
+            }}
+          >
+            <div
+              className={`${styles.tag} ${styles.clearTags}`}
+              onClick={clearSelectedTags}
+            >
+              ניקוי
+            </div>
+            {visibleTags
+              .sort((a, b) => a.localeCompare(b, "he"))
+              .map((tag, index) => (
+                <div
+                  key={index}
+                  className={`${styles.tag} ${
+                    searchTags.includes(tag) ? styles.activeTag : ""
+                  }`}
+                  onClick={() => {
+                    handleTagSearch(tag);
+                    setShowAllTags(true);
+                  }}
+                >
+                  {tag}
+                </div>
+              ))}
+          </div>
+          <div
+            className={styles.toggleTags}
+            onClick={toggleTags}
+            style={{
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "center", // מרכז את החץ
+              alignItems: "center",
+              padding: "10px", // רווח מסביב לחץ
+            }}
+          >
+            {showAllTags ? (
+              <DotLottieReact
+                src="https://lottie.host/274b2edb-6f38-420e-a3af-33e7e238c7fa/ejTzudBuMX.lottie"
+                loop
+                autoplay
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  transform: "rotate(180deg)", // הופך את האנימציה
+                  transition: "transform 0.3s", // מוסיף מעבר חלק אם תרצי לשנות כיוון
+                }}
+              />
+            ) : (
+              <DotLottieReact
+                src="https://lottie.host/274b2edb-6f38-420e-a3af-33e7e238c7fa/ejTzudBuMX.lottie"
+                loop
+                autoplay
+                style={{
+                  width: "30px",
+                  height: "30px",
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
+
+  
 
   if (!isLoggedIn && isInitialized) {
     return (
       <ErrorMessage
         message_line1="אתה לא מחובר!"
         message_line2="עליך להכנס לאתר/להרשם אם אין לך חשבון"
-        link='/home'
+        link="/home"
       />
     );
   }
@@ -312,7 +403,7 @@ const AllActivities = () => {
           </div>
         </div>
       )}
-      {modeActivityModel !== 'close' && selectedActivity && (
+      {modeActivityModel !== "close" && selectedActivity && (
         <ActivityModal
           isModeCancellig={isModeCancellig}
           modeModel={modeActivityModel}
@@ -329,7 +420,6 @@ const AllActivities = () => {
     </div>
   );
 };
-
 
 const activityTags = [
   "ספורט",
@@ -361,8 +451,7 @@ const activityTags = [
   "שפות",
   "טכנאי",
   "ילדים",
-  "מבוגרים"
-
+  "מבוגרים",
 ];
 
 export default AllActivities;
