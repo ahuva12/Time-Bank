@@ -1,18 +1,35 @@
 import React, { useState } from "react";
 import styles from "./ResetPassword.module.css";
+import { updateUser } from "@/services/users";
+import { User } from "@/types/user";
+import bcrypt from 'bcryptjs';
 
-const ResetPassword = () => {
+interface ResetPasswordProps {
+    user: User;
+    onClose: () => void;
+}
+
+const ResetPassword: React.FC<ResetPasswordProps> = ({ user, onClose }) => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
+    const saltRounds = 10; 
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setError("");
         if (newPassword !== confirmPassword) {
             setError("הסיסמאות לא זהות");
             return;
         }
-        console.log(newPassword); 
+        try {
+            console.log(newPassword); 
+            const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+            const updatedUser = { ...user, password: hashedPassword };
+            const response = await updateUser(updatedUser);
+            onClose()
+        } catch(error) {
+            console.log(error);
+        }
     };
 
     return (

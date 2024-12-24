@@ -106,7 +106,7 @@ const Login: React.FC<LoginProps> = ({
   };
 
   return isForgotPassword ? (
-    <ForgotPassword />
+    <ForgotPassword onClose={()=>setIsForgotPassword(false)}/>
   ) : (
     <div className={styles.container}>
       <div className={styles.closeButton} onClick={closePopup}>
