@@ -55,9 +55,9 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
             event.preventDefault();
             const form = event.target as HTMLFormElement;
             const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+            setIsTempPassword(true);   
             await sendEmailToResetPassword(email); 
             dateSendEmailRef.current = new Date; 
-            setIsTempPassword(true);   
         } catch(error) {
             console.error(error)
         }
@@ -92,7 +92,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
             />
         ) : (
             <div className={styles.ForgotPassword}>
-                <h1>איפוס סיסמא</h1>          
+                <h1>איפוס סיסמא</h1>    
+                <div onClick={onClose}>X</div>
                 <form onSubmit={handleEmailSubmit}>
                     <label htmlFor="email">אימייל:</label>
                     <input
