@@ -198,7 +198,7 @@ const give = () => {
     return (
       <ErrorMessage
         message_line1="אופס... משהו השתבש"
-        message_line2="תוכל לנסות שוב במועד מאוחר יותר"
+        message_line2="נסה שוב במועד מאוחר יותר"
       />
     );
   }
@@ -273,8 +273,8 @@ const give = () => {
       {isErrorMessage && (
         <ErrorMessage
           message_line1="אופס... משהו השתבש"
-          message_line2="תוכל לנסות שוב במועד מאוחר יותר"
-        />
+          message_line2="נסה שוב במועד מאוחר יותר"
+          />
       )}
     </div>
   );

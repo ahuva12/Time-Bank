@@ -8,8 +8,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { loginSchema } from "@/validations/validationsClient/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUser, getUserByEmail, updateUser } from "@/services/users";
-import { SuccessMessage, MiniLoader , ErrorMessage } from "@/components";
+import { SuccessMessage, MiniLoader , ErrorMessage, ForgotPassword } from "@/components";
 import { googleSignIn } from "@/services/auth";
+import { baseObjectInputType } from "zod";
 interface LoginProps {
   closePopup: () => void;
   setIsRegisterOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,6 +33,7 @@ const Login: React.FC<LoginProps> = ({
   const { setUser } = useUserStore();
   const router = useRouter();
   const [isLoader, setIsLoader] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState<boolean>(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const {
@@ -103,7 +105,9 @@ const Login: React.FC<LoginProps> = ({
     }
   };
 
-  return (
+  return isForgotPassword ? (
+    <ForgotPassword onClose={()=>setIsForgotPassword(false)}/>
+  ) : (
     <div className={styles.container}>
       <div className={styles.closeButton} onClick={closePopup}>
         &times;
@@ -114,7 +118,7 @@ const Login: React.FC<LoginProps> = ({
           <MiniLoader />
         </div>
       )}
-
+  
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div className={styles.fieldContainer}>
           <input
@@ -146,6 +150,12 @@ const Login: React.FC<LoginProps> = ({
         </div>
         <input className={styles.loginButton} type="submit" value="כניסה" />
       </form>
+      <button
+        className={styles.forgotPassword}
+        onClick={() => setIsForgotPassword(true)}
+      >
+        שכחת סיסמא?
+      </button>
       <div className={styles.socialAccountContainer}>
         <span className={styles.title}>או התחבר עם</span>
         <div className={styles.socialAccounts}>
@@ -176,18 +186,18 @@ const Login: React.FC<LoginProps> = ({
           message_line1="שגיאה בהתחברות"
           message_line2="נסה שוב בעוד מספר דקות"
           message_line3="או נסה להתחבר עם מייל אחר"
-          onOkClick={()=>setErrorServer(false)}
+          onOkClick={() => setErrorServer(false)}
         />
       )}
       {errorUser && (
         <ErrorMessage
           message_line1="שם המשתמש או הסיסמא שגויים"
           message_line2="נסה שוב..."
-          onOkClick={()=>setErrorUser(false)}
+          onOkClick={() => setErrorUser(false)}
         />
       )}
     </div>
   );
-};
+}
 
 export default Login;

@@ -77,7 +77,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
                 {error && <p className={styles.error}>{error}</p>}
                 <div className={styles.buttonsContainer}>
                     <button className={styles.submitButton} onClick={handleSubmit}>
-                        עדכן סיסמה
+                        שנה סיסמה
                     </button>
                 </div>
             </div>
