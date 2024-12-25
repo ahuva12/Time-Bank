@@ -150,15 +150,12 @@ const AllActivities = () => {
         textEmail: `
         <div style="direction: rtl; text-align: right;">
           היי <strong>${giverDetails?.firstName}</strong>,<br /><br />
-          אנחנו שמחים לעדכן אותך שהמשתמש <strong>${user.firstName} ${
-          user.lastName
-        }</strong> נרשם לפעילות שהצעת - <strong>${
-          selectedActivity?.nameActivity
-        }</strong>.<br /><br />
+          אנחנו שמחים לעדכן אותך שהמשתמש <strong>${user.firstName} ${user.lastName
+          }</strong> נרשם לפעילות שהצעת - <strong>${selectedActivity?.nameActivity
+          }</strong>.<br /><br />
           העברנו לו את פרטי הקשר שלך והוא יצור איתך קשר בהקדם.<br /><br />
-          יתרת השעות שלך עומדת על: <strong>${
-            (giverDetails?.remainingHours as number) +
-            selectedActivity?.durationHours
+          יתרת השעות שלך עומדת על: <strong>${(giverDetails?.remainingHours as number) +
+          selectedActivity?.durationHours
           }</strong><br />
         </div>
       `,
@@ -258,12 +255,15 @@ const AllActivities = () => {
 
   const SideBar = () => {
     const [showAllTags, setShowAllTags] = useState(false);
-    const visibleTags = showAllTags
+    const [visibleTags, setVisibleTags] = useState(showAllTags
       ? activityTags // אם מוצגות כל התגיות
-      : activityTags.slice(0, 5); // אחרת מוצגות רק חצי מהן
+      : activityTags.slice(0, 5)); // אחרת מוצגות רק חצי מהן
 
     const toggleTags = () => {
       setShowAllTags((prevState) => !prevState); // שינוי המצב של התצוגה
+      setVisibleTags(!showAllTags
+        ? activityTags // אם מוצגות כל התגיות
+        : activityTags.slice(0, 5)); 
     };
 
     return (
@@ -272,9 +272,8 @@ const AllActivities = () => {
           {tabs.map((tab) => (
             <div
               key={tab.id}
-              className={`${styles.tab} ${
-                activeTab === tab.id ? styles.activeTab : ""
-              }`}
+              className={`${styles.tab} ${activeTab === tab.id ? styles.activeTab : ""
+                }`}
               onClick={() => {
                 setActiveTab(tab.id);
               }}
@@ -301,9 +300,8 @@ const AllActivities = () => {
               .map((tag, index) => (
                 <div
                   key={index}
-                  className={`${styles.tag} ${
-                    searchTags.includes(tag) ? styles.activeTag : ""
-                  }`}
+                  className={`${styles.tag} ${searchTags.includes(tag) ? styles.activeTag : ""
+                    }`}
                   onClick={() => {
                     handleTagSearch(tag);
                     setShowAllTags(true);
@@ -353,7 +351,7 @@ const AllActivities = () => {
     );
   };
 
-  
+
 
   if (!isLoggedIn && isInitialized) {
     return (
