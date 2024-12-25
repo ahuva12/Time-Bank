@@ -169,7 +169,9 @@ const SavedActivities = () => {
   // Render content based on the query's state
   if (isError) {
     return (
-      <ErrorMessage message_line1="אופס... משהו השתבש" message_line2='תוכל לנסות שוב במועד מאוחר יותר'/>
+      <ErrorMessage message_line1="אופס... משהו השתבש"         
+      message_line2="נסה שוב במועד מאוחר יותר"
+      />
     )
   }
 

@@ -1,14 +1,12 @@
 'use client';
 import { useState, useRef } from 'react';
 import styles from './ForgotPassword.module.css';
-import { ResetPassword } from '@/components';
+import { ResetPassword, ErrorMessage } from '@/components';
 import { sendEmail } from '@/services/email/sendEmailClient';
 import { getUserByEmail } from '@/services/users';
 import { User } from '@/types/user';
 
-//timer of 5 minutes
 //errors 
-//x to close the popup
 
 interface ForgotPasswordProps {
     onClose: () => void;
@@ -17,6 +15,7 @@ interface ForgotPasswordProps {
 const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
     const [isTempPassword, setIsTempPassword] = useState<boolean>(false);
     const [isResetPassword, setIsResetPassword] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
     const [user, setUser] = useState<User | null>(null); 
     const resetCodeRef = useRef<number>(0); 
     const dateSendEmailRef = useRef<Date | null>(null); 
@@ -26,7 +25,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
           const fetchedUser = await getUserByEmail(email);
           if (fetchedUser.length === 0) {
             console.log('the user not found');
-            return 'the user not found';
+            setError('userNotFound')
+            return ;
           } else {
             setUser(fetchedUser[0]); 
             const generatedCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
@@ -46,7 +46,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
             await sendEmail(bodySendEmail); 
           }
         } catch(error) {
-          console.error(error)
+            console.error(error);
+            setError('catch');
         }
       }
 
@@ -59,32 +60,64 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
             await sendEmailToResetPassword(email); 
             dateSendEmailRef.current = new Date; 
         } catch(error) {
-            console.error(error)
+            console.error(error);
+            setError('catch');
         }
     };
 
     const handleResetCodeSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         try {
             event.preventDefault();
-            //check timer
             const dateSubmitResetCode = new Date;
             const fiveMinutesInMs = 5 * 60 * 1000;
             if (dateSendEmailRef.current && dateSubmitResetCode.getTime() - dateSendEmailRef.current.getTime() > fiveMinutesInMs) {
                 console.log("עבר יותר מידי זמן מאז ששלחנו את הקוד אימות. נסה שוב");
+                setError('overTime');
                 return;
             }
             const form = event.target as HTMLFormElement;
             const resetCodeUserEntered = Number((form.elements.namedItem('password') as HTMLInputElement).value);
             if (resetCodeUserEntered !== resetCodeRef.current) {
                 console.log('the reset code is uncorrect');
-                return 'the reset code is uncorrect';
+                setError('codeUncorrect');
+                return;
             } else {
                 setIsResetPassword(true);
             }
         } catch(error) {
-            console.error(error)
+            console.error(error);
+            setError('catch');
         }
     };
+
+    if (error) {
+        let message_line1='';
+        let message_line2='';
+        switch (error) {
+            case 'catch':
+                message_line1 = 'אופס... משהו השתבש';
+                message_line2 = 'נסה שוב במועד מאוחר יותר';
+                break;
+            case 'userNotFound':
+                message_line1 = 'המייל לא קיים במערכת';
+                message_line2 = 'נסה מייל אחר';
+                break;
+            case 'overTime':
+                message_line1 = 'עבר יותר מידי זמן מאז ששלחנו לך את קוד האימות';
+                message_line2 = 'נסה שוב';
+                break;
+            case 'codeUncorrect':
+                message_line1 = 'הקוד שגוי';
+                message_line2 = 'נסה שוב';
+                break;
+            }
+        return (
+          <ErrorMessage
+            message_line1={message_line1}
+            message_line2={message_line2}
+          />
+        );
+      }
 
     return isResetPassword && user ? (
             <ResetPassword user={user} 
