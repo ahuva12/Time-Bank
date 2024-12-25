@@ -26,13 +26,11 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ user, onClose }) => {
         }
         try {
             setIsLoader(true);
-            console.log(newPassword); 
             const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
             const updatedUser = { ...user, password: hashedPassword };
             const response = await updateUser(updatedUser);
             onClose()
         } catch(error) {
-            console.log(error);
             setIsErrorMessage(true);
         } finally {
             setIsLoader(false);
