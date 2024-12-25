@@ -148,8 +148,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
                 <MiniLoader />
                 </div>
                 )}   
-                <div onClick={onClose}>X</div>
-                <form onSubmit={handleEmailSubmit}>
+                <div onClick={onClose}>&times;</div>
+                <form className={styles.formEmail} onSubmit={handleEmailSubmit}>
                     <label htmlFor="email">אימייל:</label>
                     <input
                         id="email"
@@ -157,22 +157,22 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
                         placeholder="הכנס כתובת מייל"
                         required
                     />
-                    <button type="submit">שלח איפוס סיסמא</button>
+                    <button type="submit">שלח קוד לאיפוס סיסמא</button>
                 </form>
                 {isTempPassword && 
-                    <div>
-                    <form onSubmit={handleResetCodeSubmit}>
-                    <label htmlFor="password">קוד איפוס:</label>
-                    <input
-                        id="password"
-                        type="password"
-                        placeholder="הכנס קוד איפוס"
-                        required
-                    />
-                    <button type="submit">אפס סיסמא</button>
-                    </form>
-                    <button onClick={sendResetCodeAgain}>לא קיבלתי. שלח שוב</button>
-                    </div>
+                    <>
+                        <form onSubmit={handleResetCodeSubmit}>
+                        <label htmlFor="password">קוד אימות:</label>
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="הזן קוד אימות"
+                            required
+                        />
+                        <button type="submit">אפס סיסמא</button>
+                        </form>
+                        <button onClick={sendResetCodeAgain}>לא קיבלתי. שלח שוב</button>
+                    </>
                 }
             </div>
         );
