@@ -175,3 +175,7 @@
     margin: 13.1px 41% 0 41%;
     position: relative;
   }
+
+  .forgotPassword {
+    background-color: red;
+  }

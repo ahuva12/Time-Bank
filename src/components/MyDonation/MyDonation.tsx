@@ -28,7 +28,7 @@ const MyDonation = () => {
       const fetchGievrActivityDetails = async () => {
         if(!selectedActivity) return;
         try {
-            const giver = await getUserById(selectedActivity.giverId as string);
+            const giver = await getUserById(selectedActivity.receiverId as string);
             setReceiverDetails(giver);
     
         } catch (err) {
@@ -54,7 +54,7 @@ const MyDonation = () => {
     return (
       <ErrorMessage
         message_line1="משהו השתבש..."
-        message_line2="תוכל לנסות שוב במועד מאוחר יותר"
+        message_line2="נסה שוב במועד מאוחר יותר"
       />
     );
   }
@@ -84,7 +84,7 @@ const MyDonation = () => {
             onClose={closeModal}
             activity={selectedActivity}
             giver_receiver_details={receiverDetails as User}
-             isNeedUserDetails={true}
+            isNeedUserDetails={true}
             user={user}
             handlesMoreOptions={{}}
           />

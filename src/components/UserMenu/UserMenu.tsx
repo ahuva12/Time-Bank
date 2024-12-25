@@ -19,6 +19,7 @@ export default function UserMenu() {
   const { user } = useUserStore();
   const { setLogout } = useAuthStore();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
+  const [imageError, setImageError] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -61,13 +62,18 @@ export default function UserMenu() {
   <div className={styles.profileContainer} ref={dropdownRef}>
       {/* Profile Icon */}
       <div className={styles.userMenu} onClick={toggleDropdown}>
-        <div className={styles.profileIcon}>
-          {user.photoURL ? (
-            <img className={styles.imgIcon} src={user.photoURL} />
-          ) : (
-            <CiUser className={styles.icon} />
-          )}
-        </div>
+      <div className={styles.profileIcon}>
+        {!imageError && user.photoURL ? (
+          <img
+            className={styles.imgIcon}
+            src={user.photoURL}
+            alt="User profile"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <CiUser className={styles.icon} />
+        )}
+      </div>
       </div>
 
       {/* Dropdown Menu */}
@@ -79,7 +85,7 @@ export default function UserMenu() {
                 <div className={styles.label}>
                   <p className={styles.hello}>
                     שלום,&nbsp;
-                    <span>{user ? user.firstName : "משתמש"}</span>
+                    <span>{user ? user.firstName : "משתמש"}!</span>
                   </p>
                   <p className={styles.hours}>
                     יתרת השעות שלי:&nbsp;

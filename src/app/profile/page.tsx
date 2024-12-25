@@ -53,12 +53,11 @@ const Profile: React.FC = () => {
 
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
-  console.log(user)
-
 
   const [editingField, setEditingField] = useState<keyof EditableFields | null>(
     null
   );
+  const [imageError, setImageError] = useState(false);
   const [wallet, setWallet] = useState<Wallet>({
     hoursGiven: 0,
     hoursReceived: 0,
@@ -210,8 +209,13 @@ const Profile: React.FC = () => {
     <div className={styles.container}>
       <main className={styles.main}>
         <div className={styles.logoContainer}>
-          {user.photoURL ? (      
-            <img className={styles.imgPhoto} src={user.photoURL} alt="User Photo" />
+        {!imageError && user.photoURL ? (
+          <img
+            className={styles.imgPhoto}
+            src={user.photoURL}
+            alt="User profile"
+            onError={() => setImageError(true)}
+          />
           ) :
           user.gender === "female" ? (
             <DotLottieReact

@@ -22,6 +22,7 @@ export const updateUserSchema = z.object({
     dateOfBirth: z.coerce.date().optional(), 
     password: z.string().min(4, "Password must be at least 4 characters long").optional(),
     remainingHours: z.number().min(0, "Remaining hours must be 0 or greater").optional(),
+    photoURL: z.string().optional(),
 });
 
 export const loginSchema = z.object({

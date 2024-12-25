@@ -16,6 +16,11 @@ export { default as ActivityForm } from './ActivityForm/ActivityForm';
 export { default as MiniLoader } from './MiniLoader/MiniLoader';
 export { default as WarningMessage}  from './WarningMessage/WarningMessage';
 export { default as ExplanationPage } from './ExplanationPage/ExplanationPage';
+export { default as ForgotPassword } from './ForgotPassword/ForgotPassword';
+export { default as ResetPassword } from './ResetPassword/ResetPassword';
+
+
+
 
 
 

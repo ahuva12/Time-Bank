@@ -243,4 +243,5 @@ const ActivityModal: React.FC<ActivityModalProps> = ({
     );
 };
 
+
 export default ActivityModal;
