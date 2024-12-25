@@ -36,6 +36,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ user, onClose }) => {
         <div className={styles.modalOverlay}>
             <div className={styles.modal}>
                 <h2 className={styles.title}>איפוס סיסמה</h2>
+                <div onClick={onClose}>X</div>
                 <div className={styles.formGroup}>
                     <label>סיסמה בחר:</label>
                     <input
