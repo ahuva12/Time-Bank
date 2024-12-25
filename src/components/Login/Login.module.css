@@ -177,5 +177,15 @@
   }
 
   .forgotPassword {
-    background-color: red;
+    display: block;
+    text-align: center;
+    cursor: pointer;  
+    position: relative;
+    top: 1px;
+  }
+  
+  .forgotPassword a {
+    text-decoration: none;
+    color: #0099ff;
+    font-size: 15px;
   }
