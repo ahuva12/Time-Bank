@@ -150,12 +150,12 @@ const Login: React.FC<LoginProps> = ({
         </div>
         <input className={styles.loginButton} type="submit" value="כניסה" />
       </form>
-      <a
+      <button
         className={styles.forgotPassword}
         onClick={() => setIsForgotPassword(true)}
       >
         שכחת סיסמא?
-      </a>
+      </button>
       <div className={styles.socialAccountContainer}>
         <span className={styles.title}>או התחבר עם</span>
         <div className={styles.socialAccounts}>

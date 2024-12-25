@@ -10,7 +10,7 @@ type bodySendEmail = {
 export const sendEmail = async (bodySendEmail:bodySendEmail) => {
     try {
       console.log(bodySendEmail)
-      const response = await http.post('/dsendEmail', bodySendEmail);
+      const response = await http.post('/sendEmail', bodySendEmail);
 
       if (response.status !== 200)
         throw new Error(`${response.status}: Failed to send Email`);

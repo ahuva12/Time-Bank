@@ -1,7 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
 import styles from './ForgotPassword.module.css';
-import { ResetPassword, ErrorMessage } from '@/components';
+import { ResetPassword, ErrorMessage, MiniLoader } from '@/components';
 import { sendEmail } from '@/services/email/sendEmailClient';
 import { getUserByEmail } from '@/services/users';
 import { User } from '@/types/user';
@@ -19,80 +19,96 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
     const [user, setUser] = useState<User | null>(null); 
     const resetCodeRef = useRef<number>(0); 
     const dateSendEmailRef = useRef<Date | null>(null); 
+    const [isLoader, setIsLoader] = useState(false);
 
-      const sendEmailToResetPassword = async (email:string) => {
-        try {
-          const fetchedUser = await getUserByEmail(email);
-          if (fetchedUser.length === 0) {
-            console.log('the user not found');
-            setError('userNotFound')
-            return ;
-          } else {
-            setUser(fetchedUser[0]); 
-            const generatedCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-            resetCodeRef.current = generatedCode; 
-            const bodySendEmail = {
-            toEmail: email,
-            subjectEmail: 'איפוס סיסמה - בנק הזמן',
-            textEmail: `
-            <div style="direction: rtl; text-align: right;">
-                היי <strong>${fetchedUser[0].firstName}</strong>,<br /><br />
-                הנה הקוד שלך לאיפוס סיסמא באתר "בנק הזמן":<br /><br />
-                <strong>${generatedCode}</strong><br /><br />
-                הקוד תקף ל5 דקות הקרובות<br /><br />
-            </div>
-            `,
-            };    
-            await sendEmail(bodySendEmail); 
-          }
-        } catch(error) {
-            console.error(error);
-            setError('catch');
+    const sendEmailToResetPassword = async (email:string) => {
+    try {
+        const fetchedUser = await getUserByEmail(email);
+        if (fetchedUser.length === 0) {
+        setError('userNotFound')
+        return ;
+        } else {
+        setUser(fetchedUser[0]); 
+        const generatedCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+        resetCodeRef.current = generatedCode; 
+        const bodySendEmail = {
+        toEmail: email,
+        subjectEmail: 'איפוס סיסמה - בנק הזמן',
+        textEmail: `
+        <div style="direction: rtl; text-align: right;">
+            היי <strong>${fetchedUser[0].firstName}</strong>,<br /><br />
+            הנה הקוד שלך לאיפוס סיסמא באתר "בנק הזמן":<br /><br />
+            <strong>${generatedCode}</strong><br /><br />
+            הקוד תקף ל5 דקות הקרובות<br /><br />
+        </div>
+        `,
+        };    
+        await sendEmail(bodySendEmail); 
         }
-      }
+    } catch(error) {
+        setError('catch');
+    }
+    }
 
     const handleEmailSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         try {
+            setIsLoader(true);
             event.preventDefault();
             const form = event.target as HTMLFormElement;
             const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-            setIsTempPassword(true);   
             await sendEmailToResetPassword(email); 
             dateSendEmailRef.current = new Date; 
+            setIsTempPassword(true);   
         } catch(error) {
-            console.error(error);
             setError('catch');
+        } finally {
+            setIsLoader(false);
         }
     };
 
     const handleResetCodeSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         try {
+            setIsLoader(true);
             event.preventDefault();
             const dateSubmitResetCode = new Date;
             const fiveMinutesInMs = 5 * 60 * 1000;
             if (dateSendEmailRef.current && dateSubmitResetCode.getTime() - dateSendEmailRef.current.getTime() > fiveMinutesInMs) {
-                console.log("עבר יותר מידי זמן מאז ששלחנו את הקוד אימות. נסה שוב");
                 setError('overTime');
                 return;
             }
             const form = event.target as HTMLFormElement;
             const resetCodeUserEntered = Number((form.elements.namedItem('password') as HTMLInputElement).value);
             if (resetCodeUserEntered !== resetCodeRef.current) {
-                console.log('the reset code is uncorrect');
                 setError('codeUncorrect');
                 return;
             } else {
                 setIsResetPassword(true);
             }
         } catch(error) {
-            console.error(error);
             setError('catch');
+        } finally {
+            setIsLoader(false);
         }
     };
+
+    const sendResetCodeAgain = async () => {
+        try {
+            setIsLoader(true);
+            await sendEmailToResetPassword(user?.email as string);
+        } catch(error) {
+            setError('catch');
+        } finally {
+            setIsLoader(false);
+        }
+    }
 
     if (error) {
         let message_line1='';
         let message_line2='';
+        const onOkClick = () => {
+            setIsTempPassword(false);
+            setError(null)
+        };
         switch (error) {
             case 'catch':
                 message_line1 = 'אופס... משהו השתבש';
@@ -115,6 +131,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
           <ErrorMessage
             message_line1={message_line1}
             message_line2={message_line2}
+            onOkClick={onOkClick}
           />
         );
       }
@@ -125,7 +142,12 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
             />
         ) : (
             <div className={styles.ForgotPassword}>
-                <h1>איפוס סיסמא</h1>    
+                <h1>איפוס סיסמא</h1> 
+                {isLoader && (
+                <div className={styles.loader}>
+                <MiniLoader />
+                </div>
+                )}   
                 <div onClick={onClose}>X</div>
                 <form onSubmit={handleEmailSubmit}>
                     <label htmlFor="email">אימייל:</label>
@@ -149,7 +171,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
                     />
                     <button type="submit">אפס סיסמא</button>
                     </form>
-                    <button type="submit">לא קיבלתי. שלח שוב</button>
+                    <button onClick={sendResetCodeAgain}>לא קיבלתי. שלח שוב</button>
                     </div>
                 }
             </div>
