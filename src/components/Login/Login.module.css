@@ -175,3 +175,17 @@
     margin: 13.1px 41% 0 41%;
     position: relative;
   }
+
+  .forgotPassword {
+    display: block;
+    text-align: end;
+    cursor: pointer;  
+    position: relative;
+    top: 2px;
+  }
+  
+  .forgotPassword a {
+    text-decoration: none;
+    color: #0099ff;
+    font-size: 12px;
+  }

@@ -52,11 +52,17 @@ const TagSelector: React.FC<TagSelectorProps> = ({
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log(event);
         const tag = (event.currentTarget.value || "").trim();
         if (event.key === "Enter" && tag) {
+            console.log('if')
             event.preventDefault();
             handleAddTag(inputValue.trim());
             event.currentTarget.value = "";
+        } else if (event.key === "Enter" && !tag) {
+            event.preventDefault();
+            console.log('else')
+            return;
         }
     };
 
