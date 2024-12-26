@@ -50,13 +50,13 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ user, onClose }) => {
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modal}>
+                <div onClick={onClose}>X</div>
                 <h2 className={styles.title}>איפוס סיסמה</h2>
                 {isLoader && (
                 <div className={styles.loader}>
                 <MiniLoader />
                 </div>
                 )}  
-                <div onClick={onClose}>X</div>
                 <div className={styles.formGroup}>
                     <label>סיסמה בחר:</label>
                     <input

@@ -142,15 +142,15 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
             />
         ) : (
             <div className={styles.ForgotPassword}>
+                <div onClick={onClose}>&times;</div>
                 <h1>איפוס סיסמא</h1> 
                 {isLoader && (
                 <div className={styles.loader}>
                 <MiniLoader />
                 </div>
                 )}   
-                <div onClick={onClose}>&times;</div>
                 <form className={styles.formEmail} onSubmit={handleEmailSubmit}>
-                    <label htmlFor="email">אימייל:</label>
+                    <label htmlFor="email">מה המייל שלך?:</label>
                     <input
                         id="email"
                         type="email"
