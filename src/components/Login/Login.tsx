@@ -8,7 +8,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { loginSchema } from "@/validations/validationsClient/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUser, getUserByEmail, updateUser } from "@/services/users";
-import { SuccessMessage, MiniLoader , ErrorMessage, ForgotPassword } from "@/components";
+import {
+  SuccessMessage,
+  MiniLoader,
+  ErrorMessage,
+  ForgotPassword,
+} from "@/components";
 import { googleSignIn } from "@/services/auth";
 import { baseObjectInputType } from "zod";
 interface LoginProps {
@@ -54,10 +59,13 @@ const Login: React.FC<LoginProps> = ({
       setUser(user);
       setShowSuccessMessage(true);
     } catch (error: any) {
-      if (error.toString().includes("The password is uncorrect") || error.toString().includes("The user not found")) {
+      if (
+        error.toString().includes("The password is uncorrect") ||
+        error.toString().includes("The user not found")
+      ) {
         setErrorUser(true);
       } else {
-        setErrorServer(true)
+        setErrorServer(true);
       }
     } finally {
       setIsLoader(false);
@@ -79,9 +87,9 @@ const Login: React.FC<LoginProps> = ({
       const data = await googleSignIn();
       setIsLoader(true);
       const user = await getUserByEmail(data.user.email);
-    
-      if(user.length === 0){
-        throw new Error('user not found');
+
+      if (user.length === 0) {
+        throw new Error("user not found");
       }
 
       setUser({ ...user[0], photoURL: data.user.photoURL });
@@ -89,13 +97,12 @@ const Login: React.FC<LoginProps> = ({
         const updatedUserWithPhoto = {
           _id: user[0]._id,
           photoURL: data.user.photoURL,
-        }
+        };
         await updateUser(updatedUserWithPhoto);
       }
       setShowSuccessMessage(true);
-
-    } catch (error:any) {
-      if (error.message.includes('Error updating user')) {
+    } catch (error: any) {
+      if (error.message.includes("Error updating user")) {
         setShowSuccessMessage(true);
       } else {
         setErrorServer(true);
@@ -106,7 +113,7 @@ const Login: React.FC<LoginProps> = ({
   };
 
   return isForgotPassword ? (
-    <ForgotPassword onClose={()=>setIsForgotPassword(false)}/>
+    <ForgotPassword onClose={() => setIsForgotPassword(false)} />
   ) : (
     <div className={styles.container}>
       <div className={styles.closeButton} onClick={closePopup}>
@@ -118,7 +125,7 @@ const Login: React.FC<LoginProps> = ({
           <MiniLoader />
         </div>
       )}
-  
+
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div className={styles.fieldContainer}>
           <input
@@ -148,11 +155,11 @@ const Login: React.FC<LoginProps> = ({
             </p>
           )}
         </div>
+        <div className={styles.forgotPassword}>
+          <a onClick={() => setIsForgotPassword(true)}>שכחת סיסמא?</a>
+        </div>
         <input className={styles.loginButton} type="submit" value="כניסה" />
       </form>
-      <span className={styles.forgotPassword}>
-        <a onClick={() => setIsForgotPassword(true)}>שכחת סיסמא?</a>
-      </span>
       <div className={styles.socialAccountContainer}>
         <span className={styles.title}>או התחבר עם</span>
         <div className={styles.socialAccounts}>
@@ -195,6 +202,6 @@ const Login: React.FC<LoginProps> = ({
       )}
     </div>
   );
-}
+};
 
 export default Login;

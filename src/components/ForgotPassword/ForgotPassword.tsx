@@ -150,7 +150,6 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
                 </div>
                 )}   
                 <form className={styles.formEmail} onSubmit={handleEmailSubmit}>
-                    <label htmlFor="email">מה המייל שלך?:</label>
                     <input
                         id="email"
                         type="email"
