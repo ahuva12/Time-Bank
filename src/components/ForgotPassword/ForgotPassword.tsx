@@ -170,7 +170,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }) => {
                         />
                         <button type="submit">אפס סיסמא</button>
                         </form>
-                        <button onClick={sendResetCodeAgain}>לא קיבלתי. שלח שוב</button>
+                        <button className={styles.noSendButton} onClick={sendResetCodeAgain}>לא קיבלתי. שלח שוב</button>
                     </>
                 }
             </div>
