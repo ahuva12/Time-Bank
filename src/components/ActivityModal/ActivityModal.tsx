@@ -69,7 +69,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({
                 {buttonConfig.map(
                     (button, index) =>
                         button.label &&
-                        button.handler && ( // תנאי נוסף - רק אם יש כיתוב
+                        button.handler && ( 
                             <button
                                 key={index}
                                 className={`${styles.moreOptionButton} ${button.block ? styles.disabledButton : ""
