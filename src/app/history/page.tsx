@@ -18,9 +18,7 @@ export default function History() {
   const [itemsPerPage] = useState(4);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
-    null
-  );
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [modeActivityModel, setModeActivityModel] = useState<string>("close");
   const [giver_receiver_details, setGiver_receiver_details] = useState<User | null>(null);
 
@@ -60,29 +58,33 @@ export default function History() {
     fetchHistory();
   }, [user]);
 
-  useEffect(() => {
-    const fetchGievrActivityDetails = async () => {
-      if(!selectedActivity) return;
-      try {
-          const giver = await getUserById(selectedActivity.giverId as string);
-          setGiver_receiver_details(giver);
-  
-      } catch (err) {
-          console.error("Failed to fetch user details:", err);
-      }
-    };
-
-    fetchGievrActivityDetails();
-}, [selectedActivity]);
-
   const paginate = (activities: Activity[], page: number) =>
     activities.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const giverPaginated = paginate(giverActivities, giverPage);
   const receiverPaginated = paginate(receiverActivities, receiverPage);
 
-  const handleMoreDetails = (activity: Activity) => {
+  const handleMoreDetailsForGaveActivities = async (activity: Activity) => {
     setSelectedActivity(activity);
+    try {
+      const receiver = await getUserById(activity.receiverId as string);
+      setGiver_receiver_details(receiver);
+
+    } catch (err) {
+        console.error("Failed to fetch user details:", err);
+    }
+    setModeActivityModel("open");
+  };
+
+  const handleMoreDetailsForGotActivities = async (activity: Activity) => {
+    setSelectedActivity(activity);
+    try {
+      const giver = await getUserById(activity.giverId as string);
+      setGiver_receiver_details(giver);
+
+    } catch (err) {
+        console.error("Failed to fetch user details:", err);
+    }
     setModeActivityModel("open");
   };
 
@@ -123,7 +125,7 @@ export default function History() {
                     <ActivityCard
                       key={activity._id as string}
                       activity={activity}
-                      onMoreDetails={() => handleMoreDetails(activity)}
+                      onMoreDetails={() => handleMoreDetailsForGaveActivities(activity)}
                       flag={false}
                       handlesMoreOptions={null}
                     />
@@ -161,7 +163,7 @@ export default function History() {
                     <ActivityCard
                       key={activity._id as string}
                       activity={activity}
-                      onMoreDetails={() => handleMoreDetails(activity)}
+                      onMoreDetails={() => handleMoreDetailsForGotActivities(activity)}
                       flag={false}
                       handlesMoreOptions={null}
                     />
